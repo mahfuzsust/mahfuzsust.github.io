@@ -136,82 +136,79 @@
 
 
     <!-- jquery -->
- 
-  
-<script src="/lib/jquery/jquery.min.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+    
 
+          
 
-
-
-<!-- clipboard -->
-
-
+                        <!-- clipboard -->
+                        
+                                      
 <script src="/js/main.js"></script>
 
-<!-- search -->
-
-  
+                                        <!-- search -->
+                                        
+                                          
 <script src="/js/search.js"></script>
 
-  <script type="text/javascript">
-  $(function() {
+                                            <script type="text/javascript">
+                                              $(function () {
 
-    var $inputArea = $("input#search-input");
-    var $resultArea = document.querySelector("div#search-result");
+                                                var $inputArea = $("input#search-input");
+                                                var $resultArea = document.querySelector("div#search-result");
 
-    $inputArea.focus(function() {
-      var search_path = "search.xml";
-      if (search_path.length == 0) {
-        search_path = "search.xml";
-      }
-      var path = "/" + search_path;
-      searchFunc(path, 'search-input', 'search-result');
-    });
+                                                $inputArea.focus(function () {
+                                                  var search_path = "search.xml";
+                                                  if (search_path.length == 0) {
+                                                    search_path = "search.xml";
+                                                  }
+                                                  var path = "/" + search_path;
+                                                  searchFunc(path, 'search-input', 'search-result');
+                                                });
 
-    $inputArea.keydown(function(e) {
-      if (e.which == 13) {
-        e.preventDefault();
-      }
-    });
+                                                $inputArea.keydown(function (e) {
+                                                  if (e.which == 13) {
+                                                    e.preventDefault();
+                                                  }
+                                                });
 
-    var observer = new MutationObserver(function(mutationsList, observer) {
-      if (mutationsList.length == 1) {
-        if (mutationsList[0].addedNodes.length) {
-          $(".search-no-result").hide();
-        } else if (mutationsList[0].removedNodes.length) {
-          $(".search-no-result").show(200);
-        }
-      }
-    });
+                                                var observer = new MutationObserver(function (mutationsList, observer) {
+                                                  if (mutationsList.length == 1) {
+                                                    if (mutationsList[0].addedNodes.length) {
+                                                      $(".search-no-result").hide();
+                                                    } else if (mutationsList[0].removedNodes.length) {
+                                                      $(".search-no-result").show(200);
+                                                    }
+                                                  }
+                                                });
 
-    observer.observe($resultArea, { childList: true });
+                                                observer.observe($resultArea, { childList: true });
 
-  });
-  </script>
+                                              });
+                                            </script>
+                                            
+                                              <!-- Google Analytics -->
+                                              
+                                                  <!-- Baidu Analytics -->
+                                                  
+                                                      <!-- Cloudflare Analytics -->
+                                                      
+                                                          <!-- Umami Analytics -->
+                                                          
+                                                              <!-- Disqus Comments -->
+                                                              
+                                                                <script type="text/javascript">
+                                                                  var disqus_shortname = 'mahfuz-1';
 
-<!-- Google Analytics -->
-
-<!-- Baidu Analytics -->
-
-<!-- Cloudflare Analytics -->
-
-<!-- Umami Analytics -->
-
-<!-- Disqus Comments -->
-
-    <script type="text/javascript">
-        var disqus_shortname = 'mahfuz-1';
-
-        (function(){
-            var dsq = document.createElement('script');
-            dsq.type = 'text/javascript';
-            dsq.async = true;
-            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        }());
-    </script>
-
-
+                                                                  (function () {
+                                                                    var dsq = document.createElement('script');
+                                                                    dsq.type = 'text/javascript';
+                                                                    dsq.async = true;
+                                                                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                                                                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                                                  }());
+                                                                </script>
+                                                                
 </body>
 </html>
