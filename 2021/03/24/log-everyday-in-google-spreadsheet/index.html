@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="I just wanted to create a daily task list with notes and reminders in google spreadsheet. So, I created a template which will look like this.Now, I need to create a new sheet everyday where the sheet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Log everyday in google spreadsheet">
+<meta property="og:url" content="https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/index.html">
+<meta property="og:site_name" content="Mahfuz">
+<meta property="og:description" content="I just wanted to create a daily task list with notes and reminders in google spreadsheet. So, I created a template which will look like this.Now, I need to create a new sheet everyday where the sheet">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://mahfuzsust.github.io/content/images/2021/03/Screen-Shot-2021-03-24-at-9.44.06-AM.png">
+<meta property="article:published_time" content="2021-03-23T22:16:13.000Z">
+<meta property="article:modified_time" content="2021-06-30T07:52:04.814Z">
+<meta property="article:author" content="Mahfuzur Rahman">
+<meta property="article:tag" content="app script">
+<meta property="article:tag" content="spreadsheet">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mahfuzsust.github.io/content/images/2021/03/Screen-Shot-2021-03-24-at-9.44.06-AM.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Log everyday in google spreadsheet</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/mahfuzsust">Projects</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/2021/05/23/climbing-stairs/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2021/03/13/vim-configuration/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&text=Log everyday in google spreadsheet"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&title=Log everyday in google spreadsheet"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&is_video=false&description=Log everyday in google spreadsheet"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Log everyday in google spreadsheet&body=Check out this article: https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&title=Log everyday in google spreadsheet"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&title=Log everyday in google spreadsheet"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&title=Log everyday in google spreadsheet"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&title=Log everyday in google spreadsheet"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&name=Log everyday in google spreadsheet&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&t=Log everyday in google spreadsheet"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Log everyday in google spreadsheet
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Mahfuzur Rahman</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-03-23T22:16:13.000Z" itemprop="datePublished">2021-03-24</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/app-script/" rel="tag">app script</a>, <a class="tag-link-link" href="/tags/spreadsheet/" rel="tag">spreadsheet</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>I just wanted to create a daily task list with notes and reminders in google spreadsheet. So, I created a template which will look like this.<br><img src="/content/images/2021/03/Screen-Shot-2021-03-24-at-9.44.06-AM.png"><br>Now, I need to create a new sheet everyday where the sheet name will denote the day and after each month I needed it to back up in my google drive.</p>
+<p>To solve this problem, I have created a app script which will create a new sheet everyday I open the spreadsheet and backup in a separate file.</p>
+<p>My tasks will be</p>
+<ul>
+<li>Create a new clone of the template everyday</li>
+<li>Backup current sheet monthly</li>
+<li>Create google drive folders to organize</li>
+</ul>
+<p>First, we need to create a clone of the template sheet.</p>
+<pre><code>function cloneTemplateDaily() &#123;
+  var name = Utilities.formatDate(new Date(), &quot;GMT&quot;, &quot;dd-MM-yyyy&quot;);
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var duplicate_sheet = ss.getSheetByName(name); 
+  if(duplicate_sheet == null) &#123; 
+    var templateSheet = ss.getSheetByName(&quot;template&quot;);
+    ss.setActiveSheet(templateSheet);
+    duplicate_sheet = ss.duplicateActiveSheet();
+    duplicate_sheet.setName(name);
+  &#125;
+  ss.setActiveSheet(duplicate_sheet);
+&#125;
+</code></pre>
+<p>Then I need to backup the sheet to my google drive</p>
+<pre><code>function backupSheetMonthly() &#123;
+  var lastMonthDate = getLastMonthDate();
+  var fileName = Utilities.formatDate(lastMonthDate, &quot;GMT&quot;, &quot;MMMM, yyyy&quot;);
+  var year = Utilities.formatDate(lastMonthDate, &quot;GMT&quot;, &quot;yyyy&quot;);
+
+  var rootFolder = getFolder(&quot;My Logs&quot;);
+  var yearFolder = getFolder(year, rootFolder);
+
+  if(!fileExist(fileName, yearFolder)) &#123;
+    var file = DriveApp.getFileById(SpreadsheetApp.getActiveSpreadsheet().getId())
+    file.makeCopy(fileName, yearFolder);
+    deleteSheets();
+  &#125;
+&#125;
+</code></pre>
+<p>Now, all the methods that I require</p>
+<pre><code>function fileExist(name, folder) &#123;
+  var files = folder.getFilesByName(name);
+  while(files.hasNext())&#123;
+    var file = files.next();
+    if(file.getName() == month) &#123;
+      return true;
+    &#125;
+  &#125;;
+  return false;
+&#125;
+
+function getFolder(name, parent) &#123;
+  var folders = null;
+  if(!parent) &#123;
+    folders = DriveApp.getFoldersByName(name);
+  &#125;
+  else &#123;
+    folders = parent.getFoldersByName(name);
+  &#125;
+  
+  while(folders.hasNext())&#123;
+    var folder = folders.next();
+    if(folder.getName() == name) &#123;
+      return folder;
+    &#125;
+  &#125;
+
+  if(!parent) &#123;
+    return DriveApp.createFolder(name);
+  &#125;
+  return parent.createFolder(name);
+&#125;
+
+function getLastMonthDate() &#123;
+  var dt = new Date();
+  dt.setDate(0);
+  dt.setDate(1);
+  return dt;
+&#125;
+
+function deleteSheets() &#123;
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheets = ss.getSheets();
+  for(var i = 0; i &lt; sheets.length; i++) &#123;
+    if(sheets[i].getName() !== &quot;template&quot;) &#123;
+      ss.setActiveSheet(sheets[i]);
+      ss.deleteActiveSheet();
+      Utilities.sleep(100);
+    &#125;
+  &#125;
+&#125;
+</code></pre>
+<p>Lastly, I created two separate trigger that will call my two functions</p>
+<ol>
+<li>cloneTemplateDaily</li>
+<li>backupSheetMonthly</li>
+</ol>
+<p>I set up a trigger poninted to From spreadsheet - On open cloneTemplateDaily so there will be a new sheet name current date with the same template</p>
+<p>And a time based trigger that will run 1st of every month to run backupSheetMonthly function.</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/mahfuzsust">Projects</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&text=Log everyday in google spreadsheet"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&title=Log everyday in google spreadsheet"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&is_video=false&description=Log everyday in google spreadsheet"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Log everyday in google spreadsheet&body=Check out this article: https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&title=Log everyday in google spreadsheet"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&title=Log everyday in google spreadsheet"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&title=Log everyday in google spreadsheet"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&title=Log everyday in google spreadsheet"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&name=Log everyday in google spreadsheet&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://mahfuzsust.github.io/2021/03/24/log-everyday-in-google-spreadsheet/&t=Log everyday in google spreadsheet"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2013-2021
+    Mahfuzur Rahman
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/mahfuzsust">Projects</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'mahfuz-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+</body>
+</html>

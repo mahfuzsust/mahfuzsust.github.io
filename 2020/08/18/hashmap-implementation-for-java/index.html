@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="HashMap is a dictionary data structure provided by java. It’s a Map-based collection class that is used to store data in Key &amp; Value pairs. In this article, we’ll be creating our own hashmap imple">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HashMap Implementation for Java">
+<meta property="og:url" content="https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/index.html">
+<meta property="og:site_name" content="Mahfuz">
+<meta property="og:description" content="HashMap is a dictionary data structure provided by java. It’s a Map-based collection class that is used to store data in Key &amp; Value pairs. In this article, we’ll be creating our own hashmap imple">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://mahfuzsust.github.io/content/images/2021/03/1.png">
+<meta property="og:image" content="https://mahfuzsust.github.io/content/images/2021/03/2.png">
+<meta property="article:published_time" content="2020-08-18T07:18:27.000Z">
+<meta property="article:modified_time" content="2021-06-30T07:49:03.536Z">
+<meta property="article:author" content="Mahfuzur Rahman">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="hashmap">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mahfuzsust.github.io/content/images/2021/03/1.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>HashMap Implementation for Java</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/mahfuzsust">Projects</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/2020/08/21/find-pair-of-numbers-in-an-array-with-a-given-sum/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2020/08/16/product-of-array-except-self/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&text=HashMap Implementation for Java"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&title=HashMap Implementation for Java"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&is_video=false&description=HashMap Implementation for Java"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HashMap Implementation for Java&body=Check out this article: https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&title=HashMap Implementation for Java"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&title=HashMap Implementation for Java"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&title=HashMap Implementation for Java"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&title=HashMap Implementation for Java"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&name=HashMap Implementation for Java&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&t=HashMap Implementation for Java"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        HashMap Implementation for Java
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Mahfuzur Rahman</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-08-18T07:18:27.000Z" itemprop="datePublished">2020-08-18</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/hashmap/" rel="tag">hashmap</a>, <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>HashMap is a dictionary data structure provided by java. It’s a Map-based collection class that is used to store data in Key &amp; Value pairs. In this article, we’ll be creating our own hashmap implementation.</p>
+<p>The benefit of using this data structure is faster data retrieval. It has data access complexity of O(1) in the best case.<br><img src="/content/images/2021/03/1.png" alt="Image for post"><br>In layman’s terms, a for each key we get the associated value.</p>
+<p>To implement this structure,</p>
+<ol>
+<li>We need a list to store all the keys</li>
+<li>Key — Value relationship to get value based on key</li>
+</ol>
+<p>We can have a list containing all the key, values and to access we need to search all of it.</p>
+<p>But the main point of hash map is to access the keys faster in 0(1) access time.</p>
+<p>Here, hashing comes into play. We can hash the key and relate it with the index to retrieve data faster.</p>
+<p>Hash comes with a problem too, collision. It is always recommended to use a better hash function that can reduce chances of collision.<br><img src="/content/images/2021/03/2.png" alt="Image for post"><br>Multiple hash can have same hash key. For that reason, there is a bucket or container for each key where all the values are store if collision occurs.</p>
+<p>Let’s dive into a basic implementation of our hashmap.</p>
+<p>Firstly, we need an array to store all the keys, a bucket model to store all the entry and a wrapper for our key, value pair.</p>
+<pre><code>public class MyKeyValueEntry&lt;K, V&gt; &#123;
+    private K key;
+    private V value;
+
+    public MyKeyValueEntry(K key, V value) &#123;
+        this.key = key;
+        this.value = value;
+    &#125;    // getters &amp; setters
+    // hashCode &amp; equals
+&#125;
+</code></pre>
+<p>Bucket to store all the key values</p>
+<pre><code>public class MyMapBucket &#123;
+    private List&lt;MyKeyValueEntry&gt; entries;
+
+    public MyMapBucket() &#123;
+        if(entries == null) &#123;
+            entries = new LinkedList&lt;&gt;();
+        &#125;
+    &#125;
+
+    public List&lt;MyKeyValueEntry&gt; getEntries() &#123;
+        return entries;
+    &#125;
+
+    public void addEntry(MyKeyValueEntry entry) &#123;
+        this.entries.add(entry);
+    &#125;
+
+    public void removeEntry(MyKeyValueEntry entry) &#123;
+        this.entries.remove(entry);
+    &#125;
+&#125;
+</code></pre>
+<p>Lastly, implementation of our hashmap</p>
+<pre><code>public class MyHashMap&lt;K, V&gt; &#123;
+    private int CAPACITY = 10;
+    private MyMapBucket[] bucket;
+    private int size = 0;
+
+    public MyHashMap() &#123;
+        this.bucket = new MyMapBucket[CAPACITY];
+    &#125;
+    private int getHash(K key) &#123;
+        return (key.hashCode() &amp; 0xfffffff) % CAPACITY;
+    &#125;
+
+    private MyKeyValueEntry getEntry(K key) &#123;
+        int hash = getHash(key);
+        for (int i = 0; i &lt; bucket[hash].getEntries().size(); i++) &#123;
+            MyKeyValueEntry myKeyValueEntry = bucket[hash].getEntries().get(i);
+            if(myKeyValueEntry.getKey().equals(key)) &#123;
+                return myKeyValueEntry;
+            &#125;
+        &#125;
+        return null;
+    &#125;    public void put(K key, V value) &#123;
+        if(containsKey(key)) &#123;
+            MyKeyValueEntry entry = getEntry(key);
+            entry.setValue(value);
+        &#125; else &#123;
+            int hash = getHash(key);
+            if(bucket[hash] == null) &#123;
+                bucket[hash] = new MyMapBucket();
+            &#125;
+            bucket[hash].addEntry(new MyKeyValueEntry&lt;&gt;(key, value));
+            size++;
+        &#125;
+    &#125;
+
+    public V get(K key) &#123;
+        return containsKey(key) ? (V) getEntry(key).getValue() : null;
+    &#125;
+
+    public boolean containsKey(K key) &#123;
+        int hash = getHash(key);
+        return !(Objects.isNull(bucket[hash]) || Objects.isNull(getEntry(key)));
+    &#125;
+
+    public void delete(K key) &#123;
+        if(containsKey(key)) &#123;
+            int hash = getHash(key);
+            bucket[hash].removeEntry(getEntry(key));
+            size--;
+        &#125;
+    &#125;
+    public int size() &#123;
+        return size;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Put into map:</strong></p>
+<ol>
+<li>If key already exists, then update value of that key.</li>
+<li>Otherwise, add an entry to the bucket.</li>
+</ol>
+<p><strong>Get from map:</strong></p>
+<ol>
+<li>Check if the key exists, and return data.</li>
+</ol>
+<p><strong>Contains:</strong></p>
+<ol>
+<li>Check if the bucket is null</li>
+<li>If not, then the bucket contains the key.</li>
+</ol>
+<p><strong>Performance:</strong></p>
+<p>It has the performance of O(1) in best case and O(n) in worst case.</p>
+<p><strong>Java Improvement:</strong></p>
+<ol>
+<li>From Java version 8, All of the hashing based Map implementations: HashMap, Hashtable, LinkedHashMap, WeakHashMap and ConcurrentHashMap are modified to use an enhanced hashing algorithm for string keys when the capacity of the hash table has ever grown beyond 512 entries. The enhanced hashing implementation uses the murmur3 hashing algorithm along with random hash seeds and index masks. These enhancements mitigate cases where colliding String hash values could result in a performance bottleneck. <a target="_blank" rel="noopener" href="https://hg.openjdk.java.net/jdk8/jdk8/jdk/rev/43bd5ee0205e">Alternative String hashing implementation</a></li>
+<li>From Java version 8, once the number of items in a hash bucket grows beyond a certain threshold, that bucket will switch from using a linked list of entries to a balanced tree. In the case of high hash collisions, this will improve worst-case performance from O(n) to O(log n). <a target="_blank" rel="noopener" href="https://openjdk.java.net/jeps/180">Handle Frequent HashMap Collisions with Balanced Trees</a>.</li>
+</ol>
+<p><strong>Java Hashmap features:</strong></p>
+<ul>
+<li><p>The default initial capacity is 16</p>
+<p>  static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4;</p>
+</li>
+<li><p>The load factor used when none specified in constructor.</p>
+<p>  static final float DEFAULT_LOAD_FACTOR = 0.75f;</p>
+</li>
+<li><p>The bin count threshold for using a tree rather than list for a bin. Bins are converted to trees when adding an element to a bin with at least this many nodes.</p>
+<p>  static final int TREEIFY_THRESHOLD = 8;</p>
+</li>
+<li><p>The bin count threshold for untreeifying a (split) bin during a resize operation.</p>
+<p>  static final int UNTREEIFY_THRESHOLD = 6;</p>
+</li>
+<li><p>An instance of HashMap has two parameters that affect its performance: <em>initial capacity</em> and <em>load factor</em>. </p>
+</li>
+</ul>
+<ul>
+<li>The <em>capacity</em> is the number of buckets in the hash table, and </li>
+<li>the initial capacity is simply the capacity at the time the hash table is created.<br>The <em>load factor</em>s a measure of how full the hash table is allowed to get before its capacity is automatically increased.<br>When the number of entries in the hash table exceeds the product of the load factor and the current capacity, the hash table is <em>rehashed</em> (that is, internal data structures are rebuilt) so that the hash table has approximately twice the number of buckets.</li>
+</ul>
+<ul>
+<li>As a general rule, the default load factor (.75) offers a good tradeoff between time and space costs. </li>
+</ul>
+<ul>
+<li>Higher values decrease the space overhead but increase the lookup cost (reflected in most of the operations of the HashMap class, including get and put).<br>The expected number of entries in the map and its load factor should be taken into account when setting its initial capacity, so as to minimize the number of rehash operations. </li>
+<li>If the initial capacity is greater than the maximum number of entries divided by the load factor, no rehash operations will ever occur.</li>
+</ul>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/mahfuzsust">Projects</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&text=HashMap Implementation for Java"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&title=HashMap Implementation for Java"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&is_video=false&description=HashMap Implementation for Java"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HashMap Implementation for Java&body=Check out this article: https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&title=HashMap Implementation for Java"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&title=HashMap Implementation for Java"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&title=HashMap Implementation for Java"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&title=HashMap Implementation for Java"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&name=HashMap Implementation for Java&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://mahfuzsust.github.io/2020/08/18/hashmap-implementation-for-java/&t=HashMap Implementation for Java"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2013-2021
+    Mahfuzur Rahman
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/mahfuzsust">Projects</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'mahfuz-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+</body>
+</html>
