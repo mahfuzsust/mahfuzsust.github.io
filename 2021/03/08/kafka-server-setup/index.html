@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Script to start a kafka server #!&#x2F;bin&#x2F;sh  setProperty()&amp;#123;     awk -v pat&#x3D;&quot;^$1&#x3D;&quot; -v value&#x3D;&quot;$1&#x3D;$2&quot; &#39;&amp;#123; if ($0 ~ pat) print value; else print $0; &amp;#125;&#39; $3 &gt; $3.tm">
+    <meta name="description" content="Script to start a kafka server 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283#!&#x2F;bin&#x2F;shset">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka server setup">
 <meta property="og:url" content="https://mahfuzsust.github.io/2021/03/08/kafka-server-setup/index.html">
 <meta property="og:site_name" content="Mahfuz">
-<meta property="og:description" content="Script to start a kafka server #!&#x2F;bin&#x2F;sh  setProperty()&amp;#123;     awk -v pat&#x3D;&quot;^$1&#x3D;&quot; -v value&#x3D;&quot;$1&#x3D;$2&quot; &#39;&amp;#123; if ($0 ~ pat) print value; else print $0; &amp;#125;&#39; $3 &gt; $3.tm">
+<meta property="og:description" content="Script to start a kafka server 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283#!&#x2F;bin&#x2F;shset">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-03-08T07:24:34.000Z">
-<meta property="article:modified_time" content="2021-06-30T07:49:56.888Z">
+<meta property="article:modified_time" content="2021-06-30T16:23:39.704Z">
 <meta property="article:author" content="Mahfuzur Rahman">
 <meta property="article:tag" content="kafka">
 <meta name="twitter:card" content="summary">
@@ -47,6 +47,8 @@
     <!-- rss -->
     
     
+      <link rel="alternate" href="/true" title="Mahfuz" type="application/atom+xml" />
+    
 	<!-- mathjax -->
 	
 <meta name="generator" content="Hexo 5.4.0"></head>
@@ -75,7 +77,7 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" aria-label="Previous post " href="/2021/03/13/vim-configuration/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Previous post " href="/2021/03/24/log-everyday-in-google-spreadsheet/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" aria-label="Next post " href="/2020/08/25/how-to-implement-cache-in-java/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -151,90 +153,9 @@
 
   <div class="content" itemprop="articleBody">
     <p>Script to start a kafka server</p>
-<pre><code>#!/bin/sh
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">setProperty</span></span>()&#123;</span><br><span class="line">    awk -v pat=<span class="string">&quot;^<span class="variable">$1</span>=&quot;</span> -v value=<span class="string">&quot;<span class="variable">$1</span>=<span class="variable">$2</span>&quot;</span> <span class="string">&#x27;&#123; if ($0 ~ pat) print value; else print $0; &#125;&#x27;</span> <span class="variable">$3</span> &gt; <span class="variable">$3</span>.tmp</span><br><span class="line">    mv <span class="variable">$3</span>.tmp <span class="variable">$3</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">downloadAndPrepare</span></span>() &#123;</span><br><span class="line">    DIR=<span class="string">&quot;kafka/&quot;</span></span><br><span class="line">    <span class="keyword">if</span> [[ -d <span class="string">&quot;<span class="variable">$DIR</span>&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">cd</span> kafka</span><br><span class="line">        rm -rf nohup.out</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        wget https://www-us.apache.org/dist/kafka/2.3.0/kafka_2.12-2.3.0.tgz</span><br><span class="line">        tar -xzf kafka_2.12-2.3.0.tgz</span><br><span class="line">        mv kafka_2.12-2.3.0 kafka</span><br><span class="line">        <span class="built_in">cd</span> kafka</span><br><span class="line">        rm -rf kafka_2.12-2.3.0.tgz</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">stopServer</span></span>() &#123;</span><br><span class="line">    PIDS=$(ps ax | grep -i <span class="string">&#x27;kafka\.Kafka&#x27;</span> | grep java | grep -v grep | awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [[ -z <span class="string">&quot;<span class="variable">$PIDS</span>&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;No kafka server to stop&quot;</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">for</span> pid <span class="keyword">in</span> <span class="variable">$PIDS</span>; <span class="keyword">do</span> <span class="built_in">kill</span> -9 <span class="variable">$pid</span>; <span class="keyword">done</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    PIDS=$(ps ax | grep java | grep -i QuorumPeerMain | grep -v grep | awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [[ -z <span class="string">&quot;<span class="variable">$PIDS</span>&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;No zookeeper server to stop&quot;</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">for</span> pid <span class="keyword">in</span> <span class="variable">$PIDS</span>; <span class="keyword">do</span> <span class="built_in">kill</span> -9 <span class="variable">$pid</span>; <span class="keyword">done</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">startServer</span></span>() &#123;</span><br><span class="line">    nohup bin/zookeeper-server-start.sh config/zookeeper.properties &amp;</span><br><span class="line">    nohup bin/kafka-server-start.sh config/server.properties &amp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">helpFunction</span></span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Usage: <span class="variable">$0</span> -n number&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">&quot;\t-n Number of kafka server to launch&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">getopts</span> <span class="string">&quot;n:&quot;</span> opt</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;<span class="variable">$opt</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">        n ) number=<span class="string">&quot;<span class="variable">$OPTARG</span>&quot;</span> ;;</span><br><span class="line">        ? ) helpFunction ;;</span><br><span class="line">    <span class="keyword">esac</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ -z <span class="string">&quot;<span class="variable">$number</span>&quot;</span> ]] || ! [[ <span class="string">&quot;<span class="variable">$number</span>&quot;</span> =~ ^[0-9]+$ ]]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    helpFunction</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">downloadAndPrepare</span><br><span class="line">stopServer</span><br><span class="line">startServer</span><br><span class="line"></span><br><span class="line">counter=1</span><br><span class="line"><span class="keyword">while</span> [[ <span class="variable">$&#123;counter&#125;</span> -lt <span class="variable">$&#123;number&#125;</span> ]]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    cp config/server.properties config/<span class="string">&quot;server-<span class="variable">$counter</span>.properties&quot;</span></span><br><span class="line"></span><br><span class="line">    setProperty <span class="string">&quot;broker.id&quot;</span> <span class="string">&quot;<span class="variable">$counter</span>&quot;</span> config/<span class="string">&quot;server-<span class="variable">$counter</span>.properties&quot;</span></span><br><span class="line">    setProperty <span class="string">&quot;log.dirs&quot;</span> <span class="string">&quot;/tmp/kafka-logs-<span class="variable">$counter</span>&quot;</span> config/<span class="string">&quot;server-<span class="variable">$counter</span>.properties&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;listeners=PLAINTEXT://:<span class="subst">$((counter+9092)</span>)&quot;</span> &gt;&gt; config/<span class="string">&quot;server-<span class="variable">$counter</span>.properties&quot;</span></span><br><span class="line"></span><br><span class="line">    nohup bin/kafka-server-start.sh config/<span class="string">&quot;server-<span class="variable">$counter</span>.properties&quot;</span> &amp;</span><br><span class="line"></span><br><span class="line">    counter=$(( counter+<span class="number">1</span> ))</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
 
-setProperty()&#123;
-    awk -v pat=&quot;^$1=&quot; -v value=&quot;$1=$2&quot; &#39;&#123; if ($0 ~ pat) print value; else print $0; &#125;&#39; $3 &gt; $3.tmp
-    mv $3.tmp $3
-&#125;
 
-downloadAndPrepare() &#123;
-    DIR=&quot;kafka/&quot;
-    if [[ -d &quot;$DIR&quot; ]]; then
-        cd kafka
-        rm -rf nohup.out
-    else
-        wget https://www-us.apache.org/dist/kafka/2.3.0/kafka_2.12-2.3.0.tgz
-        tar -xzf kafka_2.12-2.3.0.tgz
-        mv kafka_2.12-2.3.0 kafka
-        cd kafka
-        rm -rf kafka_2.12-2.3.0.tgz
-    fi
-&#125;
-
-stopServer() &#123;
-    PIDS=$(ps ax | grep -i &#39;kafka\.Kafka&#39; | grep java | grep -v grep | awk &#39;&#123;print $1&#125;&#39;)
-
-    if [[ -z &quot;$PIDS&quot; ]]; then
-        echo &quot;No kafka server to stop&quot;
-    else
-        for pid in $PIDS; do kill -9 $pid; done
-    fi
-
-    PIDS=$(ps ax | grep java | grep -i QuorumPeerMain | grep -v grep | awk &#39;&#123;print $1&#125;&#39;)
-
-    if [[ -z &quot;$PIDS&quot; ]]; then
-        echo &quot;No zookeeper server to stop&quot;
-    else
-        for pid in $PIDS; do kill -9 $pid; done
-    fi
-
-&#125;
-
-startServer() &#123;
-    nohup bin/zookeeper-server-start.sh config/zookeeper.properties &amp;
-    nohup bin/kafka-server-start.sh config/server.properties &amp;
-&#125;
-
-helpFunction()
-&#123;
-   echo &quot;&quot;
-   echo &quot;Usage: $0 -n number&quot;
-   echo -e &quot;\t-n Number of kafka server to launch&quot;
-   exit 1
-&#125;
-
-while getopts &quot;n:&quot; opt
-do
-   case &quot;$opt&quot; in
-      n ) number=&quot;$OPTARG&quot; ;;
-      ? ) helpFunction ;;
-   esac
-done
-
-if [[ -z &quot;$number&quot; ]] || ! [[ &quot;$number&quot; =~ ^[0-9]+$ ]]
-then
-   helpFunction
-fi
-
-downloadAndPrepare
-stopServer
-startServer
-
-counter=1
-while [[ $&#123;counter&#125; -lt $&#123;number&#125; ]]
-do
-    cp config/server.properties config/&quot;server-$counter.properties&quot;
-
-    setProperty &quot;broker.id&quot; &quot;$counter&quot; config/&quot;server-$counter.properties&quot;
-    setProperty &quot;log.dirs&quot; &quot;/tmp/kafka-logs-$counter&quot; config/&quot;server-$counter.properties&quot;
-    echo &quot;listeners=PLAINTEXT://:$((counter+9092))&quot; &gt;&gt; config/&quot;server-$counter.properties&quot;
-
-    nohup bin/kafka-server-start.sh config/&quot;server-$counter.properties&quot; &amp;
-
-    counter=$(( counter+1 ))
-done
-</code></pre>
 
   </div>
 </article>

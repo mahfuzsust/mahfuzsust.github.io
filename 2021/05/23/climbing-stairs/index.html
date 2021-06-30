@@ -6,19 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top? Example 1:  Input: n &#x3D; 2 Output: 2 Explanation: There are two ways to climb to the top. 1. 1 step + 1 s">
+    <meta name="description" content="ProblemEach time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top? Example 1:  Input: n &#x3D; 2 Output: 2 Explanation: There are two ways to climb to the top. 1. 1 ste">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Climbing Stairs">
 <meta property="og:url" content="https://mahfuzsust.github.io/2021/05/23/climbing-stairs/index.html">
 <meta property="og:site_name" content="Mahfuz">
-<meta property="og:description" content="Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top? Example 1:  Input: n &#x3D; 2 Output: 2 Explanation: There are two ways to climb to the top. 1. 1 step + 1 s">
+<meta property="og:description" content="ProblemEach time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top? Example 1:  Input: n &#x3D; 2 Output: 2 Explanation: There are two ways to climb to the top. 1. 1 ste">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-05-22T23:48:13.000Z">
-<meta property="article:modified_time" content="2021-06-30T07:51:04.193Z">
+<meta property="article:modified_time" content="2021-06-30T16:19:16.365Z">
 <meta property="article:author" content="Mahfuzur Rahman">
+<meta property="article:tag" content="fibonacci">
 <meta property="article:tag" content="algorithm">
 <meta property="article:tag" content="java">
-<meta property="article:tag" content="fibonacci">
 <meta name="twitter:card" content="summary">
     
     
@@ -48,6 +48,8 @@
     
     <!-- rss -->
     
+    
+      <link rel="alternate" href="/true" title="Mahfuz" type="application/atom+xml" />
     
 	<!-- mathjax -->
 	
@@ -108,7 +110,7 @@
 
     </div>
     <div id="toc">
-      
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Problem"><span class="toc-number">1.</span> <span class="toc-text">Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Solution"><span class="toc-number">2.</span> <span class="toc-text">Solution</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -152,7 +154,7 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>Each time you can either climb <code>1</code> or <code>2</code> steps. In how many distinct ways can you climb to the top?</p>
+    <h2 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h2><p>Each time you can either climb <code>1</code> or <code>2</code> steps. In how many distinct ways can you climb to the top?</p>
 <pre><code>Example 1:
 
 Input: n = 2
@@ -170,26 +172,9 @@ Explanation: There are three ways to climb to the top.
 2. 1 step + 2 steps
 3. 2 steps + 1 step
 </code></pre>
-<p>Solution:</p>
-<p>This is a good example of fibonacci implementation.</p>
-<pre><code>class Solution &#123;
-    private int[] val = new int[46];
-    public int getValue(int n) &#123;
-        if(n &lt; 0) return 0;
-        if(val[n] == 0) &#123;
-            val[n] = climbStairs(n);
-        &#125;
-        return val[n];
-    &#125;
-    
-    public int climbStairs(int n) &#123;
-        if(n &lt;= 0) return 0;
-        if(n == 1) return 1;
-        if(n == 2) return 2;
-        return (getValue(n-1) + getValue(n-2));
-    &#125;
-&#125;
-</code></pre>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p>This is a good example of fibonacci implementation.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] val = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">46</span>];</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getValue</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(val[n] == <span class="number">0</span>) &#123;</span><br><span class="line">            val[n] = climbStairs(n);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val[n];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">climbStairs</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n &lt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(n == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(n == <span class="number">2</span>) <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">return</span> (getValue(n-<span class="number">1</span>) + getValue(n-<span class="number">2</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
   </div>
 </article>
@@ -221,7 +206,7 @@ Explanation: There are three ways to climb to the top.
     </div>
 
     <div id="toc-footer" style="display: none">
-      
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Problem"><span class="toc-number">1.</span> <span class="toc-text">Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Solution"><span class="toc-number">2.</span> <span class="toc-text">Solution</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

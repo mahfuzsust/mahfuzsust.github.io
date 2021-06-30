@@ -17,11 +17,11 @@
 <meta property="og:image" content="https://assets.leetcode.com/uploads/2021/02/18/btree2.jpg">
 <meta property="og:image" content="https://assets.leetcode.com/uploads/2021/02/18/btree.jpg">
 <meta property="article:published_time" content="2021-05-23T06:17:42.000Z">
-<meta property="article:modified_time" content="2021-06-30T07:51:19.471Z">
+<meta property="article:modified_time" content="2021-06-30T16:26:16.074Z">
 <meta property="article:author" content="Mahfuzur Rahman">
-<meta property="article:tag" content="binary-search-tree">
 <meta property="article:tag" content="algorithm">
 <meta property="article:tag" content="java">
+<meta property="article:tag" content="binary-search-tree">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://assets.leetcode.com/uploads/2021/02/18/btree1.jpg">
     
@@ -52,6 +52,8 @@
     
     <!-- rss -->
     
+    
+      <link rel="alternate" href="/true" title="Mahfuz" type="application/atom+xml" />
     
 	<!-- mathjax -->
 	
@@ -167,33 +169,8 @@
 <li><code>nums</code> is sorted in a <strong>strictly increasing</strong> order.</li>
 </ul>
 <p><strong>Solution</strong></p>
-<pre><code>public class TreeNode &#123;
-     int val;
-     TreeNode left;
-     TreeNode right;
-     TreeNode() &#123;&#125;
-     TreeNode(int val) &#123; this.val = val; &#125;
-     TreeNode(int val, TreeNode left, TreeNode right) &#123;
-         this.val = val;
-         this.left = left;
-         this.right = right;
-     &#125;
-&#125;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line">    TreeNode left;</span><br><span class="line">    TreeNode right;</span><br><span class="line">    TreeNode() &#123;&#125;</span><br><span class="line">    TreeNode(<span class="keyword">int</span> val) &#123; <span class="keyword">this</span>.val = val; &#125;</span><br><span class="line">    TreeNode(<span class="keyword">int</span> val, TreeNode left, TreeNode right) &#123;</span><br><span class="line">        <span class="keyword">this</span>.val = val;</span><br><span class="line">        <span class="keyword">this</span>.left = left;</span><br><span class="line">        <span class="keyword">this</span>.right = right;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> TreeNode <span class="title">sortedArrayToBST</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(p &gt; q) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">int</span> mid = (q + p) / <span class="number">2</span>;</span><br><span class="line">        TreeNode node = <span class="keyword">new</span> TreeNode(nums[mid]);</span><br><span class="line">        node.left = sortedArrayToBST(nums,p, mid -<span class="number">1</span>);</span><br><span class="line">        node.right = sortedArrayToBST(nums, mid + <span class="number">1</span>, q);</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">sortedArrayToBST</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sortedArrayToBST(nums, <span class="number">0</span>, nums.length - <span class="number">1</span>);       </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-class Solution &#123;
-    private TreeNode sortedArrayToBST(int[] nums, int p, int q) &#123;
-        if(p &gt; q) return null;
-        int mid = (q + p) / 2;
-        TreeNode node = new TreeNode(nums[mid]);
-        node.left = sortedArrayToBST(nums,p, mid -1);
-        node.right = sortedArrayToBST(nums, mid + 1, q);
-        return node;
-    &#125;
-    public TreeNode sortedArrayToBST(int[] nums) &#123;
-        return sortedArrayToBST(nums, 0, nums.length - 1);       
-    &#125;
-&#125;
-</code></pre>
 
   </div>
 </article>

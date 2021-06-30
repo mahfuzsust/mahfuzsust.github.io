@@ -16,7 +16,7 @@
 <meta property="og:image" content="https://mahfuzsust.github.io/content/images/2021/03/1.png">
 <meta property="og:image" content="https://mahfuzsust.github.io/content/images/2021/03/2.png">
 <meta property="article:published_time" content="2020-08-18T07:18:27.000Z">
-<meta property="article:modified_time" content="2021-06-30T07:49:03.536Z">
+<meta property="article:modified_time" content="2021-06-30T16:21:36.680Z">
 <meta property="article:author" content="Mahfuzur Rahman">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="hashmap">
@@ -50,6 +50,8 @@
     
     <!-- rss -->
     
+    
+      <link rel="alternate" href="/true" title="Mahfuz" type="application/atom+xml" />
     
 	<!-- mathjax -->
 	
@@ -167,97 +169,15 @@
 <p>Hash comes with a problem too, collision. It is always recommended to use a better hash function that can reduce chances of collision.<br><img src="/content/images/2021/03/2.png" alt="Image for post"><br>Multiple hash can have same hash key. For that reason, there is a bucket or container for each key where all the values are store if collision occurs.</p>
 <p>Let’s dive into a basic implementation of our hashmap.</p>
 <p>Firstly, we need an array to store all the keys, a bucket model to store all the entry and a wrapper for our key, value pair.</p>
-<pre><code>public class MyKeyValueEntry&lt;K, V&gt; &#123;
-    private K key;
-    private V value;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyKeyValueEntry</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> K key;</span><br><span class="line">    <span class="keyword">private</span> V value;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyKeyValueEntry</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.key = key;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;    <span class="comment">// getters &amp; setters</span></span><br><span class="line">    <span class="comment">// hashCode &amp; equals</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    public MyKeyValueEntry(K key, V value) &#123;
-        this.key = key;
-        this.value = value;
-    &#125;    // getters &amp; setters
-    // hashCode &amp; equals
-&#125;
-</code></pre>
+
 <p>Bucket to store all the key values</p>
-<pre><code>public class MyMapBucket &#123;
-    private List&lt;MyKeyValueEntry&gt; entries;
-
-    public MyMapBucket() &#123;
-        if(entries == null) &#123;
-            entries = new LinkedList&lt;&gt;();
-        &#125;
-    &#125;
-
-    public List&lt;MyKeyValueEntry&gt; getEntries() &#123;
-        return entries;
-    &#125;
-
-    public void addEntry(MyKeyValueEntry entry) &#123;
-        this.entries.add(entry);
-    &#125;
-
-    public void removeEntry(MyKeyValueEntry entry) &#123;
-        this.entries.remove(entry);
-    &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyMapBucket</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;MyKeyValueEntry&gt; entries;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyMapBucket</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(entries == <span class="keyword">null</span>) &#123;</span><br><span class="line">            entries = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;MyKeyValueEntry&gt; <span class="title">getEntries</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> entries;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addEntry</span><span class="params">(MyKeyValueEntry entry)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.entries.add(entry);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeEntry</span><span class="params">(MyKeyValueEntry entry)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.entries.remove(entry);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Lastly, implementation of our hashmap</p>
-<pre><code>public class MyHashMap&lt;K, V&gt; &#123;
-    private int CAPACITY = 10;
-    private MyMapBucket[] bucket;
-    private int size = 0;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyHashMap</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> CAPACITY = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> MyMapBucket[] bucket;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyHashMap</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.bucket = <span class="keyword">new</span> MyMapBucket[CAPACITY];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getHash</span><span class="params">(K key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (key.hashCode() &amp; <span class="number">0xfffffff</span>) % CAPACITY;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> MyKeyValueEntry <span class="title">getEntry</span><span class="params">(K key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hash = getHash(key);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; bucket[hash].getEntries().size(); i++) &#123;</span><br><span class="line">            MyKeyValueEntry myKeyValueEntry = bucket[hash].getEntries().get(i);</span><br><span class="line">            <span class="keyword">if</span>(myKeyValueEntry.getKey().equals(key)) &#123;</span><br><span class="line">                <span class="keyword">return</span> myKeyValueEntry;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(containsKey(key)) &#123;</span><br><span class="line">            MyKeyValueEntry entry = getEntry(key);</span><br><span class="line">            entry.setValue(value);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> hash = getHash(key);</span><br><span class="line">            <span class="keyword">if</span>(bucket[hash] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                bucket[hash] = <span class="keyword">new</span> MyMapBucket();</span><br><span class="line">            &#125;</span><br><span class="line">            bucket[hash].addEntry(<span class="keyword">new</span> MyKeyValueEntry&lt;&gt;(key, value));</span><br><span class="line">            size++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(K key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> containsKey(key) ? (V) getEntry(key).getValue() : <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">containsKey</span><span class="params">(K key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hash = getHash(key);</span><br><span class="line">        <span class="keyword">return</span> !(Objects.isNull(bucket[hash]) || Objects.isNull(getEntry(key)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(K key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(containsKey(key)) &#123;</span><br><span class="line">            <span class="keyword">int</span> hash = getHash(key);</span><br><span class="line">            bucket[hash].removeEntry(getEntry(key));</span><br><span class="line">            size--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    public MyHashMap() &#123;
-        this.bucket = new MyMapBucket[CAPACITY];
-    &#125;
-    private int getHash(K key) &#123;
-        return (key.hashCode() &amp; 0xfffffff) % CAPACITY;
-    &#125;
 
-    private MyKeyValueEntry getEntry(K key) &#123;
-        int hash = getHash(key);
-        for (int i = 0; i &lt; bucket[hash].getEntries().size(); i++) &#123;
-            MyKeyValueEntry myKeyValueEntry = bucket[hash].getEntries().get(i);
-            if(myKeyValueEntry.getKey().equals(key)) &#123;
-                return myKeyValueEntry;
-            &#125;
-        &#125;
-        return null;
-    &#125;    public void put(K key, V value) &#123;
-        if(containsKey(key)) &#123;
-            MyKeyValueEntry entry = getEntry(key);
-            entry.setValue(value);
-        &#125; else &#123;
-            int hash = getHash(key);
-            if(bucket[hash] == null) &#123;
-                bucket[hash] = new MyMapBucket();
-            &#125;
-            bucket[hash].addEntry(new MyKeyValueEntry&lt;&gt;(key, value));
-            size++;
-        &#125;
-    &#125;
-
-    public V get(K key) &#123;
-        return containsKey(key) ? (V) getEntry(key).getValue() : null;
-    &#125;
-
-    public boolean containsKey(K key) &#123;
-        int hash = getHash(key);
-        return !(Objects.isNull(bucket[hash]) || Objects.isNull(getEntry(key)));
-    &#125;
-
-    public void delete(K key) &#123;
-        if(containsKey(key)) &#123;
-            int hash = getHash(key);
-            bucket[hash].removeEntry(getEntry(key));
-            size--;
-        &#125;
-    &#125;
-    public int size() &#123;
-        return size;
-    &#125;
-&#125;
-</code></pre>
 <p><strong>Put into map:</strong></p>
 <ol>
 <li>If key already exists, then update value of that key.</li>

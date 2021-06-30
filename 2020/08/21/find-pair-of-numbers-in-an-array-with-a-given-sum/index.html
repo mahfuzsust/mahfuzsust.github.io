@@ -14,7 +14,7 @@
 <meta property="og:description" content="There are multiple ways to find the pair of numbers in a given array. The numbers in the array can be in two ways.  Sorted Unsorted  If the numbers are sorted then we can get easily with the complexit">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-08-21T07:16:21.000Z">
-<meta property="article:modified_time" content="2021-06-30T07:48:52.688Z">
+<meta property="article:modified_time" content="2021-06-30T16:35:32.895Z">
 <meta property="article:author" content="Mahfuzur Rahman">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="array">
@@ -48,6 +48,8 @@
     
     <!-- rss -->
     
+    
+      <link rel="alternate" href="/true" title="Mahfuz" type="application/atom+xml" />
     
 	<!-- mathjax -->
 	
@@ -159,51 +161,45 @@
 </ol>
 <p>If the numbers are sorted then we can get easily with the complexity of O(n). The brute force approach will be easily applicable for both the sorted and unsorted array of numbers.</p>
 <h3 id="Brute-force"><a href="#Brute-force" class="headerlink" title="Brute force:"></a>Brute force:</h3><p>Brute force approach will check each and every number to determine if it equals to the given sum. The complexity of this approach is O(n²).</p>
-<pre><code>public void findPair(int[] array, int sum) &#123;
-    for(int i = 0; i &lt; array.length - 1; i++) &#123;
-        for(int j = i + 1; j &lt; array.length; j++) &#123;
-            if(array[i] + array[j] == sum) &#123;
-                // The pair is &#123; array[i], array[j] &#125;
-            &#125;
-        &#125;
-    &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findPair</span><span class="params">(<span class="keyword">int</span>[] array, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; array.length; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(array[i] + array[j] == sum) &#123;</span><br><span class="line">                <span class="comment">// The pair is &#123; array[i], array[j] &#125;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="Sorted"><a href="#Sorted" class="headerlink" title="Sorted:"></a>Sorted:</h3><p>In this approach, we need to sort the unsorted array(if needed). In this case, the complexity depends on the complexity of the sorting algorithm. If we choose a sorting algorithm of complexity O(n) we can solve this problem in O(n) complexity.</p>
-<pre><code>public void findPair(int[] array, int sum) &#123;
-    // any sort method can be used.
-    Arrays.sort(array);
-    
-    int i = 0, j = array.length - 1;
-    
-    while(i &lt; j) &#123;
-        int pairSum = array[i] + array[j];
-        if(pairSum == sum) &#123;
-            // The pair is &#123; array[i], array[j] &#125;
-            // if we want to continue i++ otherwise break
-        &#125; else if(pairSum &gt; sum) &#123;
-            j--;
-        &#125; else &#123;
-            i++;
-        &#125;
-    &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findPair</span><span class="params">(<span class="keyword">int</span>[] array, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// any sort method can be used.</span></span><br><span class="line">    Arrays.sort(array);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>, j = array.length - <span class="number">1</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>(i &lt; j) &#123;</span><br><span class="line">        <span class="keyword">int</span> pairSum = array[i] + array[j];</span><br><span class="line">        <span class="keyword">if</span>(pairSum == sum) &#123;</span><br><span class="line">            <span class="comment">// The pair is &#123; array[i], array[j] &#125;</span></span><br><span class="line">            <span class="comment">// if we want to continue i++ otherwise break</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(pairSum &gt; sum) &#123;</span><br><span class="line">            j--;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="Hash-Flag"><a href="#Hash-Flag" class="headerlink" title="Hash / Flag:"></a>Hash / Flag:</h3><p>In this approach, we can get the pairs in O(n) complexity. We can use hashmap or flag array to set counter for each value and check using negation from the given sum.</p>
-<pre><code>public void findPair(int[] array, int sum) &#123;
-    Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
-    for (int i = 0; i &lt; array.length; i++) &#123;
-        map.put(array[i], map.getOrDefault(array[i], 0) + 1);
-    &#125;
-    for (int i = 0; i &lt; array.length; i++) &#123;
-        if(map.containsKey(sum - array[i])) &#123;
-            // The pair is &#123; array[i], sum - array[i] &#125;
-        &#125;
-    &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findPair</span><span class="params">(<span class="keyword">int</span>[] array, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">    Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++) &#123;</span><br><span class="line">        map.put(array[i], map.getOrDefault(array[i], <span class="number">0</span>) + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(map.containsKey(sum - array[i])) &#123;</span><br><span class="line">            <span class="comment">// The pair is &#123; array[i], sum - array[i] &#125;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
 <p>In this way, we will get the pairs twice. Because in each occurrence it will check with the hashmap and make a pair. We can add a set to get unique pairs.</p>
-<h3 id="Metrics"><a href="#Metrics" class="headerlink" title="Metrics:"></a>Metrics:</h3><p>I tried to run these to get some metrics. Sharing those might help to get some understanding.<br>100001000001000000Brute force22ms1453msToo longSorted O(n log(n))4ms20ms293msHashmap8ms44ms276ms</p>
+<h3 id="Metrics"><a href="#Metrics" class="headerlink" title="Metrics:"></a>Metrics:</h3><p>I tried to run these to get some metrics. Sharing those might help to get some understanding.</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">10000</th>
+<th align="center">100000</th>
+<th align="center">1000000</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Brute force</td>
+<td align="center">22ms</td>
+<td align="center">1453ms</td>
+<td align="center">Too long</td>
+</tr>
+<tr>
+<td align="left">Sorted O(n log(n))</td>
+<td align="center">4ms</td>
+<td align="center">20ms</td>
+<td align="center">293ms</td>
+</tr>
+<tr>
+<td align="left">Hashmap</td>
+<td align="center">8ms</td>
+<td align="center">44ms</td>
+<td align="center">276ms</td>
+</tr>
+</tbody></table>
 
   </div>
 </article>

@@ -15,7 +15,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://mahfuzsust.github.io/content/images/2021/03/Screen-Shot-2021-03-24-at-9.44.06-AM.png">
 <meta property="article:published_time" content="2021-03-23T22:16:13.000Z">
-<meta property="article:modified_time" content="2021-06-30T07:52:04.814Z">
+<meta property="article:modified_time" content="2021-06-30T16:25:41.706Z">
 <meta property="article:author" content="Mahfuzur Rahman">
 <meta property="article:tag" content="app script">
 <meta property="article:tag" content="spreadsheet">
@@ -50,6 +50,8 @@
     <!-- rss -->
     
     
+      <link rel="alternate" href="/true" title="Mahfuz" type="application/atom+xml" />
+    
 	<!-- mathjax -->
 	
 <meta name="generator" content="Hexo 5.4.0"></head>
@@ -81,7 +83,7 @@
         <li><a class="icon" aria-label="Previous post " href="/2021/05/23/climbing-stairs/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="Next post " href="/2021/03/13/vim-configuration/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Next post " href="/2021/03/08/kafka-server-setup/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -162,89 +164,17 @@
 <li>Create google drive folders to organize</li>
 </ul>
 <p>First, we need to create a clone of the template sheet.</p>
-<pre><code>function cloneTemplateDaily() &#123;
-  var name = Utilities.formatDate(new Date(), &quot;GMT&quot;, &quot;dd-MM-yyyy&quot;);
-  
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var duplicate_sheet = ss.getSheetByName(name); 
-  if(duplicate_sheet == null) &#123; 
-    var templateSheet = ss.getSheetByName(&quot;template&quot;);
-    ss.setActiveSheet(templateSheet);
-    duplicate_sheet = ss.duplicateActiveSheet();
-    duplicate_sheet.setName(name);
-  &#125;
-  ss.setActiveSheet(duplicate_sheet);
-&#125;
-</code></pre>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> clone<span class="constructor">TemplateDaily()</span> &#123;</span><br><span class="line">  var name = <span class="module-access"><span class="module"><span class="identifier">Utilities</span>.</span></span>format<span class="constructor">Date(<span class="params">new</span> Date()</span>, <span class="string">&quot;GMT&quot;</span>, <span class="string">&quot;dd-MM-yyyy&quot;</span>);</span><br><span class="line">  </span><br><span class="line">  var ss = <span class="module-access"><span class="module"><span class="identifier">SpreadsheetApp</span>.</span></span>get<span class="constructor">ActiveSpreadsheet()</span>;</span><br><span class="line">  var duplicate_sheet = ss.get<span class="constructor">SheetByName(<span class="params">name</span>)</span>; </span><br><span class="line">  <span class="keyword">if</span>(duplicate_sheet<span class="operator"> == </span>null) &#123; </span><br><span class="line">    var templateSheet = ss.get<span class="constructor">SheetByName(<span class="string">&quot;template&quot;</span>)</span>;</span><br><span class="line">    ss.set<span class="constructor">ActiveSheet(<span class="params">templateSheet</span>)</span>;</span><br><span class="line">    duplicate_sheet = ss.duplicate<span class="constructor">ActiveSheet()</span>;</span><br><span class="line">    duplicate_sheet.set<span class="constructor">Name(<span class="params">name</span>)</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  ss.set<span class="constructor">ActiveSheet(<span class="params">duplicate_sheet</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
 <p>Then I need to backup the sheet to my google drive</p>
-<pre><code>function backupSheetMonthly() &#123;
-  var lastMonthDate = getLastMonthDate();
-  var fileName = Utilities.formatDate(lastMonthDate, &quot;GMT&quot;, &quot;MMMM, yyyy&quot;);
-  var year = Utilities.formatDate(lastMonthDate, &quot;GMT&quot;, &quot;yyyy&quot;);
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> backup<span class="constructor">SheetMonthly()</span> &#123;</span><br><span class="line">  var lastMonthDate = get<span class="constructor">LastMonthDate()</span>;</span><br><span class="line">  var fileName = <span class="module-access"><span class="module"><span class="identifier">Utilities</span>.</span></span>format<span class="constructor">Date(<span class="params">lastMonthDate</span>, <span class="string">&quot;GMT&quot;</span>, <span class="string">&quot;MMMM, yyyy&quot;</span>)</span>;</span><br><span class="line">  var year = <span class="module-access"><span class="module"><span class="identifier">Utilities</span>.</span></span>format<span class="constructor">Date(<span class="params">lastMonthDate</span>, <span class="string">&quot;GMT&quot;</span>, <span class="string">&quot;yyyy&quot;</span>)</span>;</span><br><span class="line"></span><br><span class="line">  var rootFolder = get<span class="constructor">Folder(<span class="string">&quot;My Logs&quot;</span>)</span>;</span><br><span class="line">  var yearFolder = get<span class="constructor">Folder(<span class="params">year</span>, <span class="params">rootFolder</span>)</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(!file<span class="constructor">Exist(<span class="params">fileName</span>, <span class="params">yearFolder</span>)</span>) &#123;</span><br><span class="line">    var file = <span class="module-access"><span class="module"><span class="identifier">DriveApp</span>.</span></span>get<span class="constructor">FileById(SpreadsheetApp.<span class="params">getActiveSpreadsheet</span>()</span>.get<span class="constructor">Id()</span>)</span><br><span class="line">    file.make<span class="constructor">Copy(<span class="params">fileName</span>, <span class="params">yearFolder</span>)</span>;</span><br><span class="line">    delete<span class="constructor">Sheets()</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-  var rootFolder = getFolder(&quot;My Logs&quot;);
-  var yearFolder = getFolder(year, rootFolder);
 
-  if(!fileExist(fileName, yearFolder)) &#123;
-    var file = DriveApp.getFileById(SpreadsheetApp.getActiveSpreadsheet().getId())
-    file.makeCopy(fileName, yearFolder);
-    deleteSheets();
-  &#125;
-&#125;
-</code></pre>
 <p>Now, all the methods that I require</p>
-<pre><code>function fileExist(name, folder) &#123;
-  var files = folder.getFilesByName(name);
-  while(files.hasNext())&#123;
-    var file = files.next();
-    if(file.getName() == month) &#123;
-      return true;
-    &#125;
-  &#125;;
-  return false;
-&#125;
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> file<span class="constructor">Exist(<span class="params">name</span>, <span class="params">folder</span>)</span> &#123;</span><br><span class="line">  var files = folder.get<span class="constructor">FilesByName(<span class="params">name</span>)</span>;</span><br><span class="line">  <span class="keyword">while</span>(files.has<span class="constructor">Next()</span>)&#123;</span><br><span class="line">    var file = files.next<span class="literal">()</span>;</span><br><span class="line">    <span class="keyword">if</span>(file.get<span class="constructor">Name()</span><span class="operator"> == </span>month) &#123;</span><br><span class="line">      return <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  return <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> get<span class="constructor">Folder(<span class="params">name</span>, <span class="params">parent</span>)</span> &#123;</span><br><span class="line">  var folders = null;</span><br><span class="line">  <span class="keyword">if</span>(!parent) &#123;</span><br><span class="line">    folders = <span class="module-access"><span class="module"><span class="identifier">DriveApp</span>.</span></span>get<span class="constructor">FoldersByName(<span class="params">name</span>)</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    folders = parent.get<span class="constructor">FoldersByName(<span class="params">name</span>)</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">while</span>(folders.has<span class="constructor">Next()</span>)&#123;</span><br><span class="line">    var folder = folders.next<span class="literal">()</span>;</span><br><span class="line">    <span class="keyword">if</span>(folder.get<span class="constructor">Name()</span><span class="operator"> == </span>name) &#123;</span><br><span class="line">      return folder;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(!parent) &#123;</span><br><span class="line">    return <span class="module-access"><span class="module"><span class="identifier">DriveApp</span>.</span></span>create<span class="constructor">Folder(<span class="params">name</span>)</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  return parent.create<span class="constructor">Folder(<span class="params">name</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> get<span class="constructor">LastMonthDate()</span> &#123;</span><br><span class="line">  var dt = <span class="keyword">new</span> <span class="constructor">Date()</span>;</span><br><span class="line">  dt.set<span class="constructor">Date(0)</span>;</span><br><span class="line">  dt.set<span class="constructor">Date(1)</span>;</span><br><span class="line">  return dt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> delete<span class="constructor">Sheets()</span> &#123;</span><br><span class="line">  var ss = <span class="module-access"><span class="module"><span class="identifier">SpreadsheetApp</span>.</span></span>get<span class="constructor">ActiveSpreadsheet()</span>;</span><br><span class="line">  var sheets = ss.get<span class="constructor">Sheets()</span>;</span><br><span class="line">  <span class="keyword">for</span>(var i = <span class="number">0</span>; i &lt; sheets.length; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span>(sheets<span class="literal">[<span class="identifier">i</span>]</span>.get<span class="constructor">Name()</span> !== <span class="string">&quot;template&quot;</span>) &#123;</span><br><span class="line">      ss.set<span class="constructor">ActiveSheet(<span class="params">sheets</span>[<span class="params">i</span>])</span>;</span><br><span class="line">      ss.delete<span class="constructor">ActiveSheet()</span>;</span><br><span class="line">      <span class="module-access"><span class="module"><span class="identifier">Utilities</span>.</span></span>sleep(<span class="number">100</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-function getFolder(name, parent) &#123;
-  var folders = null;
-  if(!parent) &#123;
-    folders = DriveApp.getFoldersByName(name);
-  &#125;
-  else &#123;
-    folders = parent.getFoldersByName(name);
-  &#125;
-  
-  while(folders.hasNext())&#123;
-    var folder = folders.next();
-    if(folder.getName() == name) &#123;
-      return folder;
-    &#125;
-  &#125;
 
-  if(!parent) &#123;
-    return DriveApp.createFolder(name);
-  &#125;
-  return parent.createFolder(name);
-&#125;
-
-function getLastMonthDate() &#123;
-  var dt = new Date();
-  dt.setDate(0);
-  dt.setDate(1);
-  return dt;
-&#125;
-
-function deleteSheets() &#123;
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheets = ss.getSheets();
-  for(var i = 0; i &lt; sheets.length; i++) &#123;
-    if(sheets[i].getName() !== &quot;template&quot;) &#123;
-      ss.setActiveSheet(sheets[i]);
-      ss.deleteActiveSheet();
-      Utilities.sleep(100);
-    &#125;
-  &#125;
-&#125;
-</code></pre>
 <p>Lastly, I created two separate trigger that will call my two functions</p>
 <ol>
 <li>cloneTemplateDaily</li>
