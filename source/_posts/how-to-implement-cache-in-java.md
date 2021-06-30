@@ -2,6 +2,8 @@
 title: How to implement cache in Java
 date: 2020-08-25 12:45:43
 tags:
+  - java
+  - cache
 ---
 
 
