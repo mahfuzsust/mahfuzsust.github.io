@@ -43,56 +43,60 @@ In our design, we will use
 We are using doubly linked list to determine which key to delete and have the benefit of adding and deleting keys in O(1).
 
 Initially we will declare a model to store our key-value pair, hit count and reference node to point previous and next node.
+{% codeblock lang:java %}
+public class CacheItem<K, V> {
+    private K key;    
+    private V value;    
+    private int hitCount = 0; // LFU require this    
+    private CacheItem prev, next;    
+    
+    public CacheItem(K key, V value) {        
+        this.value = value;        		
+        this.key = key;    
+    }        
+    public void incrementHitCount() {        
+        this.hitCount++;    
+    }    
+    // getter / setter
+}
+{% endcodeblock %}
 
-    public class CacheItem<K, V> {
-        private K key;    
-        private V value;    
-        private int hitCount = 0; // LFU require this    
-        private CacheItem prev, next;    
-        
-        public CacheItem(K key, V value) {        
-        	this.value = value;        		
-            this.key = key;    
-        }        
-        public void incrementHitCount() {        
-        	this.hitCount++;    
-        }    
-        // getter / setter
-    }
 
 Now, we can outline our cache class with basic functionalities of get, put, delete and size.
-
-    public class Cache<K, V> {
-        private Map<K, CacheItem> map;
-        private CacheItem first, last;
-        private int size;
-        private final int CAPACITY;
-        private int hitCount = 0;
-        private int missCount = 0;
-        public Cache(int capacity) {
-            CAPACITY = capacity;  // 
-            map = new HashMap<>(CAPACITY);
-        }
-        
-        public void put(K key, V value) {}
-    
-        public V get(K key) {}
-    
-        public void delete(K key) {
-            deleteNode(map.get(key));
-        }
-    
-        public int size() {
-            return size;
-        }
-        public int getHitCount() {
-            return hitCount;
-        }
-    
-        public int getMissCount() {
-            return missCount;
-        }
+{% codeblock lang:java %}
+public class Cache<K, V> {
+    private Map<K, CacheItem> map;
+    private CacheItem first, last;
+    private int size;
+    private final int CAPACITY;
+    private int hitCount = 0;
+    private int missCount = 0;
+    public Cache(int capacity) {
+        CAPACITY = capacity;  // 
+        map = new HashMap<>(CAPACITY);
     }
+    
+    public void put(K key, V value) {}
+
+    public V get(K key) {}
+
+    public void delete(K key) {
+        deleteNode(map.get(key));
+    }
+
+    public int size() {
+        return size;
+    }
+    public int getHitCount() {
+        return hitCount;
+    }
+
+    public int getMissCount() {
+        return missCount;
+    }
+}
+{% endcodeblock %}
+
 
 We also included hit count and miss count to determine the performance of our cache.
 
@@ -104,68 +108,76 @@ For our put method
 2. Otherwise, If size exceeds capacity
 3. Delete existing node using appropriate strategy
 4. Add new node in the top
+{% codeblock lang:java %}
+public void put(K key, V value) {
+    CacheItem node = new CacheItem(key, value);
+    if(map.containsKey(key) == false) {
+        if(size() >= CAPACITY) {
+            deleteNode(first);        
+        }        
+        addNodeToLast(node);    
+    }    
+    map.put(key, node);
+}
+{% endcodeblock %}
 
-    public void put(K key, V value) {
-    	CacheItem node = new CacheItem(key, value);
-    	if(map.containsKey(key) == false) {
-    		if(size() >= CAPACITY) {
-    			deleteNode(first);        
-    		}        
-    		addNodeToLast(node);    
-    	}    
-    	map.put(key, node);
-    }
 
 In our delete method
 
 - Remove node from map
 - Delete all references associated with that node.
+{% codeblock lang:java %}
+private void deleteNode(CacheItem node) {    
+    if(node == null) {        
+        return;    
+    }    
+    if(last == node) {        
+        last = node.getPrev();    
+    }    
+    if(first == node) {        
+        first = node.getNext();    
+    }    
+    map.remove(node.getKey());    
+    node = null; // Optional, collected by GC    
+    size--;
+}
+{% endcodeblock %}
 
-    private void deleteNode(CacheItem node) {    
-    	if(node == null) {        
-        	return;    
-        }    
-        if(last == node) {        
-        	last = node.getPrev();    
-        }    
-        if(first == node) {        
-        	first = node.getNext();    
-        }    
-        map.remove(node.getKey());    
-        node = null; // Optional, collected by GC    
-        size--;
-    }
 
 We can add node in the top. The last pointer will reference to the last inserted node.
-
-    private void addNodeToLast(CacheItem node) {
-        if(last != null) {
-            last.setNext(node);
-            node.setPrev(last);
-        }
-    
-        last = node;
-        if(first == null) {
-            first = node;
-        }
-        size++;
+{% codeblock lang:java %}
+private void addNodeToLast(CacheItem node) {
+    if(last != null) {
+        last.setNext(node);
+        node.setPrev(last);
     }
+
+    last = node;
+    if(first == null) {
+        first = node;
+    }
+    size++;
+}
+{% endcodeblock %}
+
 
 In our get method,
 
 - Get data from map
 - Increment the counter for that item. ( Useful for lease frequently used )
 - Reorder the linked list.
-
-    public V get(K key) {
-        if(map.containsKey(key) == false) {
-            return null;
-        }
-        CacheItem node = (CacheItem) map.get(key);
-        node.incrementHitCount();
-        reorder(node);
-        return (V) node.getValue();
+{% codeblock lang:java %}
+public V get(K key) {
+    if(map.containsKey(key) == false) {
+        return null;
     }
+    CacheItem node = (CacheItem) map.get(key);
+    node.incrementHitCount();
+    reorder(node);
+    return (V) node.getValue();
+}
+{% endcodeblock %}
+
 
 Reorder is the key for this implementation. For different algorithm this reorder to delete method will change.
 
@@ -174,21 +186,23 @@ Reorder is the key for this implementation. For different algorithm this reorder
 Delete candidate is the oldest used entry.
 
 - The latest accessed node will be at the last end along with newly added items. In this way, we can delete from the first easily.
-
-    private void reorder(CacheItem node) {
-        if(last == node) {
-            return;
-        }
-        if(first == node) {
-            first = node.getNext();
-        } else {
-            node.getPrev().setNext(node.getNext());
-        }
-        last.setNext(node);
-        node.setPrev(last);
-        node.setNext(null);
-        last = node;
+{% codeblock lang:java %}
+private void reorder(CacheItem node) {
+    if(last == node) {
+        return;
     }
+    if(first == node) {
+        first = node.getNext();
+    } else {
+        node.getPrev().setNext(node.getNext());
+    }
+    last.setNext(node);
+    node.setPrev(last);
+    node.setNext(null);
+    last = node;
+}
+{% endcodeblock %}
+
 
 #### Least Frequently Used (LFU)
 
@@ -199,52 +213,56 @@ We have to sort items based on the frequency the nodes being accessed.
 To avoid getting deleted, for each accessed items needs to reach top based on their frequency.
 
 - Iterated a loop, which swaps the node if the frequency is greater than it’s next node frequency.
-
-    private void reorder(CacheItem node) {
-        if(last == node) {
-            return;
-        }
-        CacheItem nextNode = node.getNext();
-        while (nextNode != null) {
-            if(nextNode.getHitCount() > node.getHitCount()) {
-                break;
-            }
-            if(first == node) {
-                first = nextNode;
-            }
-            if(node.getPrev() != null) {
-                node.getPrev().setNext(nextNode);
-            }
-            nextNode.setPrev(node.getPrev());
-            node.setPrev(nextNode);
-            node.setNext(nextNode.getNext());
-            if(nextNode.getNext() != null) {
-                nextNode.getNext().setPrev(node);
-            }
-            nextNode.setNext(node);
-            nextNode = node.getNext();
-        }
-        if(node.getNext() == null) {
-            last = node;
-        }
+{% codeblock lang:java %}
+private void reorder(CacheItem node) {
+    if(last == node) {
+        return;
     }
+    CacheItem nextNode = node.getNext();
+    while (nextNode != null) {
+        if(nextNode.getHitCount() > node.getHitCount()) {
+            break;
+        }
+        if(first == node) {
+            first = nextNode;
+        }
+        if(node.getPrev() != null) {
+            node.getPrev().setNext(nextNode);
+        }
+        nextNode.setPrev(node.getPrev());
+        node.setPrev(nextNode);
+        node.setNext(nextNode.getNext());
+        if(nextNode.getNext() != null) {
+            nextNode.getNext().setPrev(node);
+        }
+        nextNode.setNext(node);
+        nextNode = node.getNext();
+    }
+    if(node.getNext() == null) {
+        last = node;
+    }
+}
+{% endcodeblock %}
+
 
 This way, there is an edge case where, after adding items that require delete from the start can cause deletion of the high frequency node.
 
 To solve this issue, we need to add nodes pointing our first node for least frequently accessed.
-
-    private void addNodeToFirst(CacheItem node) {
-        if(first != null) {
-            node.setNext(first);
-            first.setPrev(node);
-        }
-        first = node;
-    
-        if(last == null) {
-            last = node;
-        }
-        size++;
+{% codeblock lang:java %}
+private void addNodeToFirst(CacheItem node) {
+    if(first != null) {
+        node.setNext(first);
+        first.setPrev(node);
     }
+    first = node;
+
+    if(last == null) {
+        last = node;
+    }
+    size++;
+}
+{% endcodeblock %}
+
 
 #### First In First Out (FIFO)
 

@@ -25,18 +25,20 @@ Given `n`, calculate `F(n)`.
     Input: n = 4 Output: 3 Explanation: F(4) = F(3) + F(2) = 2 + 1 = 3.
 
 Solution
-
-    class Solution {
-        private int[] val = new int[31];
-        private int getVal(int n) {
-            if(val[n] == 0) {
-                val[n] = fib(n);
-            }
-            return val[n];
+{% codeblock lang:java %}
+class Solution {
+    private int[] val = new int[31];
+    private int getVal(int n) {
+        if(val[n] == 0) {
+            val[n] = fib(n);
         }
-        public int fib(int n) {
-            if(n <= 0) return 0;
-            if(n == 1) return 1;
-            return getVal(n-1) + getVal(n-2);
-        }
+        return val[n];
     }
+    public int fib(int n) {
+        if(n <= 0) return 0;
+        if(n == 1) return 1;
+        return getVal(n-1) + getVal(n-2);
+    }
+}
+{% endcodeblock %}
+

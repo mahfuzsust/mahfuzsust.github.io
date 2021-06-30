@@ -18,37 +18,41 @@ Problem link: [Product of Array Except Self](https://leetcode.com/problems/produ
 Solution:
 
 Let’s start with a brute-force solution.
-
-    public int[] productExceptSelf(int[] nums) {
-        int[] arr = new int[nums.length];
-        for(int i = 0; i < nums.length; i++) {
-            int mul = 1;
-            for (int j = 0; j < nums.length; j++) {
-                if(i == j) {
-                    continue;
-                }
-                mul *= nums[j];
+{% codeblock lang:java %}
+public int[] productExceptSelf(int[] nums) {
+    int[] arr = new int[nums.length];
+    for(int i = 0; i < nums.length; i++) {
+        int mul = 1;
+        for (int j = 0; j < nums.length; j++) {
+            if(i == j) {
+                continue;
             }
-            arr[i] = mul;
+            mul *= nums[j];
         }
-        return arr;
+        arr[i] = mul;
     }
+    return arr;
+}
+{% endcodeblock %}
+
 
 Clearly, this is not an efficient solution and the time complexity for this solution is O(n²)
 
 We can improve the implementation using the help of division. We can get the total multiplication value and for each element we divide the item.
 
-    public int[] productExceptSelf(int[] nums) {
-        int mul = 1;
-        for(int i = 0; i < nums.length; i++) {
-            mul *= nums[i];
-        }
-        
-        for (int i = 0; i < nums.length; i++) {
-            nums[i] = mul / nums[i];
-        }
-        return nums;
+{% codeblock lang:java %}
+public int[] productExceptSelf(int[] nums) {
+    int mul = 1;
+    for(int i = 0; i < nums.length; i++) {
+        mul *= nums[i];
     }
+    
+    for (int i = 0; i < nums.length; i++) {
+        nums[i] = mul / nums[i];
+    }
+    return nums;
+}
+{% endcodeblock %}
 
 This solution seems okay. But we missed an important edge case here. The existence of zero(0). If there is any input 0, it will cause division by zero exception.
 
@@ -65,29 +69,31 @@ But, if we have only one 0, then we will only get output for that item only.
 **Output:**`[0,0,40,0,0]`
 
 we can solve the problem using zero counter easily.
-
-    public int[] productExceptSelf(int[] nums) {
-        int mul = 1, countZero = 0;
-        for(int i = 0; i < nums.length; i++) {
-            if(nums[i] == 0) {
-                countZero++;
-            } else {
-                mul *= nums[i];
-            }
+{% codeblock lang:java %}
+public int[] productExceptSelf(int[] nums) {
+    int mul = 1, countZero = 0;
+    for(int i = 0; i < nums.length; i++) {
+        if(nums[i] == 0) {
+            countZero++;
+        } else {
+            mul *= nums[i];
         }
-        if(countZero > 1) {
-            return new int[nums.length];
-        }
-        for (int i = 0; i < nums.length; i++) {
-            if(countZero > 0) {
-                if(nums[i] == 0) nums[i] = mul;
-                else nums[i] = 0;
-            } else {
-                nums[i] = mul / nums[i];
-            }
-        }
-        return nums;
     }
+    if(countZero > 1) {
+        return new int[nums.length];
+    }
+    for (int i = 0; i < nums.length; i++) {
+        if(countZero > 0) {
+            if(nums[i] == 0) nums[i] = mul;
+            else nums[i] = 0;
+        } else {
+            nums[i] = mul / nums[i];
+        }
+    }
+    return nums;
+}
+{% endcodeblock %}
+
 
 There is a note in the problem
 
@@ -134,21 +140,23 @@ And our right array
 
 So, our solution will be
 
-    public int[] productExceptSelf(int[] nums) {
-        int[] left = new int[nums.length];
-        left[0] = 1;
-        for (int i = 1; i < nums.length; i++) {
-            left[i] = left[i - 1] * nums[i - 1];
-        }
-        int[] right = new int[nums.length];
-        right[nums.length - 1] = 1;
-        for (int i = nums.length - 2; i >= 0; i--) {
-            right[i] = right[i + 1] * nums[i + 1];
-        }
-        for (int i = 0; i < nums.length; i++) {
-            nums[i] = left[i] * right[i];
-        }
-        return nums;
+{% codeblock lang:java %}
+public int[] productExceptSelf(int[] nums) {
+    int[] left = new int[nums.length];
+    left[0] = 1;
+    for (int i = 1; i < nums.length; i++) {
+        left[i] = left[i - 1] * nums[i - 1];
     }
+    int[] right = new int[nums.length];
+    right[nums.length - 1] = 1;
+    for (int i = nums.length - 2; i >= 0; i--) {
+        right[i] = right[i + 1] * nums[i + 1];
+    }
+    for (int i = 0; i < nums.length; i++) {
+        nums[i] = left[i] * right[i];
+    }
+    return nums;
+}
+{% endcodeblock %}
 
 Please share any other better solution for this problem.

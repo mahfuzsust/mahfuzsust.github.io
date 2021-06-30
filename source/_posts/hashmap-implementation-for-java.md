@@ -30,99 +30,105 @@ Multiple hash can have same hash key. For that reason, there is a bucket or cont
 Let’s dive into a basic implementation of our hashmap.
 
 Firstly, we need an array to store all the keys, a bucket model to store all the entry and a wrapper for our key, value pair.
+{% codeblock lang:java %}
+public class MyKeyValueEntry<K, V> {
+    private K key;
+    private V value;
 
-    public class MyKeyValueEntry<K, V> {
-        private K key;
-        private V value;
-    
-        public MyKeyValueEntry(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }    // getters & setters
-        // hashCode & equals
-    }
+    public MyKeyValueEntry(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }    // getters & setters
+    // hashCode & equals
+}
+{% endcodeblock %}
+
 
 Bucket to store all the key values
+{% codeblock lang:java %}
+public class MyMapBucket {
+    private List<MyKeyValueEntry> entries;
 
-    public class MyMapBucket {
-        private List<MyKeyValueEntry> entries;
-    
-        public MyMapBucket() {
-            if(entries == null) {
-                entries = new LinkedList<>();
-            }
-        }
-    
-        public List<MyKeyValueEntry> getEntries() {
-            return entries;
-        }
-    
-        public void addEntry(MyKeyValueEntry entry) {
-            this.entries.add(entry);
-        }
-    
-        public void removeEntry(MyKeyValueEntry entry) {
-            this.entries.remove(entry);
+    public MyMapBucket() {
+        if(entries == null) {
+            entries = new LinkedList<>();
         }
     }
+
+    public List<MyKeyValueEntry> getEntries() {
+        return entries;
+    }
+
+    public void addEntry(MyKeyValueEntry entry) {
+        this.entries.add(entry);
+    }
+
+    public void removeEntry(MyKeyValueEntry entry) {
+        this.entries.remove(entry);
+    }
+}
+{% endcodeblock %}
+    
 
 Lastly, implementation of our hashmap
+{% codeblock lang:java %}
+public class MyHashMap<K, V> {
+    private int CAPACITY = 10;
+    private MyMapBucket[] bucket;
+    private int size = 0;
 
-    public class MyHashMap<K, V> {
-        private int CAPACITY = 10;
-        private MyMapBucket[] bucket;
-        private int size = 0;
-    
-        public MyHashMap() {
-            this.bucket = new MyMapBucket[CAPACITY];
+    public MyHashMap() {
+        this.bucket = new MyMapBucket[CAPACITY];
+    }
+    private int getHash(K key) {
+        return (key.hashCode() & 0xfffffff) % CAPACITY;
+    }
+
+    private MyKeyValueEntry getEntry(K key) {
+        int hash = getHash(key);
+        for (int i = 0; i < bucket[hash].getEntries().size(); i++) {
+            MyKeyValueEntry myKeyValueEntry = bucket[hash].getEntries().get(i);
+            if(myKeyValueEntry.getKey().equals(key)) {
+                return myKeyValueEntry;
+            }
         }
-        private int getHash(K key) {
-            return (key.hashCode() & 0xfffffff) % CAPACITY;
-        }
-    
-        private MyKeyValueEntry getEntry(K key) {
+        return null;
+    }    public void put(K key, V value) {
+        if(containsKey(key)) {
+            MyKeyValueEntry entry = getEntry(key);
+            entry.setValue(value);
+        } else {
             int hash = getHash(key);
-            for (int i = 0; i < bucket[hash].getEntries().size(); i++) {
-                MyKeyValueEntry myKeyValueEntry = bucket[hash].getEntries().get(i);
-                if(myKeyValueEntry.getKey().equals(key)) {
-                    return myKeyValueEntry;
-                }
+            if(bucket[hash] == null) {
+                bucket[hash] = new MyMapBucket();
             }
-            return null;
-        }    public void put(K key, V value) {
-            if(containsKey(key)) {
-                MyKeyValueEntry entry = getEntry(key);
-                entry.setValue(value);
-            } else {
-                int hash = getHash(key);
-                if(bucket[hash] == null) {
-                    bucket[hash] = new MyMapBucket();
-                }
-                bucket[hash].addEntry(new MyKeyValueEntry<>(key, value));
-                size++;
-            }
-        }
-    
-        public V get(K key) {
-            return containsKey(key) ? (V) getEntry(key).getValue() : null;
-        }
-    
-        public boolean containsKey(K key) {
-            int hash = getHash(key);
-            return !(Objects.isNull(bucket[hash]) || Objects.isNull(getEntry(key)));
-        }
-    
-        public void delete(K key) {
-            if(containsKey(key)) {
-                int hash = getHash(key);
-                bucket[hash].removeEntry(getEntry(key));
-                size--;
-            }
-        }
-        public int size() {
-            return size;
+            bucket[hash].addEntry(new MyKeyValueEntry<>(key, value));
+            size++;
         }
     }
+
+    public V get(K key) {
+        return containsKey(key) ? (V) getEntry(key).getValue() : null;
+    }
+
+    public boolean containsKey(K key) {
+        int hash = getHash(key);
+        return !(Objects.isNull(bucket[hash]) || Objects.isNull(getEntry(key)));
+    }
+
+    public void delete(K key) {
+        if(containsKey(key)) {
+            int hash = getHash(key);
+            bucket[hash].removeEntry(getEntry(key));
+            size--;
+        }
+    }
+    public int size() {
+        return size;
+    }
+}
+{% endcodeblock %}
+
 
 **Put into map:**
 

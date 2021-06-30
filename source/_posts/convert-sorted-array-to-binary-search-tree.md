@@ -33,30 +33,32 @@ A **height-balanced** binary tree is a binary tree in which the depth of the two
 - `nums` is sorted in a **strictly increasing** order.
 
 **Solution**
-
-    public class TreeNode {
-         int val;
-         TreeNode left;
-         TreeNode right;
-         TreeNode() {}
-         TreeNode(int val) { this.val = val; }
-         TreeNode(int val, TreeNode left, TreeNode right) {
-             this.val = val;
-             this.left = left;
-             this.right = right;
-         }
+{% codeblock lang:java %}
+public class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
     }
+}
 
-    class Solution {
-        private TreeNode sortedArrayToBST(int[] nums, int p, int q) {
-            if(p > q) return null;
-            int mid = (q + p) / 2;
-            TreeNode node = new TreeNode(nums[mid]);
-            node.left = sortedArrayToBST(nums,p, mid -1);
-            node.right = sortedArrayToBST(nums, mid + 1, q);
-            return node;
-        }
-        public TreeNode sortedArrayToBST(int[] nums) {
-            return sortedArrayToBST(nums, 0, nums.length - 1);       
-        }
+class Solution {
+    private TreeNode sortedArrayToBST(int[] nums, int p, int q) {
+        if(p > q) return null;
+        int mid = (q + p) / 2;
+        TreeNode node = new TreeNode(nums[mid]);
+        node.left = sortedArrayToBST(nums,p, mid -1);
+        node.right = sortedArrayToBST(nums, mid + 1, q);
+        return node;
     }
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return sortedArrayToBST(nums, 0, nums.length - 1);       
+    }
+}
+{% endcodeblock %}
+

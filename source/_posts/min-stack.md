@@ -39,38 +39,40 @@ Implement the `MinStack` class:
     minStack.getMin(); // return -2
 
 **Solution:**
-
-    class MinStack {
-        private List<Integer> values = null;
-        private List<Integer> mins = null;
-        
-        public MinStack() {
-            this.values = new ArrayList<Integer>();
-            this.mins = new ArrayList<Integer>();
-        }
-        
-        private void setMin(int val) {
-            if(this.mins.isEmpty() || val <= this.getMin()) {
-                this.mins.add(val);
-            } 
-        }
-        
-        public void push(int val) {
-            this.values.add(val);
-            setMin(val);
-        }
-        
-        public void pop() {
-            if(this.values.remove(this.values.size() - 1) == this.getMin()) {
-                this.mins.remove(this.mins.size() - 1);
-            }
-        }
-        
-        public int top() {
-            return this.values.get(this.values.size() - 1);
-        }
-        
-        public int getMin() {
-            return this.mins.get(this.mins.size() - 1);
+{% codeblock lang:java %}
+class MinStack {
+    private List<Integer> values = null;
+    private List<Integer> mins = null;
+    
+    public MinStack() {
+        this.values = new ArrayList<Integer>();
+        this.mins = new ArrayList<Integer>();
+    }
+    
+    private void setMin(int val) {
+        if(this.mins.isEmpty() || val <= this.getMin()) {
+            this.mins.add(val);
+        } 
+    }
+    
+    public void push(int val) {
+        this.values.add(val);
+        setMin(val);
+    }
+    
+    public void pop() {
+        if(this.values.remove(this.values.size() - 1) == this.getMin()) {
+            this.mins.remove(this.mins.size() - 1);
         }
     }
+    
+    public int top() {
+        return this.values.get(this.values.size() - 1);
+    }
+    
+    public int getMin() {
+        return this.mins.get(this.mins.size() - 1);
+    }
+}
+{% endcodeblock %}
+

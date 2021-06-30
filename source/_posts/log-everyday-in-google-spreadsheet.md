@@ -21,91 +21,97 @@ My tasks will be
 - Create google drive folders to organize
 
 First, we need to create a clone of the template sheet.
+{% codeblock %}
+function cloneTemplateDaily() {
+  var name = Utilities.formatDate(new Date(), "GMT", "dd-MM-yyyy");
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var duplicate_sheet = ss.getSheetByName(name); 
+  if(duplicate_sheet == null) { 
+    var templateSheet = ss.getSheetByName("template");
+    ss.setActiveSheet(templateSheet);
+    duplicate_sheet = ss.duplicateActiveSheet();
+    duplicate_sheet.setName(name);
+  }
+  ss.setActiveSheet(duplicate_sheet);
+}
+{% endcodeblock %}
 
-    function cloneTemplateDaily() {
-      var name = Utilities.formatDate(new Date(), "GMT", "dd-MM-yyyy");
-      
-      var ss = SpreadsheetApp.getActiveSpreadsheet();
-      var duplicate_sheet = ss.getSheetByName(name); 
-      if(duplicate_sheet == null) { 
-        var templateSheet = ss.getSheetByName("template");
-        ss.setActiveSheet(templateSheet);
-        duplicate_sheet = ss.duplicateActiveSheet();
-        duplicate_sheet.setName(name);
-      }
-      ss.setActiveSheet(duplicate_sheet);
-    }
 
 Then I need to backup the sheet to my google drive
+{% codeblock %}
+function backupSheetMonthly() {
+  var lastMonthDate = getLastMonthDate();
+  var fileName = Utilities.formatDate(lastMonthDate, "GMT", "MMMM, yyyy");
+  var year = Utilities.formatDate(lastMonthDate, "GMT", "yyyy");
 
-    function backupSheetMonthly() {
-      var lastMonthDate = getLastMonthDate();
-      var fileName = Utilities.formatDate(lastMonthDate, "GMT", "MMMM, yyyy");
-      var year = Utilities.formatDate(lastMonthDate, "GMT", "yyyy");
-    
-      var rootFolder = getFolder("My Logs");
-      var yearFolder = getFolder(year, rootFolder);
-    
-      if(!fileExist(fileName, yearFolder)) {
-        var file = DriveApp.getFileById(SpreadsheetApp.getActiveSpreadsheet().getId())
-        file.makeCopy(fileName, yearFolder);
-        deleteSheets();
-      }
-    }
+  var rootFolder = getFolder("My Logs");
+  var yearFolder = getFolder(year, rootFolder);
+
+  if(!fileExist(fileName, yearFolder)) {
+    var file = DriveApp.getFileById(SpreadsheetApp.getActiveSpreadsheet().getId())
+    file.makeCopy(fileName, yearFolder);
+    deleteSheets();
+  }
+}
+{% endcodeblock %}
+
 
 Now, all the methods that I require
-
-    function fileExist(name, folder) {
-      var files = folder.getFilesByName(name);
-      while(files.hasNext()){
-        var file = files.next();
-        if(file.getName() == month) {
-          return true;
-        }
-      };
-      return false;
+{% codeblock %}
+function fileExist(name, folder) {
+  var files = folder.getFilesByName(name);
+  while(files.hasNext()){
+    var file = files.next();
+    if(file.getName() == month) {
+      return true;
     }
+  };
+  return false;
+}
 
-    function getFolder(name, parent) {
-      var folders = null;
-      if(!parent) {
-        folders = DriveApp.getFoldersByName(name);
-      }
-      else {
-        folders = parent.getFoldersByName(name);
-      }
-      
-      while(folders.hasNext()){
-        var folder = folders.next();
-        if(folder.getName() == name) {
-          return folder;
-        }
-      }
-    
-      if(!parent) {
-        return DriveApp.createFolder(name);
-      }
-      return parent.createFolder(name);
+function getFolder(name, parent) {
+  var folders = null;
+  if(!parent) {
+    folders = DriveApp.getFoldersByName(name);
+  }
+  else {
+    folders = parent.getFoldersByName(name);
+  }
+  
+  while(folders.hasNext()){
+    var folder = folders.next();
+    if(folder.getName() == name) {
+      return folder;
     }
+  }
 
-    function getLastMonthDate() {
-      var dt = new Date();
-      dt.setDate(0);
-      dt.setDate(1);
-      return dt;
-    }
+  if(!parent) {
+    return DriveApp.createFolder(name);
+  }
+  return parent.createFolder(name);
+}
 
-    function deleteSheets() {
-      var ss = SpreadsheetApp.getActiveSpreadsheet();
-      var sheets = ss.getSheets();
-      for(var i = 0; i < sheets.length; i++) {
-        if(sheets[i].getName() !== "template") {
-          ss.setActiveSheet(sheets[i]);
-          ss.deleteActiveSheet();
-          Utilities.sleep(100);
-        }
-      }
+function getLastMonthDate() {
+  var dt = new Date();
+  dt.setDate(0);
+  dt.setDate(1);
+  return dt;
+}
+
+function deleteSheets() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheets = ss.getSheets();
+  for(var i = 0; i < sheets.length; i++) {
+    if(sheets[i].getName() !== "template") {
+      ss.setActiveSheet(sheets[i]);
+      ss.deleteActiveSheet();
+      Utilities.sleep(100);
     }
+  }
+}
+{% endcodeblock %}
+
 
 Lastly, I created two separate trigger that will call my two functions
 
