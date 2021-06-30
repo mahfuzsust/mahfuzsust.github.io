@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="How to implement cache in JavaAccording to wikipedia, a cache is a hardware or software component that stores data so that future requests for that data can be served faster. Benefits Faster access of">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to implement cache in Java">
+<meta property="og:url" content="https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/index.html">
+<meta property="og:site_name" content="Mahfuz">
+<meta property="og:description" content="How to implement cache in JavaAccording to wikipedia, a cache is a hardware or software component that stores data so that future requests for that data can be served faster. Benefits Faster access of">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/2000/1*enbSTt8WK0VFPxMCu9nJHw.png">
+<meta property="article:published_time" content="2020-08-25T06:45:43.000Z">
+<meta property="article:modified_time" content="2021-06-30T07:03:25.274Z">
+<meta property="article:author" content="Mahfuzur Rahman">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn-images-1.medium.com/max/2000/1*enbSTt8WK0VFPxMCu9nJHw.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>How to implement cache in Java</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/mahfuzsust">Projects</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&text=How to implement cache in Java"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&title=How to implement cache in Java"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&is_video=false&description=How to implement cache in Java"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=How to implement cache in Java&body=Check out this article: https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&title=How to implement cache in Java"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&title=How to implement cache in Java"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&title=How to implement cache in Java"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&title=How to implement cache in Java"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&name=How to implement cache in Java&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&t=How to implement cache in Java"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#How-to-implement-cache-in-Java"><span class="toc-number">1.</span> <span class="toc-text">How to implement cache in Java</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Benefits"><span class="toc-number">1.0.1.</span> <span class="toc-text">Benefits</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Types"><span class="toc-number">1.0.2.</span> <span class="toc-text">Types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Least-Recently-Used-LRU"><span class="toc-number">1.0.3.</span> <span class="toc-text">Least Recently Used (LRU)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Least-Frequently-Used-LFU"><span class="toc-number">1.0.4.</span> <span class="toc-text">Least Frequently Used (LFU)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#First-In-First-Out-FIFO"><span class="toc-number">1.0.5.</span> <span class="toc-text">First In First Out (FIFO)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Last-In-First-Out-LIFO"><span class="toc-number">1.0.6.</span> <span class="toc-text">Last In First Out (LIFO)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Questions"><span class="toc-number">1.1.</span> <span class="toc-text">Questions:</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        How to implement cache in Java
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Mahfuzur Rahman</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-08-25T06:45:43.000Z" itemprop="datePublished">2020-08-25</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="How-to-implement-cache-in-Java"><a href="#How-to-implement-cache-in-Java" class="headerlink" title="How to implement cache in Java"></a>How to implement cache in Java</h1><p>According to wikipedia, a cache is a hardware or software component that stores data so that future requests for that data can be served faster.</p>
+<h3 id="Benefits"><a href="#Benefits" class="headerlink" title="Benefits"></a>Benefits</h3><ul>
+<li><p>Faster access of data in O(1)</p>
+</li>
+<li><p>Computation complexity once for the first time</p>
+</li>
+</ul>
+<h3 id="Types"><a href="#Types" class="headerlink" title="Types"></a>Types</h3><ul>
+<li><p>Memory cache</p>
+</li>
+<li><p>Database cache</p>
+</li>
+<li><p>Disk cache, etc</p>
+</li>
+</ul>
+<p>In this post, we’ll go through the steps to create a in memory cache in java.</p>
+<p>To create a cache, we can simply use a map / dictionary data structure and we can get the expected result of O(1) for both get and put operation.</p>
+<p>But, we can’t store everything in our cache. We have storage and performance limits.</p>
+<p>A cache eviction algorithm is a way of deciding which element to evict when the cache is full. To gain optimized benefits there are many algorithms for different use cases.</p>
+<ul>
+<li><p>Least Recently Used (LRU)</p>
+</li>
+<li><p>Least Frequently Used (LFU)</p>
+</li>
+<li><p>First In First Out (FIFO)</p>
+</li>
+<li><p>Last In First Out (LIFO) etc.</p>
+<blockquote>
+<p>There are only two hard things in computer science, Cache invalidation and naming things. — Phil Karlton</p>
+</blockquote>
+</li>
+</ul>
+<p>In our design, we will use</p>
+<ul>
+<li><p><em>HashMap</em> to get and put data in O(1)</p>
+</li>
+<li><p>Doubly linked list</p>
+</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/2000/1*enbSTt8WK0VFPxMCu9nJHw.png" alt="Cache implementation strategy"><em>Cache implementation strategy</em></p>
+<p>We are using doubly linked list to determine which key to delete and have the benefit of adding and deleting keys in O(1).</p>
+<p>Initially we will declare a model to store our key-value pair, hit count and reference node to point previous and next node.</p>
+<pre><code>public class CacheItem&lt;K, V&gt; &#123;
+    private K key;
+    private V value;
+    private int hitCount = 0; // LFU require this
+    private CacheItem prev, next;
+
+    public CacheItem(K key, V value) &#123;
+        this.value = value;
+        this.key = key;
+    &#125;
+    
+    public void incrementHitCount() &#123;
+        this.hitCount++;
+    &#125;
+
+    // getter / setter
+&#125;
+</code></pre>
+<p>Now, we can outline our cache class with basic functionalities of get, put, delete and size.</p>
+<pre><code>public class Cache&lt;K, V&gt; &#123;
+    private Map&lt;K, CacheItem&gt; map;
+    private CacheItem first, last;
+    private int size;
+    private final int CAPACITY;
+    private int hitCount = 0;
+    private int missCount = 0;
+
+    public Cache(int capacity) &#123;
+        CAPACITY = capacity;  // 
+        map = new HashMap&lt;&gt;(CAPACITY);
+    &#125;
+    
+    public void put(K key, V value) &#123;&#125;
+
+    public V get(K key) &#123;&#125;
+
+    public void delete(K key) &#123;
+        deleteNode(map.get(key));
+    &#125;
+
+    public int size() &#123;
+        return size;
+    &#125;
+
+    public int getHitCount() &#123;
+        return hitCount;
+    &#125;
+
+    public int getMissCount() &#123;
+        return missCount;
+    &#125;
+&#125;
+</code></pre>
+<p>We also included hit count and miss count to determine the performance of our cache.</p>
+<pre><code>Hit ratio = total hit / (total hit + total miss)
+</code></pre>
+<p>For our put method</p>
+<ol>
+<li><p>If key already exists, update the value</p>
+</li>
+<li><p>Otherwise, If size exceeds capacity</p>
+</li>
+<li><p>Delete existing node using appropriate strategy</p>
+</li>
+<li><p>Add new node in the top</p>
+</li>
+</ol>
+<pre><code>public void put(K key, V value) &#123;
+    CacheItem node = new CacheItem(key, value);
+
+    if(map.containsKey(key) == false) &#123;
+        if(size() &gt;= CAPACITY) &#123;
+            deleteNode(first);
+        &#125;
+        addNodeToLast(node);
+    &#125;
+    map.put(key, node);
+&#125;
+</code></pre>
+<p>In our delete method</p>
+<ul>
+<li><p>Remove node from map</p>
+</li>
+<li><p>Delete all references associated with that node.</p>
+</li>
+</ul>
+<pre><code>private void deleteNode(CacheItem node) &#123;
+    if(node == null) &#123;
+        return;
+    &#125;
+    if(last == node) &#123;
+        last = node.getPrev();
+    &#125;
+    if(first == node) &#123;
+        first = node.getNext();
+    &#125;
+    map.remove(node.getKey());
+    node = null; // Optional, collected by GC
+    size--;
+&#125;
+</code></pre>
+<p>We can add node in the top. The last pointer will reference to the last inserted node.</p>
+<pre><code>private void addNodeToLast(CacheItem node) &#123;
+    if(last != null) &#123;
+        last.setNext(node);
+        node.setPrev(last);
+    &#125;
+
+    last = node;
+    if(first == null) &#123;
+        first = node;
+    &#125;
+    size++;
+&#125;
+</code></pre>
+<p>In our get method,</p>
+<ul>
+<li><p>Get data from map</p>
+</li>
+<li><p>Increment the counter for that item. ( Useful for lease frequently used )</p>
+</li>
+<li><p>Reorder the linked list.</p>
+</li>
+</ul>
+<pre><code>public V get(K key) &#123;
+    if(map.containsKey(key) == false) &#123;
+        return null;
+    &#125;
+    CacheItem node = (CacheItem) map.get(key);
+    node.incrementHitCount();
+    reorder(node);
+    return (V) node.getValue();
+&#125;
+</code></pre>
+<p>Reorder is the key for this implementation. For different algorithm this reorder to delete method will change.</p>
+<h3 id="Least-Recently-Used-LRU"><a href="#Least-Recently-Used-LRU" class="headerlink" title="Least Recently Used (LRU)"></a>Least Recently Used (LRU)</h3><p>Delete candidate is the oldest used entry.</p>
+<ul>
+<li>The latest accessed node will be at the last end along with newly added items. In this way, we can delete from the first easily.</li>
+</ul>
+<pre><code>private void reorder(CacheItem node) &#123;
+    if(last == node) &#123;
+        return;
+    &#125;
+
+    if(first == node) &#123;
+        first = node.getNext();
+    &#125; else &#123;
+        node.getPrev().setNext(node.getNext());
+    &#125;
+
+    last.setNext(node);
+    node.setPrev(last);
+    node.setNext(null);
+    last = node;
+&#125;
+</code></pre>
+<h3 id="Least-Frequently-Used-LFU"><a href="#Least-Frequently-Used-LFU" class="headerlink" title="Least Frequently Used (LFU)"></a>Least Frequently Used (LFU)</h3><p>Delete candidate is the least accessed entry.</p>
+<p>We have to sort items based on the frequency the nodes being accessed.</p>
+<p>To avoid getting deleted, for each accessed items needs to reach top based on their frequency.</p>
+<ul>
+<li>Iterated a loop, which swaps the node if the frequency is greater than it’s next node frequency.</li>
+</ul>
+<pre><code>private void reorder(CacheItem node) &#123;
+    if(last == node) &#123;
+        return;
+    &#125;
+
+    CacheItem nextNode = node.getNext();
+
+    while (nextNode != null) &#123;
+        if(nextNode.getHitCount() &gt; node.getHitCount()) &#123;
+            break;
+        &#125;
+
+        if(first == node) &#123;
+            first = nextNode;
+        &#125;
+
+        if(node.getPrev() != null) &#123;
+            node.getPrev().setNext(nextNode);
+        &#125;
+
+        nextNode.setPrev(node.getPrev());
+        node.setPrev(nextNode);
+        node.setNext(nextNode.getNext());
+        if(nextNode.getNext() != null) &#123;
+            nextNode.getNext().setPrev(node);
+        &#125;
+        nextNode.setNext(node);
+
+        nextNode = node.getNext();
+    &#125;
+
+    if(node.getNext() == null) &#123;
+        last = node;
+    &#125;
+&#125;
+</code></pre>
+<p>This way, there is an edge case where, after adding items that require delete from the start can cause deletion of the high frequency node.</p>
+<p>To solve this issue, we need to add nodes pointing our first node for least frequently accessed.</p>
+<pre><code>private void addNodeToFirst(CacheItem node) &#123;
+    if(first != null) &#123;
+        node.setNext(first);
+        first.setPrev(node);
+    &#125;
+    first = node;
+
+    if(last == null) &#123;
+        last = node;
+    &#125;
+    size++;
+&#125;
+</code></pre>
+<h3 id="First-In-First-Out-FIFO"><a href="#First-In-First-Out-FIFO" class="headerlink" title="First In First Out (FIFO)"></a>First In First Out (FIFO)</h3><p>Delete candidate is the first node.</p>
+<ul>
+<li><p>To add node we will use <em>addNodeToLast</em></p>
+</li>
+<li><p>Reordering is not required.</p>
+</li>
+<li><p>Delete node from first</p>
+</li>
+</ul>
+<h3 id="Last-In-First-Out-LIFO"><a href="#Last-In-First-Out-LIFO" class="headerlink" title="Last In First Out (LIFO)"></a>Last In First Out (LIFO)</h3><p>Delete candidate is the last node.</p>
+<ul>
+<li><p>To add node we will use <em>addNodeToLast</em></p>
+</li>
+<li><p>Reordering is not required.</p>
+</li>
+<li><p>Delete node from last</p>
+</li>
+</ul>
+<h2 id="Questions"><a href="#Questions" class="headerlink" title="Questions:"></a>Questions:</h2><ol>
+<li>We can use array /ArrayList to solve the same issue with simplified coding.</li>
+</ol>
+<p>Yes, it would be simpler. The aspects for not using,</p>
+<ul>
+<li><p>ArrayList has complexity of insertion and deletion of O(n) in worst case</p>
+</li>
+<li><p>To search from there list, the worst case complexity would be O(n)</p>
+</li>
+</ul>
+<ol start="2">
+<li>We could have used the LinkedList instead of ArrayList.</li>
+</ol>
+<p>Once again, yes. LinkedList had the benefit for adding and removing node at O(1). The aspects for not using,</p>
+<ul>
+<li>We will still face the searching complexity of O(n)</li>
+</ul>
+<ol start="3">
+<li>For LFU, we are having a complexity of O(n) in reordering method.</li>
+</ol>
+<p>Yes, unfortunately.</p>
+<ul>
+<li><p>I’m reordering here after each get request, which increases the complexity for each get. For post heavy system, this approach will benefit.</p>
+</li>
+<li><p>It can be done at the moment of deletion. This way the complexity will increase at the time of putting data. For get heavy system, this approach will benefit more.</p>
+</li>
+</ul>
+<p>I have came up a solution with this so far. Please suggest any better idea.</p>
+<ol start="4">
+<li>We are using HashMap. It can have the issue of hash collision. Then the performance will not be O(1) as mentioned.</li>
+</ol>
+<p>Absolutely.</p>
+<ul>
+<li><p>It’s always recommended to use better hash function that cause less collision.</p>
+</li>
+<li><p>Make sure our load factor remains 0.75 or less.</p>
+</li>
+<li><p>If the load factor is more than default or provided one, from Java 8 HashMap automatically increase the size and rehash the full structure.</p>
+</li>
+<li><p>From Java 8, the collision also being handled by using balanced tree to obtain O(log n) performance.</p>
+</li>
+</ul>
+<p>I’ve written a post with implementation and explanation <a target="_blank" rel="noopener" href="https://medium.com/swlh/hashmap-implementation-for-java-90a5f58d4a5b">HashMap Implementation for Java</a>.</p>
+<ol start="5">
+<li>Is this implementation thread safe?</li>
+</ol>
+<p>No. To be thread safe</p>
+<ul>
+<li><p>We can use <em>ConcurrentHashMap</em> instead of <em>HashMap</em></p>
+</li>
+<li><p>Use synchronized block</p>
+</li>
+</ul>
+<ol start="6">
+<li>How to add time based eviction strategy to auto delete items?</li>
+</ol>
+<p>No. To implement this, we need to run a timer thread to define which items are eligible for eviction and perform deletion operation.</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/mahfuzsust">Projects</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#How-to-implement-cache-in-Java"><span class="toc-number">1.</span> <span class="toc-text">How to implement cache in Java</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Benefits"><span class="toc-number">1.0.1.</span> <span class="toc-text">Benefits</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Types"><span class="toc-number">1.0.2.</span> <span class="toc-text">Types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Least-Recently-Used-LRU"><span class="toc-number">1.0.3.</span> <span class="toc-text">Least Recently Used (LRU)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Least-Frequently-Used-LFU"><span class="toc-number">1.0.4.</span> <span class="toc-text">Least Frequently Used (LFU)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#First-In-First-Out-FIFO"><span class="toc-number">1.0.5.</span> <span class="toc-text">First In First Out (FIFO)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Last-In-First-Out-LIFO"><span class="toc-number">1.0.6.</span> <span class="toc-text">Last In First Out (LIFO)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Questions"><span class="toc-number">1.1.</span> <span class="toc-text">Questions:</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&text=How to implement cache in Java"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&title=How to implement cache in Java"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&is_video=false&description=How to implement cache in Java"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=How to implement cache in Java&body=Check out this article: https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&title=How to implement cache in Java"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&title=How to implement cache in Java"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&title=How to implement cache in Java"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&title=How to implement cache in Java"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&name=How to implement cache in Java&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://mahfuzsust.github.io/2020/08/25/how-to-implement-cache-in-java/&t=How to implement cache in Java"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2013-2021
+    Mahfuzur Rahman
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/mahfuzsust">Projects</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'mahfuz-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+</body>
+</html>
