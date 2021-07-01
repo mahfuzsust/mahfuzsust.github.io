@@ -105,3 +105,9 @@ deploy:
   type: git
   repo: git@github.com:mahfuzsust/mahfuzsust.github.io.git
   branch: master
+
+sitemap:
+  path: sitemap.xml
+  rel: false
+  tags: true
+  categories: true
