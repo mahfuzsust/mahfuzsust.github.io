@@ -5,6 +5,8 @@ tags:
   - java
   - array
   - number theory
+categories:
+  - Leetcode
 ---
 
 There are multiple ways to find the pair of numbers in a given array. The numbers in the array can be in two ways.

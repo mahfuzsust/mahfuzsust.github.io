@@ -4,6 +4,8 @@ date: 2020-08-18 13:18:27
 tags:
   - java
   - hashmap
+categories:
+  - Java
 ---
 
 HashMap is a dictionary data structure provided by java. It’s a Map-based collection class that is used to store data in Key & Value pairs. In this article, we’ll be creating our own hashmap implementation.

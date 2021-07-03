@@ -7,6 +7,8 @@ tags:
   - stack
   - algorithm
   - java
+categories:
+  - Leetcode
 ---
 
 Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.

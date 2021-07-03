@@ -4,6 +4,8 @@ date: 2020-08-25 12:45:43
 tags:
   - java
   - cache
+categories:
+  - Java
 ---
 
 According to [wikipedia](https://en.wikipedia.org/wiki/Cache_%28computing%29), a cache is a hardware or software component that stores data so that future requests for that data can be served faster.
