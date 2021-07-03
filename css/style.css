@@ -1623,3 +1623,9 @@ code {
 .highlight .line {
   height: 22px;
 }
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
