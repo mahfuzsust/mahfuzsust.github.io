@@ -1,4 +1,8 @@
-[
+[   {
+      "name":"Collab",
+      "url":"https://github.com/mahfuzsust/passbook",
+      "desc":"Real-time collaborative editor"
+    },
     {
        "name":"passbook",
        "url":"https://github.com/mahfuzsust/passbook",

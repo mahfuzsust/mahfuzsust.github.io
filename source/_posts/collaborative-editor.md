@@ -8,9 +8,9 @@ tags:
 categories:
   - System design
 ---
-A text editor can be a real game changer when it's equipped with the functionality of collaborative editing. There are so many tools out there providing such features with great excelence such as Google Doc, Microsoft word etc. 
+A text editor can be a real game changer when it's equipped with the functionality of collaborative editing. There are so many tools out there providing such features with great excellence such as Google Doc, Microsoft word etc.
 
-I planned to design and develop such a system which can handle basic text editing and can scale on need. So I tried developing a POC which can handle realtime editing and went through some ideas to make this solution scalable. 
+I planned to design and develop such a system which can handle basic text editing and can scale on need. So I tried developing a POC(Proof of concept) which can handle real-time editing and went through some ideas to make this solution scalable.
 
 Obviously, there are scopes for improvement and please share your ideas which will give better insights.
 
@@ -23,7 +23,6 @@ Let's define some project requirement to start on
 5. Add / Remove users based on event
 
 ## Tools
-I have decided to use some basic tools / technologies to implement the basic POC. 
 1. CKEditor 4
 2. Plain & Simple Javascript
 3. Node.js & Express
@@ -31,6 +30,7 @@ I have decided to use some basic tools / technologies to implement the basic POC
 5. For operational trasform I've used the CKEditor 5 diff library to adapt changes to the editor.
 
 ## Initial setup
+First we need a Node.js server which will host our application server and respond the front end in root endpoint.
 
 {% codeblock %}
 // package.json
@@ -59,13 +59,9 @@ I have decided to use some basic tools / technologies to implement the basic POC
 }
 {% endcodeblock %}
 
-First we need a Node.js server which will host our application server and respond application html.
-
-I've added a redirection in the root endpoint to generate document id and load the html.
-If we store the document user specific then this step is completely unnecessary.
+I've added a redirection in the root endpoint to generate document id and load the html. If we store the document user specific then this step is completely unnecessary.
 
 {% codeblock lang:javascript %}
-
 //server.js
 
 const express = require('express');
@@ -155,14 +151,14 @@ editor.setData("Hello world");
 ## Collaborative editing
 To add collaboration in our editor, we have different way to implement.
 
-### Asynchronus collaborative editing
-In this approach, the editor synchronize the content based on user event. For an example, after the user manually save the document or trigger an event, the content delivered to different clients associated with the content. 
+### Asynchronous collaborative editing
+In this approach, the editor synchronize the content based on user event. For an example, after the user manually save the document or trigger an event, the content delivered to different clients associated with the content.
 To publish local content, manual action is involved.
 
-### Realtime editing
-The content of the editor synchronize with other clients realtime.
+### Real-time editing
+The content of the editor synchronize with other clients in real-time.
 
-We will be moving forward with the realtime sync approach. To achieve that, we are going to implement socket.
+We will be moving forward with the real-time sync approach.
 
 ## Socket
 
@@ -184,8 +180,8 @@ httpServer.listen(port);
 
 {% endcodeblock %}
 
-### Realtime user management (Optional)
-We will add user registration and left events to show the connected users and update the list realtime incase of new join and leave the document.
+## Real-time user management (Optional)
+We will show the connected users and update the list real-time.
 
 {% codeblock lang:javascript %}
 // server.js
@@ -231,6 +227,7 @@ io.on("connection", socket => {
 ...
 {% endcodeblock %}
 
+Add a list node to show all the connected users.
 
 {% codeblock lang:html %}
 ...
@@ -255,6 +252,7 @@ io.on("connection", socket => {
 ...
 {% endcodeblock %}
 
+Dynamically add the users to DOM
 
 {% codeblock lang:javascript %}
 // writer.js
@@ -307,19 +305,24 @@ register.addEventListener('click', registerUserListener);
 
 ## Collaborative editing
 
-In terms of collaborative editing we can face different type of issues. The most critical of them is conflict resolution. When multiple user changing same text at a time can cause conflict which has to resolve in terms of real time collaboration. There are many algorithms to solve this issue in certain extent, but they have differnt pros and cons in different situations. The most popular of them is operational transform.
+In terms of collaborative editing we can face different type of issues. The most critical of them is conflict resolution. When multiple user changing same text at a time can cause conflict which has to resolve in terms of real time collaboration. There are many algorithms to solve this issue in certain extent, but they have different pros and cons in different situations. The most popular of them is operational transform.
 
 ## Operational transform
 According to [wikipedia](https://en.wikipedia.org/wiki/Operational_transformation)
 > Operational transformation (OT) is a technology for supporting a range of collaboration functionalities in advanced collaborative software systems. OT was originally invented for consistency maintenance and concurrency control in collaborative editing of plain text documents. 
 
 Implementing OT is something complex which takes a lot of time to implement and be good at. There is a famous quote by Joseph Gentle, one of the early people implemented OT
+
 > Unfortunately, implementing OT sucks. There’s a million algorithms with different tradeoffs, mostly trapped in academic papers. The algorithms are really hard and time consuming to implement correctly. […] Wave took 2 years to write and if we rewrote it today, it would take almost as long to write a second time. 
 
 Let's look at a example of operational transform. Let's say we have a text ```CA``` and two different user is doing operation 
+
 String --> CA
-User 1 --> CAT (operation O1 [insert T at position 2])
-USER 2 --> HAT (opearion O2 [insert T at positon 2, delete C at positon 0, insert H at position 0])
+User 1 --> CAT (operation O1)
+USER 2 --> HAT (opearion O2)
+
+O1 = [insert T at position 2]
+O2 = [insert T at position 2, delete C at position 0, insert H at position 0]
 
 For User 1, local operation is O1 and incoming change operation is O2
 For User 2, local operation is O2 and incoming change operation is O1
@@ -337,7 +340,7 @@ To add transformation, we have to apply both these changes to the string. The tr
 
 The states are synchronized for both the user.
 
-This way we'll get the same result at the end of the transformation and for every changes we made we will apply that with the last sync value. 
+This way we'll get the same result at the end of the transformation and for every changes we made we will apply that with the last sync value.
 
 For this project, I have used CKEditor 5 [```diffToChanges```](https://ckeditor.com/docs/ckeditor5/latest/api/module_utils_difftochanges.html) util to check the changes(operations) from sync state and then apply in the editor.
 
@@ -421,7 +424,6 @@ editor.on('key', () => {
 {% endcodeblock %}
 
 ## Containerization
-A docker file will help us to containerize the application to run
 {% codeblock %}
 FROM node:16-alpine
 ENV NODE_ENV=production
@@ -438,6 +440,8 @@ EXPOSE 3000
 
 CMD [ "node", "server.js" ]
 {% endcodeblock %}
+
+In the next part, I'll share the ideas and implementation to scale this application.
 
 Full source code is hosted in [Github](https://github.com/mahfuzsust/collab) and a quick [demo](https://collab-edit-1.herokuapp.com)
 
