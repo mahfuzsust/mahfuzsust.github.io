@@ -8,6 +8,8 @@ tags:
 categories:
   - System design
 ---
+![alt text](https://miro.medium.com/max/2000/1*msFlUe_uZknWisLa8Ef7Rg.jpeg "Editor")
+
 A text editor can be a real game changer when it's equipped with the functionality of collaborative editing. There are so many tools out there providing such features with great excellence such as Google Doc, Microsoft word etc.
 
 I planned to design and develop such a system which can handle basic text editing and can scale on need. So I tried developing a POC(Proof of concept) which can handle real-time editing and went through some ideas to make this solution scalable.
