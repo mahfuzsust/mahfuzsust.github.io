@@ -10,11 +10,13 @@ categories:
 ---
 
 
-![alt text](https://miro.medium.com/max/2000/1*msFlUe_uZknWisLa8Ef7Rg.jpeg "Editor")
+![alt text](https://miro.medium.com/max/1400/1*7C8YrY6ety7tYjJs3eb9Pg.jpeg "Editor")
 
-In our previous post, we have developed a basic real-time collaborative application. In this post, we are going to scale the system.
+In our previous post, we have developed a basic real-time collaborative application.
 
-Our previous application is perfectly fine for small project. Let's say we have added more features into it and we want to deliver this application to end user. 
+In this post, we are going to scale the system.
+
+Our previous application is perfectly fine for small project. Let’s say we have added more features into it and we want to deliver this application to end user.
 
 To make this application production ready we need to make sure this is scalable and always available to our customer.
 
@@ -24,20 +26,20 @@ It involves upgrading our instance or add extra resource to support increasing w
 ## Horizontal scale
 Distributed strategy of adding copies running same task in parallel.
 
-Both of them have separate pros and cons and different use cases to implement. But, in enterprise application horizontal scale is quite popular.
+Both of them have separate pros and cons and different use cases based on different scenario. But, in enterprise application horizontal scale is quite popular.
 
 ## Socket scale
 
-In our application, we are using socket to handle real-time operations and socket internally uses TCP port to establish a connection. The maximum number of TCP sessions a single source IP can make to a single destination IP and port is 65,535. So, we can only have maximum 65K of connection at a time with a single instance. 
+In our application, we are using socket to handle real-time operations and socket internally uses TCP port to establish a connection. The maximum number of TCP sessions a single source IP can make to a single destination IP and port is 65,535. So, we can only have maximum 65K of connection at a time with a single instance.
 
 There are two ways to solve this issue,
 1. Assign IPs to an instance and have ports associated with it. This way we can have maximum connection = number of IP * 65K
 2. Running multiple instance.
 
-The problem of assigning IPs to and instance is manual workload with limited capacity. For that reason, we'll be moving forward with multiple instance. And this way we'll have the benefit of scaling out more as per need.
+The problem of assigning IPs to and instance is manual workload with limited capacity. For that reason, we’ll be moving forward with multiple instance. And this way we’ll have the benefit of scaling out more as per need.
 
-With multiple instance, there is another issue of socket synchronization. For an example, two user is connected with two different instance. If one user posts an action, other user will not able to respond to it. 
-To communicate with these sockets, we need a central place to handle synchronization. Any message broker with pub-sub mechanism will solve. For our use case, we'll be using redis for this.
+With multiple instance, there is another issue of socket synchronization. For an example, two user is connected with two different instance. If one user posts an action, other user will not able to respond to it.
+To communicate with these sockets, we need a central place to handle synchronization. Any message broker with pub-sub mechanism will solve. For our use case, we’ll be using redis for this.
 
 {% codeblock %}
 ...
@@ -58,9 +60,11 @@ io.adapter(redisAdapter(pubClient, subClient));
 
 ## Load balance
 
-For load balancing purpose, we'll be using Nginx as this one of the most popular tools having so much resource. We can also choose other platform like HAProxy or anything preferrable.
+![alt text](https://miro.medium.com/max/1142/1*74Xo4hv3qRN-I38rIZeN6g.png "Load balance")
 
-When we are having multiple instances, we need to make sure our socket sticks to the intance it already connected to. If everytime it connects or creates a new socket in each server, then we are going to have performance hit for sure.
+For load balancing purpose, we’ll be using Nginx as this one of the most popular tools having so much resource. We can also choose other platform like HAProxy or anything preferable.
+
+When we are having multiple instances, we need to make sure our socket sticks to the instance it already connected to. If every time it connects or creates a new socket in each server, then we are going to have performance hit for sure.
 
 {% codeblock %}
 events {
@@ -98,7 +102,7 @@ http {
 }
 {% endcodeblock %}
 
-To test out our load balancing strategy we are going to run our application using docker compose and run the application.
+To test out our load balancing strategy we are going to run our application using docker compose.
 
 {% codeblock %}
 version: '3'
@@ -137,16 +141,17 @@ services:
       - app03
 {% endcodeblock %}
 
-## Deployment
+## Deployment strategy
 After figuring out all the tweaks and improvements, we can deploy our service to the cloud infrastructure. There can be separate front end and backend application to support our application.
-For a production ready application, checklist of workloads needs to be done before going live. 
+
+For a production ready application, checklist of workloads needs to be done before going live.
 1. Deploy our front end application behind Content Delivery Network(CDN) which will support scaling across the global regions and caches the content for faster response
 2. Deploy our services inside a cluster handling load.
 3. Autoscale service container based on parameters
 4. Autoscale server instance based on paramerters like CPU usage, Memory 
 5. Log and monitor requests and act on regular feedback
 
-## Improvement
+## Final product
 Let's define some requirement to roll out our application to end users. These are some of the basic features can be added or we'll do a system design for them. 
 1. User can authenticate and authorize
 2. Realtime collaborative editing
@@ -169,7 +174,7 @@ We can think of separate services to support our application.
 4. Notification service
 5. Comment service
 
-All of these service can be developed and deployed independently behind load balancer. Autoscaling can be done based on different attributes.
+All of these service can be developed and deployed independently behind load balancer. Auto scaling can be done based on different attributes.
 
 ## Storage decisions
 We have plethora of database solutions to choose from. For out implementation, we can have different combination of selection.
@@ -182,3 +187,15 @@ We have plethora of database solutions to choose from. For out implementation, w
 
 ## Data stream
 For our data stream we can use Apache Kafka. This is an open-source distributed event streaming platform.
+
+## Design
+![alt text](https://miro.medium.com/max/1400/1*NkGkkbq_MJ0dDvnhvIVRZg.png "Load balance")
+
+## Resource
+We tried to design a system based on some requirements. In real case this can change as per need. There are lot of resources can be found over internet to scale socket implementation.
+
+[Socket.io Using multiple nodes](https://socket.io/docs/v3/using-multiple-nodes/index.html)
+[Scaling a realtime chat app on AWS using Socket.io, Redis, and AWS Fargate](https://medium.com/containers-on-aws/scaling-a-realtime-chat-app-on-aws-using-socket-io-redis-and-aws-fargate-4ed63fb1b681)
+[The Road to 2 Million Websocket Connections in Phoenix — Phoenix Blog](https://phoenixframework.org/blog/the-road-to-2-million-websocket-connections)
+[600k concurrent websocket connections on AWS using Node.js](https://blog.jayway.com/2015/04/13/600k-concurrent-websocket-connections-on-aws-using-node-js/)
+[10M — goroutines](https://goroutines.com/10m)
