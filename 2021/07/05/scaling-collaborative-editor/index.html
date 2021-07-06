@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="In our previous post, we have developed a basic real-time collaborative application. In this post, we are going to scale the system. Our previous application is perfectly fine for small project. Let’">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scale a real-time collaborative editor">
+<meta property="og:url" content="https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/index.html">
+<meta property="og:site_name" content="Read &#x2F; Write">
+<meta property="og:description" content="In our previous post, we have developed a basic real-time collaborative application. In this post, we are going to scale the system. Our previous application is perfectly fine for small project. Let’">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://miro.medium.com/max/2000/1*msFlUe_uZknWisLa8Ef7Rg.jpeg">
+<meta property="article:published_time" content="2021-07-05T11:43:10.000Z">
+<meta property="article:modified_time" content="2021-07-06T05:48:33.214Z">
+<meta property="article:author" content="Mahfuzur Rahman">
+<meta property="article:tag" content="socket">
+<meta property="article:tag" content="node.js">
+<meta property="article:tag" content="ckeditor">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://miro.medium.com/max/2000/1*msFlUe_uZknWisLa8Ef7Rg.jpeg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Scale a real-time collaborative editor</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="Read / Write" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Posts</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2021/07/04/collaborative-editor/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&text=Scale a real-time collaborative editor"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&title=Scale a real-time collaborative editor"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&is_video=false&description=Scale a real-time collaborative editor"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Scale a real-time collaborative editor&body=Check out this article: https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&title=Scale a real-time collaborative editor"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&title=Scale a real-time collaborative editor"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&title=Scale a real-time collaborative editor"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&title=Scale a real-time collaborative editor"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&name=Scale a real-time collaborative editor&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&t=Scale a real-time collaborative editor"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Vertical-scale"><span class="toc-number">1.</span> <span class="toc-text">Vertical scale</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Horizontal-scale"><span class="toc-number">2.</span> <span class="toc-text">Horizontal scale</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socket-scale"><span class="toc-number">3.</span> <span class="toc-text">Socket scale</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Load-balance"><span class="toc-number">4.</span> <span class="toc-text">Load balance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Deployment"><span class="toc-number">5.</span> <span class="toc-text">Deployment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Improvement"><span class="toc-number">6.</span> <span class="toc-text">Improvement</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Front-end"><span class="toc-number">7.</span> <span class="toc-text">Front end</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Backend-service"><span class="toc-number">8.</span> <span class="toc-text">Backend service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Storage-decisions"><span class="toc-number">9.</span> <span class="toc-text">Storage decisions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Data-stream"><span class="toc-number">10.</span> <span class="toc-text">Data stream</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Scale a real-time collaborative editor
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Mahfuzur Rahman</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-07-05T11:43:10.000Z" itemprop="datePublished">2021-07-05</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/System-design/">System design</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/ckeditor/" rel="tag">ckeditor</a>, <a class="tag-link-link" href="/tags/node-js/" rel="tag">node.js</a>, <a class="tag-link-link" href="/tags/socket/" rel="tag">socket</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><img src="https://miro.medium.com/max/2000/1*msFlUe_uZknWisLa8Ef7Rg.jpeg" alt="alt text" title="Editor"></p>
+<p>In our previous post, we have developed a basic real-time collaborative application. In this post, we are going to scale the system.</p>
+<p>Our previous application is perfectly fine for small project. Let’s say we have added more features into it and we want to deliver this application to end user. </p>
+<p>To make this application production ready we need to make sure this is scalable and always available to our customer.</p>
+<h2 id="Vertical-scale"><a href="#Vertical-scale" class="headerlink" title="Vertical scale"></a>Vertical scale</h2><p>It involves upgrading our instance or add extra resource to support increasing workload.</p>
+<h2 id="Horizontal-scale"><a href="#Horizontal-scale" class="headerlink" title="Horizontal scale"></a>Horizontal scale</h2><p>Distributed strategy of adding copies running same task in parallel.</p>
+<p>Both of them have separate pros and cons and different use cases to implement. But, in enterprise application horizontal scale is quite popular.</p>
+<h2 id="Socket-scale"><a href="#Socket-scale" class="headerlink" title="Socket scale"></a>Socket scale</h2><p>In our application, we are using socket to handle real-time operations and socket internally uses TCP port to establish a connection. The maximum number of TCP sessions a single source IP can make to a single destination IP and port is 65,535. So, we can only have maximum 65K of connection at a time with a single instance. </p>
+<p>There are two ways to solve this issue,</p>
+<ol>
+<li>Assign IPs to an instance and have ports associated with it. This way we can have maximum connection = number of IP * 65K</li>
+<li>Running multiple instance.</li>
+</ol>
+<p>The problem of assigning IPs to and instance is manual workload with limited capacity. For that reason, we’ll be moving forward with multiple instance. And this way we’ll have the benefit of scaling out more as per need.</p>
+<p>With multiple instance, there is another issue of socket synchronization. For an example, two user is connected with two different instance. If one user posts an action, other user will not able to respond to it.<br>To communicate with these sockets, we need a central place to handle synchronization. Any message broker with pub-sub mechanism will solve. For our use case, we’ll be using redis for this.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">const</span> &#123; createClient &#125; = <span class="built_in">require</span>(<span class="string">&#x27;redis&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> redisAdapter = <span class="built_in">require</span>(<span class="string">&#x27;@socket.io/redis-adapter&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> pubClient = createClient(&#123;</span><br><span class="line">    <span class="attr">host</span>: process.env.REDIS_ENDPOINT || <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">    <span class="attr">port</span>: process.env.REDIS_PORT || <span class="number">6379</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">if</span> (process.env.REDIS_PASSWORD) &#123;</span><br><span class="line">    pubClient.auth(process.env.REDIS_PASSWORD);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> subClient = pubClient.duplicate();</span><br><span class="line">io.adapter(redisAdapter(pubClient, subClient));</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h2 id="Load-balance"><a href="#Load-balance" class="headerlink" title="Load balance"></a>Load balance</h2><p>For load balancing purpose, we’ll be using Nginx as this one of the most popular tools having so much resource. We can also choose other platform like HAProxy or anything preferrable.</p>
+<p>When we are having multiple instances, we need to make sure our socket sticks to the intance it already connected to. If everytime it connects or creates a new socket in each server, then we are going to have performance hit for sure.</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">events &#123;</span><br><span class="line">    worker_connections  <span class="number">1024</span>;</span><br><span class="line">&#125;</span><br><span class="line">http &#123;</span><br><span class="line">    gzip on;</span><br><span class="line">    gzip_proxied any;</span><br><span class="line">    gzip_types text<span class="regexp">/plain application/</span>json;</span><br><span class="line">    gzip_min_length <span class="number">1000</span>;</span><br><span class="line">  </span><br><span class="line">    server &#123;</span><br><span class="line">        listen <span class="number">80</span>;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">            proxy_set_header Host <span class="variable">$host</span>;</span><br><span class="line"></span><br><span class="line">            proxy_pass http:<span class="regexp">//</span>nodes;</span><br><span class="line"></span><br><span class="line">            <span class="comment"># enable WebSockets</span></span><br><span class="line">            proxy_http_version <span class="number">1.1</span>;</span><br><span class="line">            proxy_set_header Upgrade <span class="variable">$http_upgrade</span>;</span><br><span class="line">            proxy_set_header Connection <span class="string">&quot;upgrade&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    upstream nodes &#123;</span><br><span class="line">        ip_hash;</span><br><span class="line"></span><br><span class="line">        server app01:<span class="number">3000</span>;</span><br><span class="line">        server app02:<span class="number">3000</span>;</span><br><span class="line">        server app03:<span class="number">3000</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>To test out our load balancing strategy we are going to run our application using docker compose and run the application.</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="symbol">services:</span></span><br><span class="line"><span class="symbol">  redis:</span></span><br><span class="line"><span class="symbol">    image:</span> redis:alpine</span><br><span class="line"><span class="symbol"></span></span><br><span class="line"><span class="symbol">  app01:</span></span><br><span class="line"><span class="symbol">    build:</span> .</span><br><span class="line"><span class="symbol">    environment:</span></span><br><span class="line">      - REDIS_ENDPOINT=redis</span><br><span class="line"><span class="symbol">    depends_on:</span></span><br><span class="line">      - redis</span><br><span class="line"><span class="symbol">  </span></span><br><span class="line"><span class="symbol">  app02:</span></span><br><span class="line"><span class="symbol">    build:</span> .</span><br><span class="line"><span class="symbol">    environment:</span></span><br><span class="line">      - REDIS_ENDPOINT=redis</span><br><span class="line"><span class="symbol">    depends_on:</span></span><br><span class="line">      - redis</span><br><span class="line"><span class="symbol">  </span></span><br><span class="line"><span class="symbol">  app03:</span></span><br><span class="line"><span class="symbol">    build:</span> .</span><br><span class="line"><span class="symbol">    environment:</span></span><br><span class="line">      - REDIS_ENDPOINT=redis</span><br><span class="line"><span class="symbol">    depends_on:</span></span><br><span class="line">      - redis</span><br><span class="line"><span class="symbol"></span></span><br><span class="line"><span class="symbol">  web:</span></span><br><span class="line"><span class="symbol">    build:</span> nginx/</span><br><span class="line"><span class="symbol">    ports:</span></span><br><span class="line">      - <span class="number">80</span>:<span class="number">80</span></span><br><span class="line"><span class="symbol">    depends_on:</span></span><br><span class="line">      - app01</span><br><span class="line">      - app02</span><br><span class="line">      - app03</span><br></pre></td></tr></table></figure>
+
+<h2 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h2><p>After figuring out all the tweaks and improvements, we can deploy our service to the cloud infrastructure. There can be separate front end and backend application to support our application.<br>For a production ready application, checklist of workloads needs to be done before going live. </p>
+<ol>
+<li>Deploy our front end application behind Content Delivery Network(CDN) which will support scaling across the global regions and caches the content for faster response</li>
+<li>Deploy our services inside a cluster handling load.</li>
+<li>Autoscale service container based on parameters</li>
+<li>Autoscale server instance based on paramerters like CPU usage, Memory </li>
+<li>Log and monitor requests and act on regular feedback</li>
+</ol>
+<h2 id="Improvement"><a href="#Improvement" class="headerlink" title="Improvement"></a>Improvement</h2><p>Let’s define some requirement to roll out our application to end users. These are some of the basic features can be added or we’ll do a system design for them. </p>
+<ol>
+<li>User can authenticate and authorize</li>
+<li>Realtime collaborative editing</li>
+<li>Document save and retrieval</li>
+<li>Document history</li>
+<li>Comments / feedback</li>
+<li>Notification</li>
+</ol>
+<h2 id="Front-end"><a href="#Front-end" class="headerlink" title="Front end"></a>Front end</h2><p>Front end can be developed in any framework and deployed behind a CDN. To have better control over the editor, there are many things to consider about. Like</p>
+<ol>
+<li>Multiple cursor</li>
+<li>Apply style changes</li>
+<li>Import / Export support for differnt format</li>
+</ol>
+<h2 id="Backend-service"><a href="#Backend-service" class="headerlink" title="Backend service"></a>Backend service</h2><p>We can think of separate services to support our application.</p>
+<ol>
+<li>Authentication / Authorization service</li>
+<li>Application service </li>
+<li>Websocket service (Lightweight and Fast)</li>
+<li>Notification service</li>
+<li>Comment service</li>
+</ol>
+<p>All of these service can be developed and deployed independently behind load balancer. Autoscaling can be done based on different attributes.</p>
+<h2 id="Storage-decisions"><a href="#Storage-decisions" class="headerlink" title="Storage decisions"></a>Storage decisions</h2><p>We have plethora of database solutions to choose from. For out implementation, we can have different combination of selection.</p>
+<ol>
+<li>RDBMS (PostgreSQL, MySQL etc.) for user management service</li>
+<li>Document DB(MongoDB, CouchDB, PostgreSQL) for our document storage. </li>
+<li>Redis (For publish subscribe message broker)</li>
+<li>Time series database (InfluxDB) for user operation storage</li>
+<li>Storage for comments can be added in MongoDB</li>
+</ol>
+<h2 id="Data-stream"><a href="#Data-stream" class="headerlink" title="Data stream"></a>Data stream</h2><p>For our data stream we can use Apache Kafka. This is an open-source distributed event streaming platform.</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Posts</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Vertical-scale"><span class="toc-number">1.</span> <span class="toc-text">Vertical scale</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Horizontal-scale"><span class="toc-number">2.</span> <span class="toc-text">Horizontal scale</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socket-scale"><span class="toc-number">3.</span> <span class="toc-text">Socket scale</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Load-balance"><span class="toc-number">4.</span> <span class="toc-text">Load balance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Deployment"><span class="toc-number">5.</span> <span class="toc-text">Deployment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Improvement"><span class="toc-number">6.</span> <span class="toc-text">Improvement</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Front-end"><span class="toc-number">7.</span> <span class="toc-text">Front end</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Backend-service"><span class="toc-number">8.</span> <span class="toc-text">Backend service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Storage-decisions"><span class="toc-number">9.</span> <span class="toc-text">Storage decisions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Data-stream"><span class="toc-number">10.</span> <span class="toc-text">Data stream</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&text=Scale a real-time collaborative editor"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&title=Scale a real-time collaborative editor"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&is_video=false&description=Scale a real-time collaborative editor"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Scale a real-time collaborative editor&body=Check out this article: https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&title=Scale a real-time collaborative editor"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&title=Scale a real-time collaborative editor"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&title=Scale a real-time collaborative editor"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&title=Scale a real-time collaborative editor"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&name=Scale a real-time collaborative editor&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.mahfuz.info/2021/07/05/scaling-collaborative-editor/&t=Scale a real-time collaborative editor"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2012-2021
+    Mahfuzur Rahman
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Posts</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+    
+
+          
+
+                        <!-- clipboard -->
+                        
+                          
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+                              
+                                    <script type="text/javascript">
+                                      $(function () {
+                                        // copy-btn HTML
+                                        var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+                                        btn += '<i class="far fa-clone"></i>';
+                                        btn += '</span>';
+                                        // mount it!
+                                        $(".highlight table").before(btn);
+                                        var clip = new ClipboardJS('.btn-copy', {
+                                          text: function (trigger) {
+                                            return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str, it) => str + it.innerText + '\n', '')
+                                          }
+                                        });
+                                        clip.on('success', function (e) {
+                                          e.trigger.setAttribute('aria-label', "Copied!");
+                                          e.clearSelection();
+                                        })
+                                      })
+                                    </script>
+                                    
+                                      
+<script src="/js/main.js"></script>
+
+                                        <!-- search -->
+                                        
+                                              <!-- Google Analytics -->
+                                              
+                                                <script async
+                                                  src="https://www.googletagmanager.com/gtag/js?id=UA-65026350-1"></script>
+                                                <script>
+                                                  window.dataLayer = window.dataLayer || [];
+                                                  function gtag() { dataLayer.push(arguments); }
+                                                  gtag('js', new Date());
+                                                  gtag('config', 'UA-65026350-1');
+                                                </script>
+                                                
+                                                  <!-- Baidu Analytics -->
+                                                  
+                                                      <!-- Cloudflare Analytics -->
+                                                      
+                                                        <script defer
+                                                          src='https://static.cloudflareinsights.com/beacon.min.js'
+                                                          data-cf-beacon='{"token": "d2685a2b4ae6c1ef8f0c653b0b005dbe"}'></script>
+                                                        
+                                                          <!-- Umami Analytics -->
+                                                          
+                                                              <!-- Disqus Comments -->
+                                                              
+                                                                <script type="text/javascript">
+                                                                  var disqus_shortname = 'mahfuz-1';
+
+                                                                  (function () {
+                                                                    var dsq = document.createElement('script');
+                                                                    dsq.type = 'text/javascript';
+                                                                    dsq.async = true;
+                                                                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                                                                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                                                  }());
+                                                                </script>
+                                                                
+</body>
+</html>
