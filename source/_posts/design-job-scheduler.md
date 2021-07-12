@@ -10,6 +10,8 @@ categories:
 ---
 
 ## Design of a job scheduler
+![Untitled Diagram (1)](https://miro.medium.com/max/2000/1*KzGIlkYpm0v9E32SIR5pPw.jpeg)
+
 
 From [Wikipedia](https://en.wikipedia.org/wiki/Job_scheduler),
 
@@ -40,7 +42,7 @@ There are also some non-functional requirements to think of
 
 First, we need to create a service to store the job metadata. For simplicity, we can make a rest service endpoint that will store the job information in storage.
 
-![Untitled Diagram (1)](/Users/mahfuz/Documents/service.png)
+![Untitled Diagram (1)](https://miro.medium.com/max/1122/1*zytff-jKeHeL_1mo9SP4Ag.png)
 
 If we deploy our job service behind a load balancer then it can handle traffic load easily and store job metadata to the database.
 
@@ -242,7 +244,7 @@ The last piece of our system is an executor service. The consumer can act as the
 
 From this service, the metadata of execution can be stored in a database for future queries.
 
-![full](/Users/mahfuz/Documents/full.png)
+![full](https://miro.medium.com/max/1400/1*2oe9jxD7buwel91tgue4Gw.png)
 
 ## Improvement
 
