@@ -137,27 +137,6 @@
 
   
   <url>
-    <loc>https://www.mahfuz.info/tags/fibonacci/</loc>
-    <lastmod>2021-07-12</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.mahfuz.info/tags/algorithm/</loc>
-    <lastmod>2021-07-12</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.mahfuz.info/tags/java/</loc>
-    <lastmod>2021-07-12</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.mahfuz.info/tags/socket/</loc>
     <lastmod>2021-07-12</lastmod>
     <changefreq>daily</changefreq>
@@ -173,6 +152,27 @@
   
   <url>
     <loc>https://www.mahfuz.info/tags/ckeditor/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.mahfuz.info/tags/fibonacci/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.mahfuz.info/tags/algorithm/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.mahfuz.info/tags/java/</loc>
     <lastmod>2021-07-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -207,21 +207,14 @@
   </url>
   
   <url>
-    <loc>https://www.mahfuz.info/tags/array/</loc>
-    <lastmod>2021-07-12</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.mahfuz.info/tags/number-theory/</loc>
-    <lastmod>2021-07-12</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.mahfuz.info/tags/hashmap/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.mahfuz.info/tags/kafka/</loc>
     <lastmod>2021-07-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -235,7 +228,14 @@
   </url>
   
   <url>
-    <loc>https://www.mahfuz.info/tags/kafka/</loc>
+    <loc>https://www.mahfuz.info/tags/array/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.mahfuz.info/tags/number-theory/</loc>
     <lastmod>2021-07-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -265,14 +265,14 @@
 
   
   <url>
-    <loc>https://www.mahfuz.info/categories/Leetcode/</loc>
+    <loc>https://www.mahfuz.info/categories/System-design/</loc>
     <lastmod>2021-07-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.mahfuz.info/categories/System-design/</loc>
+    <loc>https://www.mahfuz.info/categories/Leetcode/</loc>
     <lastmod>2021-07-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
