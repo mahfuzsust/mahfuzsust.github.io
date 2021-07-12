@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://www.mahfuz.info/2021/07/12/design-task-scheduler/</loc>
+    <loc>https://www.mahfuz.info/2021/07/12/design-job-scheduler/</loc>
     
     <lastmod>2021-07-12</lastmod>
     
@@ -158,13 +158,6 @@
   </url>
   
   <url>
-    <loc>https://www.mahfuz.info/tags/binary-search-tree/</loc>
-    <lastmod>2021-07-12</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.mahfuz.info/tags/socket/</loc>
     <lastmod>2021-07-12</lastmod>
     <changefreq>daily</changefreq>
@@ -180,6 +173,13 @@
   
   <url>
     <loc>https://www.mahfuz.info/tags/ckeditor/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.mahfuz.info/tags/binary-search-tree/</loc>
     <lastmod>2021-07-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
