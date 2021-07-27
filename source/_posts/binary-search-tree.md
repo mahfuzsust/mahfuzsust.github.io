@@ -1,5 +1,5 @@
 ---
-title: binary-search-tree
+title: Binary Search Tree
 date: 2021-07-27 19:02:51
 tags:
   - binary search tree
