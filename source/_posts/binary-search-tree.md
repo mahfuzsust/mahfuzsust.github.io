@@ -9,6 +9,8 @@ categories:
   - Algorithm
 ---
 
+![Binary Search Tree (1)](https://miro.medium.com/max/1400/1*_LqrcGNWChmeXlrsbB5enQ.png)
+
 A binary search tree is a tree data structure that stores values in two sub-tree of left and right.
 
 ## Properties
