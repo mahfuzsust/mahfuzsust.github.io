@@ -1,5 +1,6 @@
 ---
 title: Fish FZF Configuration
+date: 2021-07-31T20:48:13.000Z
 tags:
   - fish
   - fzf
