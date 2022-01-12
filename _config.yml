@@ -98,5 +98,20 @@ deploy:
 sitemap:
   path: sitemap.xml
   rel: false
-  tags: true
-  categories: true
+  tags: false
+  categories: false
+
+plugins:
+  gitalk:
+    clientID: e9d8558ff735b9ce5c2a
+    clientSecret: d9d80117018fb929e83407f2120c108cf61d9eb8
+    repo: mahfuzsust.github.io
+    owner: mahfuzsust
+    admin: 
+      - mahfuzsust
+    distractionFreeMode: false
+
+readmeConfig:
+  postsHeader: '## My posts' # headers, support markdown
+  sort: 'desc' # posts display sort: 'desc' or 'acs'. The default option is 'desc'
+  groupType: 'month' # 'month' or 'year' or 'none'. The default option is 'month'
