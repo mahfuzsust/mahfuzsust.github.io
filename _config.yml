@@ -86,7 +86,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: coder
+theme: Chic
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
@@ -115,3 +115,7 @@ readmeConfig:
   postsHeader: '## My posts' # headers, support markdown
   sort: 'desc' # posts display sort: 'desc' or 'acs'. The default option is 'desc'
   groupType: 'month' # 'month' or 'year' or 'none'. The default option is 'month'
+
+theme_config:
+  colorscheme: dark
+
