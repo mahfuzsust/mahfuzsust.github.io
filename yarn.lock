@@ -830,11 +830,6 @@
   "resolved" "https://registry.npmjs.org/hexo-pagination/-/hexo-pagination-1.0.0.tgz"
   "version" "1.0.0"
 
-"hexo-plugin-gitalk@^0.2.0":
-  "integrity" "sha512-jKxO2sjyI9yTAl6KfpGisE9fzpizDKKGnKxTdx6FKr+v0O2m6lkfCk7kmgzqAcBUH2b853KAUMmvZye+Gvxzkw=="
-  "resolved" "https://registry.npmjs.org/hexo-plugin-gitalk/-/hexo-plugin-gitalk-0.2.0.tgz"
-  "version" "0.2.0"
-
 "hexo-reading-time@^1.0.3":
   "integrity" "sha1-kJ2jcZ+dDtIk4DqaZSHXllDu84s="
   "resolved" "https://registry.npmjs.org/hexo-reading-time/-/hexo-reading-time-1.0.3.tgz"
