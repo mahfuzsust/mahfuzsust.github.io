@@ -6,7 +6,7 @@
     "build": "hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo clean && hexo generate && hexo deploy",
-    "server": "hexo server"
+    "server": "hexo clean && hexo generate && hexo server"
   },
   "hexo": {
     "version": "5.4.0"
@@ -20,6 +20,7 @@
     "hexo-generator-index": "^2.0.0",
     "hexo-generator-readme-file": "^1.0.3",
     "hexo-generator-search": "^2.4.3",
+    "hexo-generator-searchdb": "^1.4.0",
     "hexo-generator-sitemap": "^2.1.0",
     "hexo-generator-tag": "^1.0.0",
     "hexo-reading-time": "^1.0.3",
