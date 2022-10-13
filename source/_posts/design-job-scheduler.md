@@ -68,7 +68,7 @@ Jobs can run based on a certain event. If we can create an event for each of the
 
 Redis has an event called expiration event. Redis deletes a key after the time expires and throws an event to the subscriber channel. 
 
-```javascript
+{% codeblock lang:javascript %}
 const { createClient } = require('redis');
 const client = createClient({
     host: process.env.REDIS_ENDPOINT || 'localhost',
@@ -84,7 +84,7 @@ client.subscribe('__keyevent@0__:expired');
 client.on('message', function (channel, key) {
     console.log(key);
 });
-```
+{% endcodeblock %}
 
 For each job, we can create a key in Redis with appropriate expiration. After the time expired, we will get an event and run the appropriate trigger based on the task metadata.
 
@@ -124,8 +124,7 @@ To solve these issues, we can add an extra layer of a queue. The generated event
 
 To test this, we can set up a Kafka using docker-compose.
 
-```
-
+{% codeblock lang:yaml %}
 version: "3"
 services:
   zookeeper:
@@ -147,11 +146,11 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
       - zookeeper
-```
+{% endcodeblock %}
 
 A producer example to push events to our Kafka cluster.
 
-```javascript
+{% codeblock lang:javascript %}
 // producer.js
 const { Kafka } = require("kafkajs")
 
@@ -178,12 +177,12 @@ const send = async (msg) => {
     }
 }
 
-module.exports = send
-```
+module.exports = send;
+{% endcodeblock %}
 
 A consumer can listent to a certain topic and handle execution based on type.
 
-```javascript
+{% codeblock lang:javascript %}
 // consumer.js
 const { Kafka } = require("kafkajs")
 
@@ -207,7 +206,7 @@ const consume = async () => {
 consume().catch((err) => {
     console.error("error in consumer: ", err)
 });
-```
+{% endcodeblock %}
 
 The executor service will subscribe to a different topic and then act based on different properties.
 

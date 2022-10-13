@@ -35,7 +35,7 @@ The balance factor of a node in an AVL tree is the difference between the height
 Balance factor = Height of Left Subtree — Height of Right Subtree (or inverse)
 The value of the balance factor should always be [-1, 0 or+1]
 
-```
+{% codeblock lang:java %}
 public class TreeNode<T extends Comparable<T>> {
   private T key;
   private TreeNode<T> parent;
@@ -58,20 +58,19 @@ public void updateBalanceFactor() {
 public boolean isBalanced() {
   return this.getBalanceFactor() <= 1 && this.getBalanceFactor() >= -1;
 }
-
-```
+{% endcodeblock %}
 
 We will use a callback pattern for our AVL tree insert and delete methods.
 
-```
+{% codeblock lang:java %}
 public interface Callback<T> {
   void success(T value);
 }
-```
+{% endcodeblock %}
 
 We have already discussed BST implementation in our previous post. We will extend the insert and delete operation here to maintain AVL properties.
 
-```
+{% codeblock lang:java %}
 public class BST<T extends Comparable<T>> {
   public void insert(T key, Callback<TreeNode<T>> callback) {
     callback.success(node);
@@ -80,11 +79,11 @@ public class BST<T extends Comparable<T>> {
     callback.success(node);
   }
 }
-```
+{% endcodeblock %}
 
 ## AVL implementation
 
-```
+{% codeblock lang:java %}
 public class AVL<T extends Comparable<T>> extends BST<T> {
 
   @Override
@@ -115,14 +114,14 @@ public class AVL<T extends Comparable<T>> extends BST<T> {
     });
   }
 }
-```
+{% endcodeblock %}
 
 ## Insert
 
 After the binary search tree insertion, we need to update the balance factor of each node. As we know we insert in any of the subtrees we are going to check all the way up to the parent to check if every node maintains the AVL properties.
 If the node is unbalanced, we need to rotate the tree to maintain the balance factor ≤ 1 and ≥ -1
 
-```
+{% codeblock lang:java %}
 private void fixAVLProperties(TreeNode<T> node, T key) {
   TreeNode<T> item = node;
   while (item != null) {
@@ -133,7 +132,7 @@ private void fixAVLProperties(TreeNode<T> node, T key) {
     item = item.getParent();
   }
 }
-```
+{% endcodeblock %}
 
 ## Unbalanced Node
 
@@ -148,7 +147,7 @@ For these use cases, we have to rotate our tree to maintain our balance properti
 
 First, we have to find the unbalanced direction
 
-```
+{% codeblock lang:java %}
 private String getUnbalancedDirection(TreeNode<T> node, T key) {
   String str = "";
   TreeNode<T> item = node;
@@ -169,11 +168,11 @@ private String getUnbalancedDirection(TreeNode<T> node, T key) {
   }
   return str;
 }
-```
+{% endcodeblock %}
 
 Next, we have to apply rotation based on the direction
 
-```
+{% codeblock lang:java %}
 private void applyRotation(TreeNode<T> node, String direction) {
   switch (direction) {
     case LEFT:
@@ -194,13 +193,13 @@ private void applyRotation(TreeNode<T> node, String direction) {
       break;
   }
 }
-```
+{% endcodeblock %}
 
 ## Left rotation
 
 To apply the rotation in left rotation,
 
-```
+{% codeblock lang:java %}
 private void rotateLeft(TreeNode<T> node) {
   if (node.getParent() != null) {
     if (node.getParent().getLeft() == node) {
@@ -224,13 +223,13 @@ private void rotateLeft(TreeNode<T> node) {
   updateChildBalanceFactor(node.getParent());
 }
 
-```
+{% endcodeblock %}
 
 ## Right rotation
 
 To apply the rotation in the right rotation
 
-```
+{% codeblock lang:java %}
 private void rotateRight(TreeNode<T> node) {
   if (node.getParent() != null) {
     if (node.getParent().getLeft() == node) {
@@ -253,11 +252,11 @@ private void rotateRight(TreeNode<T> node) {
   node.setLeft(right);
   updateChildBalanceFactor(node.getParent());
 }
-```
+{% endcodeblock %}
 
 ## Update balance factor
 
-```
+{% codeblock lang:java %}
 private void updateChildBalanceFactor(TreeNode<T> node) {
   if (node == null) {
     return;
@@ -266,7 +265,7 @@ private void updateChildBalanceFactor(TreeNode<T> node) {
   updateChildBalanceFactor(node.getRight());
   node.updateBalanceFactor();
 }
-```
+{% endcodeblock %}
 
 ## Deletion
 
@@ -277,7 +276,7 @@ In terms of deletion, we need to check certain steps to determine if the balance
 
 First, we need to check if any unbalanced node exists or not
 
-```
+{% codeblock lang:java %}
 private TreeNode<T> getUnbalancedNode(TreeNode<T> node) {
   if (node == null) {
     return null;
@@ -291,11 +290,11 @@ private TreeNode<T> getUnbalancedNode(TreeNode<T> node) {
   }
   return leftUNode;
 }
-```
+{% endcodeblock %}
 
 Then we have to check the key, for which the node is unbalanced. We just need to check two nodes here and because to find the unbalanced direction two nodes are sufficient.
 
-```
+{% codeblock lang:java %}
 private T getUnbalancedKey(TreeNode<T> node) {
   if (node == null || node.isBalanced()) {
     return null;
@@ -315,13 +314,13 @@ private T getUnbalancedKey(TreeNode<T> node) {
   }
   return item.getKey();
 }
-```
+{% endcodeblock %}
 
 ## Driver
 
 We can check our AVL tree using a driver method
 
-```
+{% codeblock lang:java %}
 public class Main {
   public static void main(String[] args) {
     AVL<Integer> tree = new AVL<Integer>();
@@ -332,7 +331,7 @@ public class Main {
     tree.preorder(tree.getRoot(), (x) -> System.out.println(x));
   }
 }
-```
+{% endcodeblock %}
 
 This will make our tree as
 

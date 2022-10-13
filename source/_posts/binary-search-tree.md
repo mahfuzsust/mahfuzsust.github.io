@@ -24,7 +24,7 @@ A binary search tree is a tree data structure that stores values in two sub-tree
 
 This is the tree node that will store our tree structure data.
 
-```
+{% codeblock lang:java %}
 public class Tree {
     private int key;
     private Tree parent;
@@ -33,19 +33,19 @@ public class Tree {
 
     // getters + setters
 }
-```
+{% endcodeblock %}
 
 ## Generate
 
 We can add a method to generate a tree from an array or a collection of items
 
-```
+{% codeblock lang:java %}
 public void generate(int[] array) {
     for (int i = 0; i < array.length; i++) {
         insert(array[i]);
     }
 }
-```
+{% endcodeblock %}
 
 ## Insert
 
@@ -55,7 +55,7 @@ While inserting an entry to our tree, we need to find the position to fit. Entry
 - If the key is less than the node, move left to the tree.
 - If the key is greater than the node, move right to the tree
 
-```
+{% codeblock lang:java %}
 private void insert(int key) {
     Tree node = new Tree(key);
     if (root == null) {
@@ -81,13 +81,13 @@ private void insert(int key) {
         }
     }
 }
-```
+{% endcodeblock %}
 
 ## Find / Search
 
 To find an entry in the tree, we have to search the tree recursively. If the key is less than the node then we have to move left otherwise, right.
 
-```
+{% codeblock lang:java %}
 private Tree findNode(Tree node, int key) {
     if (node == null)
         return null;
@@ -103,7 +103,7 @@ private Tree findNode(Tree node, int key) {
 public boolean find(int key) {
     return findNode(root, key) != null;
 }
-```
+{% endcodeblock %}
 
 ## Delete
 
@@ -137,7 +137,7 @@ To find the successor of the node, we need to follow these steps.
 1. Move to the right child of the node.
 2. Move to the way to the left most child. This child node will be the successor.
 
-```
+{% codeblock lang:java %}
 private Tree getSuccessor(Tree node) {
     var right = node.getRight();
     Tree successor = null;
@@ -147,11 +147,11 @@ private Tree getSuccessor(Tree node) {
     }
     return successor;
 }
-```
+{% endcodeblock %}
 
 The successor may contain the right child tree. In this case, the parent node of the successor will point to the right child and then replace the node with the successor.
 
-```
+{% codeblock lang:java %}
 public void delete(int key) {
     Tree node = findNode(root, key);
     if (node == null) {
@@ -201,43 +201,43 @@ private void replaceNode(Tree node, Tree replace) {
     }
     updateParent(replace, node.getParent());
 }
-```
+{% endcodeblock %}
 
 ## Height
 
 Height of a binary search tree is the depth count from root to the leaf node.
 
-```
+{% codeblock lang:java %}
 public int height(Tree node) {
     if (node == null)
         return 0;
     return Math.max(height(node.getLeft()) + 1, height(node.getRight()) + 1);
 }
-```
+{% endcodeblock %}
 
 ## Min
 
 From the definition, the leftmost element will have the minimum item of the tree.
 
-```
+{% codeblock lang:java %}
 public int min(Tree node) {
     if (node == null)
         return Integer.MAX_VALUE;
     return Math.min(min(node.getLeft()), node.getKey());
 }
-```
+{% endcodeblock %}
 
 ## Max
 
 From the definition, the rightmost element will have the minimum item of the tree.
 
-```
+{% codeblock lang:java %}
 public int max(Tree node) {
     if (node == null)
         return Integer.MIN_VALUE;
     return Math.max(max(node.getRight()), node.getKey());
 }
-```
+{% endcodeblock %}
 
 ## Complexity
 

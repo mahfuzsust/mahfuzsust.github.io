@@ -41,7 +41,7 @@ The problem of assigning IPs to and instance is manual workload with limited cap
 With multiple instance, there is another issue of socket synchronization. For an example, two user is connected with two different instance. If one user posts an action, other user will not able to respond to it.
 To communicate with these sockets, we need a central place to handle synchronization. Any message broker with pub-sub mechanism will solve. For our use case, we’ll be using redis for this.
 
-{% codeblock %}
+{% codeblock lang:javascript %}
 ...
 const { createClient } = require('redis');
 const redisAdapter = require('@socket.io/redis-adapter');
@@ -66,7 +66,7 @@ For load balancing purpose, we’ll be using Nginx as this one of the most popul
 
 When we are having multiple instances, we need to make sure our socket sticks to the instance it already connected to. If every time it connects or creates a new socket in each server, then we are going to have performance hit for sure.
 
-{% codeblock %}
+{% codeblock lang:yaml %}
 events {
     worker_connections  1024;
 }
@@ -104,7 +104,7 @@ http {
 
 To test out our load balancing strategy we are going to run our application using docker compose.
 
-{% codeblock %}
+{% codeblock lang:yml %}
 version: '3'
 services:
   redis:

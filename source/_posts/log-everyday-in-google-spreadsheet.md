@@ -21,7 +21,7 @@ My tasks will be
 - Create google drive folders to organize
 
 First, we need to create a clone of the template sheet.
-{% codeblock %}
+{% codeblock lang:java %}
 function cloneTemplateDaily() {
   var name = Utilities.formatDate(new Date(), "GMT", "dd-MM-yyyy");
   
@@ -39,7 +39,7 @@ function cloneTemplateDaily() {
 
 
 Then I need to backup the sheet to my google drive
-{% codeblock %}
+{% codeblock lang:java %}
 function backupSheetMonthly() {
   var lastMonthDate = getLastMonthDate();
   var fileName = Utilities.formatDate(lastMonthDate, "GMT", "MMMM, yyyy");
@@ -58,7 +58,7 @@ function backupSheetMonthly() {
 
 
 Now, all the methods that I require
-{% codeblock %}
+{% codeblock lang:java %}
 function fileExist(name, folder) {
   var files = folder.getFilesByName(name);
   while(files.hasNext()){
