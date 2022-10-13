@@ -335,18 +335,16 @@ public class Main {
 
 This will make our tree as
 
-```
-       4
-      / \
-     /   \
-    /     \
-   /       \
-   2       6
-  / \     / \
- /   \   /   \
- 1   3   5   9
-            / \
-            8 10
+```mermaid
+  graph TD;
+      4-->2;
+      4-->6;
+      2-->1;
+      2-->3;
+      6-->5;
+      6-->9;
+      9-->8;
+      9-->10;
 ```
 
 Full [source code](https://gist.github.com/mahfuzsust/e67043588cbf42414ab3ecc0db1412fd) is shared.
