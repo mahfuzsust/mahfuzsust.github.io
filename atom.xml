@@ -119,7 +119,7 @@ Simple, fast and user-friendly alternative to</summary>
     <link href="https://www.mahfuz.info/2021/07/27/binary-search-tree/"/>
     <id>https://www.mahfuz.info/2021/07/27/binary-search-tree/</id>
     <published>2021-07-27T17:02:51.000Z</published>
-    <updated>2023-10-15T16:20:59.358Z</updated>
+    <updated>2023-10-15T18:20:29.842Z</updated>
     
     
     <summary type="html">A binary search tree is a tree data structure that stores values in two sub-tree of left and right.
@@ -208,7 +208,7 @@ To </summary>
     <link href="https://www.mahfuz.info/2021/07/04/collaborative-editor/"/>
     <id>https://www.mahfuz.info/2021/07/04/collaborative-editor/</id>
     <published>2021-07-04T11:57:02.000Z</published>
-    <updated>2023-10-15T16:20:59.358Z</updated>
+    <updated>2023-10-15T18:20:14.493Z</updated>
     
     
     <summary type="html">A text editor can be a real game changer when it’s equipped with the functionality of collaborative editing. There are so many tools out there providing such features with great excellence such as Google Doc, Microsoft word etc.
@@ -263,7 +263,7 @@ Implement the MinStack class:
     <link href="https://www.mahfuz.info/2021/05/23/convert-sorted-array-to-binary-search-tree/"/>
     <id>https://www.mahfuz.info/2021/05/23/convert-sorted-array-to-binary-search-tree/</id>
     <published>2021-05-23T10:17:42.000Z</published>
-    <updated>2023-10-15T16:20:59.358Z</updated>
+    <updated>2023-10-15T18:21:13.131Z</updated>
     
     
     <summary type="html">Given an integer array nums where the elements are sorted in ascending order, convert it to a height-balanced binary search tree.
@@ -361,7 +361,7 @@ Explanation: There are three ways to cli</summary>
     <link href="https://www.mahfuz.info/2021/03/24/log-everyday-in-google-spreadsheet/"/>
     <id>https://www.mahfuz.info/2021/03/24/log-everyday-in-google-spreadsheet/</id>
     <published>2021-03-24T03:16:13.000Z</published>
-    <updated>2023-10-15T16:20:59.359Z</updated>
+    <updated>2023-10-15T18:22:45.586Z</updated>
     
     
     <summary type="html">I just wanted to create a daily task list with notes and reminders in google spreadsheet. So, I created a template which will look like this.
@@ -491,7 +491,7 @@ setProperty(){
     <link href="https://www.mahfuz.info/2020/08/25/how-to-implement-cache-in-java/"/>
     <id>https://www.mahfuz.info/2020/08/25/how-to-implement-cache-in-java/</id>
     <published>2020-08-25T10:45:43.000Z</published>
-    <updated>2023-10-15T16:20:59.359Z</updated>
+    <updated>2023-10-15T18:22:32.954Z</updated>
     
     
     <summary type="html">According to wikipedia, a cache is a hardware or software component that stores data so that future requests for that data can be served faster.
@@ -550,7 +550,7 @@ If the numbers are sorted then we can get easily with the complexity of O(n). Th
     <link href="https://www.mahfuz.info/2020/08/18/hashmap-implementation-for-java/"/>
     <id>https://www.mahfuz.info/2020/08/18/hashmap-implementation-for-java/</id>
     <published>2020-08-18T11:18:27.000Z</published>
-    <updated>2023-10-15T16:20:59.359Z</updated>
+    <updated>2023-10-15T18:21:46.161Z</updated>
     
     
     <summary type="html">HashMap is a dictionary data structure provided by java. It’s a Map-based collection class that is used to store data in Key &amp; Value pairs. In this article, we’ll be creating our own hashmap implementation.
