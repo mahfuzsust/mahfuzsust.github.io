@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>How to implement cache in Java - Read / Write</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="How to implement cache in Java - Read / Write" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://www.mahfuz.info/2020/08/25/how-to-implement-cache-in-java/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2020-08-25T10:45:43.000Z" />
+  
+  <meta property="og:article:author" content="Mahfuzur Rahman" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Home</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/mahfuzsust" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item" target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/">LinkedIn</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Java/">Java</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>August</span>
+            <span>25,</span>
+            <span>2020</span>
+        </div>
+        
+
+        <h2 class="title">How to implement cache in Java</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>According to <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Cache_%28computing%29">wikipedia</a>, a cache is a hardware or software component that stores data so that future requests for that data can be served faster.</p>
+<h4 id="Benefits"><a href="#Benefits" class="headerlink" title="Benefits:"></a>Benefits:</h4><ul>
+<li>Faster access of data in O(1)</li>
+<li>Computation complexity once for the first time</li>
+</ul>
+<h4 id="Types"><a href="#Types" class="headerlink" title="Types:"></a>Types:</h4><ul>
+<li>Memory cache</li>
+<li>Database cache</li>
+<li>Disk cache, etc</li>
+</ul>
+<p>In this post, we’ll go through the steps to create a in memory cache in java.</p>
+<p>To create a cache, we can simply use a map / dictionary data structure and we can get the expected result of O(1) for both get and put operation.</p>
+<p>But, we can’t store everything in our cache. We have storage and performance limits.</p>
+<p>A cache eviction algorithm is a way of deciding which element to evict when the cache is full. To gain optimized benefits there are many algorithms for different use cases.</p>
+<ul>
+<li>Least Recently Used (LRU)</li>
+<li>Least Frequently Used (LFU)</li>
+<li>First In First Out (FIFO)</li>
+<li>Last In First Out (LIFO) etc.</li>
+</ul>
+<blockquote>
+<p>There are only two hard things in computer science, Cache invalidation and naming things. — Phil Karlton</p>
+</blockquote>
+<p>In our design, we will use</p>
+<ul>
+<li><em>HashMap</em> to get and put data in O(1)</li>
+<li>Doubly linked list</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*enbSTt8WK0VFPxMCu9nJHw.png">Cache implementation strategy<br>We are using doubly linked list to determine which key to delete and have the benefit of adding and deleting keys in O(1).</p>
+<p>Initially we will declare a model to store our key-value pair, hit count and reference node to point previous and next node.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CacheItem</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> K key;    </span><br><span class="line">    <span class="keyword">private</span> V value;    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> hitCount = <span class="number">0</span>; <span class="comment">// LFU require this    </span></span><br><span class="line">    <span class="keyword">private</span> CacheItem prev, next;    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CacheItem</span><span class="params">(K key, V value)</span> </span>&#123;        </span><br><span class="line">        <span class="keyword">this</span>.value = value;        		</span><br><span class="line">        <span class="keyword">this</span>.key = key;    </span><br><span class="line">    &#125;        </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">incrementHitCount</span><span class="params">()</span> </span>&#123;        </span><br><span class="line">        <span class="keyword">this</span>.hitCount++;    </span><br><span class="line">    &#125;    </span><br><span class="line">    <span class="comment">// getter / setter</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>Now, we can outline our cache class with basic functionalities of get, put, delete and size.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Cache</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;K, CacheItem&gt; map;</span><br><span class="line">    <span class="keyword">private</span> CacheItem first, last;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> CAPACITY;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> hitCount = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> missCount = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Cache</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">        CAPACITY = capacity;  <span class="comment">// </span></span><br><span class="line">        map = <span class="keyword">new</span> HashMap&lt;&gt;(CAPACITY);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(K key)</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(K key)</span> </span>&#123;</span><br><span class="line">        deleteNode(map.get(key));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getHitCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> hitCount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getMissCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> missCount;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>We also included hit count and miss count to determine the performance of our cache.</p>
+<p>Hit ratio = total hit / (total hit + total miss)</p>
+<p>For our put method</p>
+<ol>
+<li>If key already exists, update the value</li>
+<li>Otherwise, If size exceeds capacity</li>
+<li>Delete existing node using appropriate strategy</li>
+<li>Add new node in the top<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    CacheItem node = <span class="keyword">new</span> CacheItem(key, value);</span><br><span class="line">    <span class="keyword">if</span>(map.containsKey(key) == <span class="keyword">false</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(size() &gt;= CAPACITY) &#123;</span><br><span class="line">            deleteNode(first);        </span><br><span class="line">        &#125;        </span><br><span class="line">        addNodeToLast(node);    </span><br><span class="line">    &#125;    </span><br><span class="line">    map.put(key, node);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>In our delete method</p>
+<ul>
+<li>Remove node from map</li>
+<li>Delete all references associated with that node.<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">deleteNode</span><span class="params">(CacheItem node)</span> </span>&#123;    </span><br><span class="line">    <span class="keyword">if</span>(node == <span class="keyword">null</span>) &#123;        </span><br><span class="line">        <span class="keyword">return</span>;    </span><br><span class="line">    &#125;    </span><br><span class="line">    <span class="keyword">if</span>(last == node) &#123;        </span><br><span class="line">        last = node.getPrev();    </span><br><span class="line">    &#125;    </span><br><span class="line">    <span class="keyword">if</span>(first == node) &#123;        </span><br><span class="line">        first = node.getNext();    </span><br><span class="line">    &#125;    </span><br><span class="line">    map.remove(node.getKey());    </span><br><span class="line">    node = <span class="keyword">null</span>; <span class="comment">// Optional, collected by GC    </span></span><br><span class="line">    size--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>We can add node in the top. The last pointer will reference to the last inserted node.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">addNodeToLast</span><span class="params">(CacheItem node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(last != <span class="keyword">null</span>) &#123;</span><br><span class="line">        last.setNext(node);</span><br><span class="line">        node.setPrev(last);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    last = node;</span><br><span class="line">    <span class="keyword">if</span>(first == <span class="keyword">null</span>) &#123;</span><br><span class="line">        first = node;</span><br><span class="line">    &#125;</span><br><span class="line">    size++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>In our get method,</p>
+<ul>
+<li>Get data from map</li>
+<li>Increment the counter for that item. ( Useful for lease frequently used )</li>
+<li>Reorder the linked list.<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(K key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(map.containsKey(key) == <span class="keyword">false</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    CacheItem node = (CacheItem) map.get(key);</span><br><span class="line">    node.incrementHitCount();</span><br><span class="line">    reorder(node);</span><br><span class="line">    <span class="keyword">return</span> (V) node.getValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>Reorder is the key for this implementation. For different algorithm this reorder to delete method will change.</p>
+<h4 id="Least-Recently-Used-LRU"><a href="#Least-Recently-Used-LRU" class="headerlink" title="Least Recently Used (LRU)"></a>Least Recently Used (LRU)</h4><p>Delete candidate is the oldest used entry.</p>
+<ul>
+<li>The latest accessed node will be at the last end along with newly added items. In this way, we can delete from the first easily.<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">reorder</span><span class="params">(CacheItem node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(last == node) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(first == node) &#123;</span><br><span class="line">        first = node.getNext();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        node.getPrev().setNext(node.getNext());</span><br><span class="line">    &#125;</span><br><span class="line">    last.setNext(node);</span><br><span class="line">    node.setPrev(last);</span><br><span class="line">    node.setNext(<span class="keyword">null</span>);</span><br><span class="line">    last = node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="Least-Frequently-Used-LFU"><a href="#Least-Frequently-Used-LFU" class="headerlink" title="Least Frequently Used (LFU)"></a>Least Frequently Used (LFU)</h4><p>Delete candidate is the least accessed entry.</p>
+<p>We have to sort items based on the frequency the nodes being accessed.</p>
+<p>To avoid getting deleted, for each accessed items needs to reach top based on their frequency.</p>
+<ul>
+<li>Iterated a loop, which swaps the node if the frequency is greater than it’s next node frequency.<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">reorder</span><span class="params">(CacheItem node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(last == node) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    CacheItem nextNode = node.getNext();</span><br><span class="line">    <span class="keyword">while</span> (nextNode != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(nextNode.getHitCount() &gt; node.getHitCount()) &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(first == node) &#123;</span><br><span class="line">            first = nextNode;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(node.getPrev() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            node.getPrev().setNext(nextNode);</span><br><span class="line">        &#125;</span><br><span class="line">        nextNode.setPrev(node.getPrev());</span><br><span class="line">        node.setPrev(nextNode);</span><br><span class="line">        node.setNext(nextNode.getNext());</span><br><span class="line">        <span class="keyword">if</span>(nextNode.getNext() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            nextNode.getNext().setPrev(node);</span><br><span class="line">        &#125;</span><br><span class="line">        nextNode.setNext(node);</span><br><span class="line">        nextNode = node.getNext();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(node.getNext() == <span class="keyword">null</span>) &#123;</span><br><span class="line">        last = node;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>This way, there is an edge case where, after adding items that require delete from the start can cause deletion of the high frequency node.</p>
+<p>To solve this issue, we need to add nodes pointing our first node for least frequently accessed.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">addNodeToFirst</span><span class="params">(CacheItem node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(first != <span class="keyword">null</span>) &#123;</span><br><span class="line">        node.setNext(first);</span><br><span class="line">        first.setPrev(node);</span><br><span class="line">    &#125;</span><br><span class="line">    first = node;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(last == <span class="keyword">null</span>) &#123;</span><br><span class="line">        last = node;</span><br><span class="line">    &#125;</span><br><span class="line">    size++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="First-In-First-Out-FIFO"><a href="#First-In-First-Out-FIFO" class="headerlink" title="First In First Out (FIFO)"></a>First In First Out (FIFO)</h4><p>Delete candidate is the first node.</p>
+<ul>
+<li>To add node we will use <em>addNodeToLast</em></li>
+<li>Reordering is not required.</li>
+<li>Delete node from first</li>
+</ul>
+<h4 id="Last-In-First-Out-LIFO"><a href="#Last-In-First-Out-LIFO" class="headerlink" title="Last In First Out (LIFO)"></a>Last In First Out (LIFO)</h4><p>Delete candidate is the last node.</p>
+<ul>
+<li>To add node we will use <em>addNodeToLast</em></li>
+<li>Reordering is not required.</li>
+<li>Delete node from last</li>
+</ul>
+<h3 id="Questions"><a href="#Questions" class="headerlink" title="Questions:"></a>Questions:</h3><ol>
+<li>We can use array /ArrayList to solve the same issue with simplified coding.</li>
+</ol>
+<p>Yes, it would be simpler. The aspects for not using,</p>
+<ul>
+<li>ArrayList has complexity of insertion and deletion of O(n) in worst case</li>
+<li>To search from there list, the worst case complexity would be O(n)</li>
+</ul>
+<ol start="2">
+<li>We could have used the LinkedList instead of ArrayList.</li>
+</ol>
+<p>Once again, yes. LinkedList had the benefit for adding and removing node at O(1). The aspects for not using,</p>
+<ul>
+<li>We will still face the searching complexity of O(n)</li>
+</ul>
+<ol start="3">
+<li>For LFU, we are having a complexity of O(n) in reordering method.</li>
+</ol>
+<p>Yes, unfortunately.</p>
+<ul>
+<li>I’m reordering here after each get request, which increases the complexity for each get. For post heavy system, this approach will benefit.</li>
+<li>It can be done at the moment of deletion. This way the complexity will increase at the time of putting data. For get heavy system, this approach will benefit more.</li>
+</ul>
+<p>I have came up a solution with this so far. Please suggest any better idea.</p>
+<ol start="4">
+<li>We are using HashMap. It can have the issue of hash collision. Then the performance will not be O(1) as mentioned.</li>
+</ol>
+<p>Absolutely.</p>
+<ul>
+<li>It’s always recommended to use better hash function that cause less collision.</li>
+<li>Make sure our load factor remains 0.75 or less.</li>
+<li>If the load factor is more than default or provided one, from Java 8 HashMap automatically increase the size and rehash the full structure.</li>
+<li>From Java 8, the collision also being handled by using balanced tree to obtain O(log n) performance.</li>
+</ul>
+<p>I’ve written a post with implementation and explanation <a target="_blank" rel="noopener" href="https://medium.com/swlh/hashmap-implementation-for-java-90a5f58d4a5b">HashMap Implementation for Java</a>.</p>
+<ol start="5">
+<li>Is this implementation thread safe?</li>
+</ol>
+<p>No. To be thread safe</p>
+<ul>
+<li>We can use <em>ConcurrentHashMap</em> instead of <em>HashMap</em></li>
+<li>Use synchronized block</li>
+</ul>
+<ol start="6">
+<li>How to add time based eviction strategy to auto delete items?</li>
+</ol>
+<p>No. To implement this, we need to run a timer thread to define which items are eligible for eviction and perform deletion operation.</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Mahfuzur Rahman, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/java/" class="tag">#java</a><a href="/tags/cache/" class="tag">#cache</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2021/03/08/kafka-server-setup/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Kafka server setup</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2020/08/21/find-pair-of-numbers-in-an-array-with-a-given-sum/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Find pair of numbers in an array with a given sum</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Home</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/mahfuzsust" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/" class="item">LinkedIn</a>
+                
+                <a href="mailto:mahfuzsust@yahoo.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2023 Mahfuzur Rahman<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Scale a real-time collaborative editor - Read / Write</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Scale a real-time collaborative editor - Read / Write" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://www.mahfuz.info/2021/07/06/scaling-collaborative-editor/index.html" />
+  
+  <meta property="og:image" content="https://miro.medium.com/max/1400/1*7C8YrY6ety7tYjJs3eb9Pg.jpeg" />
+  
+  <meta property="og:article:published_time" content="2021-07-06T09:43:10.000Z" />
+  
+  <meta property="og:article:author" content="Mahfuzur Rahman" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Home</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/mahfuzsust" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item" target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/">LinkedIn</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/System-design/">System design</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>July</span>
+            <span>6,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">Scale a real-time collaborative editor</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p><img src="https://miro.medium.com/max/1400/1*7C8YrY6ety7tYjJs3eb9Pg.jpeg" alt="alt text" title="Editor"></p>
+<p>In our previous post, we have developed a basic real-time collaborative application.</p>
+<p>In this post, we are going to scale the system.</p>
+<p>Our previous application is perfectly fine for small project. Let’s say we have added more features into it and we want to deliver this application to end user.</p>
+<p>To make this application production ready we need to make sure this is scalable and always available to our customer.</p>
+<h2 id="Vertical-scale"><a href="#Vertical-scale" class="headerlink" title="Vertical scale"></a>Vertical scale</h2><p>It involves upgrading our instance or add extra resource to support increasing workload.</p>
+<h2 id="Horizontal-scale"><a href="#Horizontal-scale" class="headerlink" title="Horizontal scale"></a>Horizontal scale</h2><p>Distributed strategy of adding copies running same task in parallel.</p>
+<p>Both of them have separate pros and cons and different use cases based on different scenario. But, in enterprise application horizontal scale is quite popular.</p>
+<h2 id="Socket-scale"><a href="#Socket-scale" class="headerlink" title="Socket scale"></a>Socket scale</h2><p>In our application, we are using socket to handle real-time operations and socket internally uses TCP port to establish a connection. The maximum number of TCP sessions a single source IP can make to a single destination IP and port is 65,535. So, we can only have maximum 65K of connection at a time with a single instance.</p>
+<p>There are two ways to solve this issue,</p>
+<ol>
+<li>Assign IPs to an instance and have ports associated with it. This way we can have maximum connection = number of IP * 65K</li>
+<li>Running multiple instance.</li>
+</ol>
+<p>The problem of assigning IPs to and instance is manual workload with limited capacity. For that reason, we’ll be moving forward with multiple instance. And this way we’ll have the benefit of scaling out more as per need.</p>
+<p>With multiple instance, there is another issue of socket synchronization. For an example, two user is connected with two different instance. If one user posts an action, other user will not able to respond to it.<br>To communicate with these sockets, we need a central place to handle synchronization. Any message broker with pub-sub mechanism will solve. For our use case, we’ll be using redis for this.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">const</span> &#123; createClient &#125; = <span class="built_in">require</span>(<span class="string">&#x27;redis&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> redisAdapter = <span class="built_in">require</span>(<span class="string">&#x27;@socket.io/redis-adapter&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> pubClient = createClient(&#123;</span><br><span class="line">    <span class="attr">host</span>: process.env.REDIS_ENDPOINT || <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">    <span class="attr">port</span>: process.env.REDIS_PORT || <span class="number">6379</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">if</span> (process.env.REDIS_PASSWORD) &#123;</span><br><span class="line">    pubClient.auth(process.env.REDIS_PASSWORD);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> subClient = pubClient.duplicate();</span><br><span class="line">io.adapter(redisAdapter(pubClient, subClient));</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h2 id="Load-balance"><a href="#Load-balance" class="headerlink" title="Load balance"></a>Load balance</h2><p><img src="https://miro.medium.com/max/1142/1*74Xo4hv3qRN-I38rIZeN6g.png" alt="alt text" title="Load balance"></p>
+<p>For load balancing purpose, we’ll be using Nginx as this one of the most popular tools having so much resource. We can also choose other platform like HAProxy or anything preferable.</p>
+<p>When we are having multiple instances, we need to make sure our socket sticks to the instance it already connected to. If every time it connects or creates a new socket in each server, then we are going to have performance hit for sure.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">events</span> &#123;</span><br><span class="line">    <span class="string">worker_connections</span>  <span class="number">1024</span><span class="string">;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="string">http</span> &#123;</span><br><span class="line">    <span class="string">gzip</span> <span class="string">on;</span></span><br><span class="line">    <span class="string">gzip_proxied</span> <span class="string">any;</span></span><br><span class="line">    <span class="string">gzip_types</span> <span class="string">text/plain</span> <span class="string">application/json;</span></span><br><span class="line">    <span class="string">gzip_min_length</span> <span class="number">1000</span><span class="string">;</span></span><br><span class="line">  </span><br><span class="line">    <span class="string">server</span> &#123;</span><br><span class="line">        <span class="string">listen</span> <span class="number">80</span><span class="string">;</span></span><br><span class="line"></span><br><span class="line">        <span class="string">location</span> <span class="string">/</span> &#123;</span><br><span class="line">            <span class="string">proxy_set_header</span> <span class="string">X-Forwarded-For</span> <span class="string">$proxy_add_x_forwarded_for;</span></span><br><span class="line">            <span class="string">proxy_set_header</span> <span class="string">Host</span> <span class="string">$host;</span></span><br><span class="line"></span><br><span class="line">            <span class="string">proxy_pass</span> <span class="string">http://nodes;</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># enable WebSockets</span></span><br><span class="line">            <span class="string">proxy_http_version</span> <span class="number">1.1</span><span class="string">;</span></span><br><span class="line">            <span class="string">proxy_set_header</span> <span class="string">Upgrade</span> <span class="string">$http_upgrade;</span></span><br><span class="line">            <span class="string">proxy_set_header</span> <span class="string">Connection</span> <span class="string">&quot;upgrade&quot;</span><span class="string">;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="string">upstream</span> <span class="string">nodes</span> &#123;</span><br><span class="line">        <span class="string">ip_hash;</span></span><br><span class="line"></span><br><span class="line">        <span class="string">server</span> <span class="string">app01:3000;</span></span><br><span class="line">        <span class="string">server</span> <span class="string">app02:3000;</span></span><br><span class="line">        <span class="string">server</span> <span class="string">app03:3000;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>To test out our load balancing strategy we are going to run our application using docker compose.</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis:alpine</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">app01:</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">.</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">REDIS_ENDPOINT=redis</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redis</span></span><br><span class="line">  </span><br><span class="line">  <span class="attr">app02:</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">.</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">REDIS_ENDPOINT=redis</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redis</span></span><br><span class="line">  </span><br><span class="line">  <span class="attr">app03:</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">.</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">REDIS_ENDPOINT=redis</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redis</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">nginx/</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">80</span><span class="string">:80</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">app01</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">app02</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">app03</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Deployment-strategy"><a href="#Deployment-strategy" class="headerlink" title="Deployment strategy"></a>Deployment strategy</h2><p>After figuring out all the tweaks and improvements, we can deploy our service to the cloud infrastructure. There can be separate front end and backend application to support our application.</p>
+<p>For a production ready application, checklist of workloads needs to be done before going live.</p>
+<ol>
+<li>Deploy our front end application behind Content Delivery Network(CDN) which will support scaling across the global regions and caches the content for faster response</li>
+<li>Deploy our services inside a cluster handling load.</li>
+<li>Autoscale service container based on parameters</li>
+<li>Autoscale server instance based on paramerters like CPU usage, Memory </li>
+<li>Log and monitor requests and act on regular feedback</li>
+</ol>
+<h2 id="Final-product"><a href="#Final-product" class="headerlink" title="Final product"></a>Final product</h2><p>Let’s define some requirement to roll out our application to end users. These are some of the basic features can be added or we’ll do a system design for them. </p>
+<ol>
+<li>User can authenticate and authorize</li>
+<li>Realtime collaborative editing</li>
+<li>Document save and retrieval</li>
+<li>Document history</li>
+<li>Comments / feedback</li>
+<li>Notification</li>
+</ol>
+<h2 id="Front-end"><a href="#Front-end" class="headerlink" title="Front end"></a>Front end</h2><p>Front end can be developed in any framework and deployed behind a CDN. To have better control over the editor, there are many things to consider about. Like</p>
+<ol>
+<li>Multiple cursor</li>
+<li>Apply style changes</li>
+<li>Import / Export support for differnt format</li>
+</ol>
+<h2 id="Backend-service"><a href="#Backend-service" class="headerlink" title="Backend service"></a>Backend service</h2><p>We can think of separate services to support our application.</p>
+<ol>
+<li>Authentication / Authorization service</li>
+<li>Application service </li>
+<li>Websocket service (Lightweight and Fast)</li>
+<li>Notification service</li>
+<li>Comment service</li>
+</ol>
+<p>All of these service can be developed and deployed independently behind load balancer. Auto scaling can be done based on different attributes.</p>
+<h2 id="Storage-decisions"><a href="#Storage-decisions" class="headerlink" title="Storage decisions"></a>Storage decisions</h2><p>We have plethora of database solutions to choose from. For out implementation, we can have different combination of selection.</p>
+<ol>
+<li>RDBMS (PostgreSQL, MySQL etc.) for user management service</li>
+<li>Document DB(MongoDB, CouchDB, PostgreSQL) for our document storage. </li>
+<li>Redis (For publish subscribe message broker)</li>
+<li>Time series database (InfluxDB) for user operation storage</li>
+<li>Storage for comments can be added in MongoDB</li>
+</ol>
+<h2 id="Data-stream"><a href="#Data-stream" class="headerlink" title="Data stream"></a>Data stream</h2><p>For our data stream we can use Apache Kafka. This is an open-source distributed event streaming platform.</p>
+<h2 id="Design"><a href="#Design" class="headerlink" title="Design"></a>Design</h2><p><img src="https://miro.medium.com/max/1400/1*NkGkkbq_MJ0dDvnhvIVRZg.png" alt="alt text" title="Load balance"></p>
+<h2 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h2><p>We tried to design a system based on some requirements. In real case this can change as per need. There are lot of resources can be found over internet to scale socket implementation.</p>
+<p><a target="_blank" rel="noopener" href="https://socket.io/docs/v3/using-multiple-nodes/index.html">Socket.io Using multiple nodes</a><br><a target="_blank" rel="noopener" href="https://medium.com/containers-on-aws/scaling-a-realtime-chat-app-on-aws-using-socket-io-redis-and-aws-fargate-4ed63fb1b681">Scaling a realtime chat app on AWS using Socket.io, Redis, and AWS Fargate</a><br><a target="_blank" rel="noopener" href="https://phoenixframework.org/blog/the-road-to-2-million-websocket-connections">The Road to 2 Million Websocket Connections in Phoenix — Phoenix Blog</a><br><a target="_blank" rel="noopener" href="https://blog.jayway.com/2015/04/13/600k-concurrent-websocket-connections-on-aws-using-node-js/">600k concurrent websocket connections on AWS using Node.js</a><br><a target="_blank" rel="noopener" href="https://goroutines.com/10m">10M — goroutines</a></p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Mahfuzur Rahman, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/socket/" class="tag">#socket</a><a href="/tags/node-js/" class="tag">#node.js</a><a href="/tags/ckeditor/" class="tag">#ckeditor</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2021/07/12/design-job-scheduler/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Design a job scheduler</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2021/07/04/collaborative-editor/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Building a real-time collaborative editor</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Home</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/mahfuzsust" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/" class="item">LinkedIn</a>
+                
+                <a href="mailto:mahfuzsust@yahoo.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2023 Mahfuzur Rahman<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

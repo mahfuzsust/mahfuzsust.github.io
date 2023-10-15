@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Building a real-time collaborative editor - Read / Write</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Building a real-time collaborative editor - Read / Write" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://www.mahfuz.info/2021/07/04/collaborative-editor/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2021-07-04T11:57:02.000Z" />
+  
+  <meta property="og:article:author" content="Mahfuzur Rahman" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Home</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/mahfuzsust" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item" target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/">LinkedIn</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/System-design/">System design</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>July</span>
+            <span>4,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">Building a real-time collaborative editor</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p><img src="https://miro.medium.com/max/2000/1*msFlUe_uZknWisLa8Ef7Rg.jpeg" alt="alt text" title="Editor"></p>
+<p>A text editor can be a real game changer when it’s equipped with the functionality of collaborative editing. There are so many tools out there providing such features with great excellence such as Google Doc, Microsoft word etc.</p>
+<p>I planned to design and develop such a system which can handle basic text editing and can scale on need. So I tried developing a POC(Proof of concept) which can handle real-time editing and went through some ideas to make this solution scalable.</p>
+<p>Obviously, there are scopes for improvement and please share your ideas which will give better insights.</p>
+<h2 id="Requirement"><a href="#Requirement" class="headerlink" title="Requirement"></a>Requirement</h2><p>Let’s define some project requirement to start on</p>
+<ol>
+<li>Basic editing</li>
+<li>Realtime collaboration</li>
+<li>Basic operational transform</li>
+<li>List of joined users</li>
+<li>Add / Remove users based on event</li>
+</ol>
+<h2 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h2><ol>
+<li>CKEditor 4</li>
+<li>Plain &amp; Simple Javascript</li>
+<li>Node.js &amp; Express</li>
+<li>Socket.io</li>
+<li>For operational trasform I’ve used the CKEditor 5 diff library to adapt changes to the editor.</li>
+</ol>
+<h2 id="Initial-setup"><a href="#Initial-setup" class="headerlink" title="Initial setup"></a>Initial setup</h2><p>First we need a Node.js server which will host our application server and respond the front end in root endpoint.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">// package.json</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;&lt;NAME&gt;&quot;,</span><br><span class="line">  &quot;version&quot;: &quot;1.0.0&quot;,</span><br><span class="line">  &quot;description&quot;: &quot;&quot;,</span><br><span class="line">  &quot;main&quot;: &quot;server.js&quot;,</span><br><span class="line">  &quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;start&quot;: &quot;node server.js&quot;,</span><br><span class="line">    &quot;dev&quot;: &quot;nodemon server.js&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;author&quot;: &quot;&quot;,</span><br><span class="line">  &quot;license&quot;: &quot;ISC&quot;,</span><br><span class="line">  &quot;dependencies&quot;: &#123;</span><br><span class="line">    &quot;@socket.io/redis-adapter&quot;: &quot;^7.0.0&quot;,</span><br><span class="line">    &quot;express&quot;: &quot;^4.17.1&quot;,</span><br><span class="line">    &quot;http&quot;: &quot;^0.0.1-security&quot;,</span><br><span class="line">    &quot;redis&quot;: &quot;^3.1.2&quot;,</span><br><span class="line">    &quot;socket.io&quot;: &quot;^4.1.2&quot;,</span><br><span class="line">    &quot;uuid&quot;: &quot;^8.3.2&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;devDependencies&quot;: &#123;</span><br><span class="line">    &quot;nodemon&quot;: &quot;^2.0.9&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>I’ve added a redirection in the root endpoint to generate document id and load the html. If we store the document user specific then this step is completely unnecessary.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//server.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> &#123; <span class="attr">v4</span>: uuidv4 &#125; = <span class="built_in">require</span>(<span class="string">&#x27;uuid&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"><span class="keyword">const</span> port = process.env.PORT || <span class="number">3000</span>;</span><br><span class="line"></span><br><span class="line">app.use(<span class="string">&#x27;/public&#x27;</span>, express.static(<span class="string">&#x27;public&#x27;</span>));</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&#x27;/:id&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> fileDirectory = path.resolve(__dirname);</span><br><span class="line">    res.sendFile(<span class="string">&#x27;index.html&#x27;</span>, &#123; <span class="attr">root</span>: fileDirectory &#125;, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">            <span class="built_in">console</span>.error(err);</span><br><span class="line">            <span class="keyword">throw</span> (err);</span><br><span class="line">        &#125;</span><br><span class="line">        res.end();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">app.get(<span class="string">&#x27;/&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">    res.redirect(<span class="number">307</span>, <span class="string">&#x27;/&#x27;</span> + uuidv4());</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(port, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`Example app listening at http://localhost:<span class="subst">$&#123;port&#125;</span>`</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Adding CKEditor in our front end application along with bootstrap for simplicity.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- index.html --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Collaborative Editor<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css&quot;</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">integrity</span>=<span class="string">&quot;sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC&quot;</span> <span class="attr">crossorigin</span>=<span class="string">&quot;anonymous&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">integrity</span>=<span class="string">&quot;sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">crossorigin</span>=<span class="string">&quot;anonymous&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;public/writer.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;row&quot;</span> <span class="attr">style</span>=<span class="string">&quot;padding-top: 20px;&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;col-7&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Collaborative Editor<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;editor-block&quot;</span> <span class="attr">class</span>=<span class="string">&quot;row&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: none;&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;form-group&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">textarea</span> <span class="attr">id</span>=<span class="string">&quot;textarea&quot;</span> <span class="attr">class</span>=<span class="string">&quot;form-control&quot;</span> <span class="attr">rows</span>=<span class="string">&quot;3&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">                CKEDITOR.replace(<span class="string">&#x27;textarea&#x27;</span>);</span></span><br><span class="line"><span class="javascript">            </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>We will get the document ID from the path</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// writer.js</span></span><br><span class="line"><span class="keyword">const</span> documentId = <span class="keyword">new</span> URL(<span class="built_in">window</span>.location.href).pathname.substring(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> editor = CKEDITOR.instances.textarea;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Get data</span></span><br><span class="line">editor.getData();</span><br><span class="line"></span><br><span class="line"><span class="comment">// Set data</span></span><br><span class="line">editor.setData(<span class="string">&quot;Hello world&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Collaborative-editing"><a href="#Collaborative-editing" class="headerlink" title="Collaborative editing"></a>Collaborative editing</h2><p>To add collaboration in our editor, we have different way to implement.</p>
+<h3 id="Asynchronous-collaborative-editing"><a href="#Asynchronous-collaborative-editing" class="headerlink" title="Asynchronous collaborative editing"></a>Asynchronous collaborative editing</h3><p>In this approach, the editor synchronize the content based on user event. For an example, after the user manually save the document or trigger an event, the content delivered to different clients associated with the content.<br>To publish local content, manual action is involved.</p>
+<h3 id="Real-time-editing"><a href="#Real-time-editing" class="headerlink" title="Real-time editing"></a>Real-time editing</h3><p>The content of the editor synchronize with other clients in real-time.</p>
+<p>We will be moving forward with the real-time sync approach.</p>
+<h2 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h2><p>In this phase, we are going to add socket implementation in our project.</p>
+<p>Our server will listen to socket ports.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// server.js</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">const</span> httpServer = <span class="built_in">require</span>(<span class="string">&quot;http&quot;</span>).createServer(app);</span><br><span class="line"><span class="keyword">const</span> io = <span class="built_in">require</span>(<span class="string">&quot;socket.io&quot;</span>)(httpServer);</span><br><span class="line">...</span><br><span class="line">io.on(<span class="string">&quot;connection&quot;</span>, <span class="function"><span class="params">socket</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;socket connected..&#x27;</span>, socket.id);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">httpServer.listen(port);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Real-time-user-management-Optional"><a href="#Real-time-user-management-Optional" class="headerlink" title="Real-time user management (Optional)"></a>Real-time user management (Optional)</h2><p>We will show the connected users and update the list real-time.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// server.js</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">let</span> roomMembers = &#123;&#125;;</span><br><span class="line"><span class="keyword">let</span> socketRoom = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">io.on(<span class="string">&quot;connection&quot;</span>, <span class="function"><span class="params">socket</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;socket connected..&#x27;</span>, socket.id);</span><br><span class="line"></span><br><span class="line">    socket.on(<span class="string">&#x27;register&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> room = data.documentId;</span><br><span class="line">        socket.join(room);</span><br><span class="line"></span><br><span class="line">        socketRoom[socket.id] = room;</span><br><span class="line">        <span class="keyword">if</span> (roomMembers[room]) &#123;</span><br><span class="line">            roomMembers[room].push(&#123; <span class="attr">id</span>: socket.id, <span class="attr">name</span>: data.handle &#125;);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            roomMembers[room] = [&#123; <span class="attr">id</span>: socket.id, <span class="attr">name</span>: data.handle &#125;];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Let all the clients know about new user to the document</span></span><br><span class="line">        socket.to(room).emit(<span class="string">&#x27;register&#x27;</span>, &#123; <span class="attr">id</span>: socket.id, <span class="attr">name</span>: data.handle &#125;);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Post all the user list registered to this document</span></span><br><span class="line">        io.in(room).emit(<span class="string">&#x27;members&#x27;</span>, roomMembers[room]);</span><br><span class="line">    &#125;);</span><br><span class="line">    socket.on(<span class="string">&#x27;disconnect&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&quot;Disconnected&quot;</span>)</span><br><span class="line">        <span class="keyword">let</span> room = socketRoom[socket.id];</span><br><span class="line">        <span class="keyword">if</span> (room) &#123;</span><br><span class="line">            roomMembers[room] = roomMembers[room].filter(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> item.id !== socket.id</span><br><span class="line">            &#125;);</span><br><span class="line">            <span class="keyword">if</span> (roomMembers[room].length == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">delete</span> roomMembers[room];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">delete</span> socketRoom[socket.id];</span><br><span class="line">            socket.to(room).emit(<span class="string">&#x27;user_left&#x27;</span>, &#123; <span class="attr">id</span>: socket.id &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>Add a list node to show all the connected users.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;row&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;col-5&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">class</span>=<span class="string">&quot;form-control&quot;</span> <span class="attr">id</span>=<span class="string">&quot;handle&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;User&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;btn btn-outline-success&quot;</span> <span class="attr">type</span>=<span class="string">&quot;button&quot;</span> <span class="attr">id</span>=<span class="string">&quot;register&quot;</span>&gt;</span>Register<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;row&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;col-5&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;card&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;card-header&quot;</span>&gt;</span></span><br><span class="line">                Editors</span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">&quot;list-group list-group-flush&quot;</span> <span class="attr">id</span>=<span class="string">&quot;editors&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>Dynamically add the users to DOM</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// writer.js</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">let</span> socket;</span><br><span class="line"><span class="keyword">const</span> handle = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;handle&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> register = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;register&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addEditor</span>(<span class="params">writer</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> ul = <span class="built_in">document</span>.getElementById(<span class="string">&quot;editors&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> li = <span class="built_in">document</span>.createElement(<span class="string">&quot;li&quot;</span>);</span><br><span class="line">    li.appendChild(<span class="built_in">document</span>.createTextNode(writer.name));</span><br><span class="line">    li.className = <span class="string">&quot;list-group-item&quot;</span>;</span><br><span class="line">    li.id = writer.id;</span><br><span class="line">    ul.appendChild(li);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeEditor</span>(<span class="params">id</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> elem = <span class="built_in">document</span>.getElementById(id);</span><br><span class="line">    <span class="keyword">return</span> elem.parentNode.removeChild(elem);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">registerUserListener</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    handle.style.display = <span class="string">&#x27;none&#x27;</span>;</span><br><span class="line">    register.style.display = <span class="string">&#x27;none&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> editorBlock = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;editor-block&#x27;</span>);</span><br><span class="line">    editorBlock.style.display = <span class="string">&#x27;block&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    socket = io();</span><br><span class="line">    socket.emit(<span class="string">&#x27;register&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">handle</span>: handle.value,</span><br><span class="line">        <span class="attr">documentId</span>: documentId</span><br><span class="line">    &#125;);</span><br><span class="line">    socket.on(<span class="string">&#x27;register&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">        addEditor(data);</span><br><span class="line">    &#125;);</span><br><span class="line">    socket.on(<span class="string">&#x27;user_left&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">        removeEditor(data.id);</span><br><span class="line">    &#125;);</span><br><span class="line">    socket.on(<span class="string">&#x27;members&#x27;</span>, <span class="function">(<span class="params">members</span>) =&gt;</span> &#123;</span><br><span class="line">        members.forEach(<span class="function"><span class="params">member</span> =&gt;</span> &#123;</span><br><span class="line">            addEditor(member);</span><br><span class="line">        &#125;);</span><br><span class="line">        socket.off(<span class="string">&#x27;members&#x27;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line">register.addEventListener(<span class="string">&#x27;click&#x27;</span>, registerUserListener);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h2 id="Collaborative-editing-1"><a href="#Collaborative-editing-1" class="headerlink" title="Collaborative editing"></a>Collaborative editing</h2><p>In terms of collaborative editing we can face different type of issues. The most critical of them is conflict resolution. When multiple user changing same text at a time can cause conflict which has to resolve in terms of real time collaboration. There are many algorithms to solve this issue in certain extent, but they have different pros and cons in different situations. The most popular of them is operational transform.</p>
+<h2 id="Operational-transform"><a href="#Operational-transform" class="headerlink" title="Operational transform"></a>Operational transform</h2><p>According to <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Operational_transformation">wikipedia</a></p>
+<blockquote>
+<p>Operational transformation (OT) is a technology for supporting a range of collaboration functionalities in advanced collaborative software systems. OT was originally invented for consistency maintenance and concurrency control in collaborative editing of plain text documents. </p>
+</blockquote>
+<p>Implementing OT is something complex which takes a lot of time to implement and be good at. There is a famous quote by Joseph Gentle, one of the early people implemented OT</p>
+<blockquote>
+<p>Unfortunately, implementing OT sucks. There’s a million algorithms with different tradeoffs, mostly trapped in academic papers. The algorithms are really hard and time consuming to implement correctly. […] Wave took 2 years to write and if we rewrote it today, it would take almost as long to write a second time. </p>
+</blockquote>
+<p>Let’s look at a example of operational transform. Let’s say we have a text <code>CA</code> and two different user is doing operation </p>
+<p>String –&gt; CA<br>User 1 –&gt; CAT (operation O1)<br>USER 2 –&gt; HAT (opearion O2)</p>
+<p>O1 = [insert T at position 2]<br>O2 = [insert T at position 2, delete C at position 0, insert H at position 0]</p>
+<p>For User 1, local operation is O1 and incoming change operation is O2<br>For User 2, local operation is O2 and incoming change operation is O1</p>
+<p>To add transformation, we have to apply both these changes to the string. The transformation will be,</p>
+<pre><code>For User 1, String --&gt; O2 --&gt; O1  
+    String --&gt; CA 
+    O2     --&gt; HAT
+    O1     --&gt; HAT (Result)
+For User 2, String --&gt; O1 --&gt; O2 
+    String --&gt; CA
+    O1     --&gt; CAT
+    O2     --&gt; HAT (Result)
+</code></pre>
+<p>The states are synchronized for both the user.</p>
+<p>This way we’ll get the same result at the end of the transformation and for every changes we made we will apply that with the last sync value.</p>
+<p>For this project, I have used CKEditor 5 <a target="_blank" rel="noopener" href="https://ckeditor.com/docs/ckeditor5/latest/api/module_utils_difftochanges.html"><code>diffToChanges</code></a> util to check the changes(operations) from sync state and then apply in the editor.</p>
+<blockquote>
+<p>The most difficult part of OT is not the code, but the difficulty in proving that your system is correct. Therefore, maintaining OT code is difficult. Either you need to prove your code correct repeatedly (and historically people make mistakes), or you need a powerful testing infrastructure for concurrent/distributed systems (which is also hard to write)<a target="_blank" rel="noopener" href="https://digitalfreepen.com/2018/01/04/operational-transform-hard.html">1</a></p>
+</blockquote>
+<h2 id="OT-implementation"><a href="#OT-implementation" class="headerlink" title="OT implementation"></a>OT implementation</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// server.js</span></span><br><span class="line">...</span><br><span class="line">socket.on(<span class="string">&#x27;content_change&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> room = data.documentId;</span><br><span class="line">    socket.to(room).emit(<span class="string">&#x27;content_change&#x27;</span>, data.changes);</span><br><span class="line">&#125;);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>Now, We need to apply transformation to the editor content. In the code, I publish changes to the socket after the user stopped typing. In this case, the user will compare the changes with the sync state and then apply the changes to the state and publish the changes to the socket.</p>
+<p>While receiving the change, first it’ll check with the sync state and then apply it there. After that, it’ll apply the local changes to the state and apply and set value of the editor. For the local additional changes it’ll then publish again to the socket.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// writer.js</span></span><br><span class="line">...</span><br><span class="line"><span class="comment">// Sync state store</span></span><br><span class="line"><span class="keyword">let</span> syncValue = <span class="built_in">Array</span>();</span><br><span class="line"><span class="keyword">let</span> keypressed = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getChanges</span>(<span class="params">input, output</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> diffToChanges(diff(input, output), output);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">applyChanges</span>(<span class="params">input, changes</span>) </span>&#123;</span><br><span class="line">    changes.forEach(<span class="function"><span class="params">change</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (change.type == <span class="string">&#x27;insert&#x27;</span>) &#123;</span><br><span class="line">            input.splice(change.index, <span class="number">0</span>, ...change.values);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (change.type == <span class="string">&#x27;delete&#x27;</span>) &#123;</span><br><span class="line">            input.splice(change.index, change.howMany);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">applyLocalChanges</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (keypressed &amp;&amp; editor.checkDirty()) &#123;</span><br><span class="line">        <span class="keyword">let</span> currentData = editor.getData();</span><br><span class="line">        <span class="keyword">let</span> input = <span class="built_in">Array</span>.from(syncValue);</span><br><span class="line">        <span class="keyword">let</span> output = <span class="built_in">Array</span>.from(currentData);</span><br><span class="line">        <span class="keyword">let</span> changes = getChanges(input, output);</span><br><span class="line">        applyChanges(input, changes);</span><br><span class="line">        <span class="keyword">if</span> (output.join(<span class="string">&#x27;&#x27;</span>) == input.join(<span class="string">&#x27;&#x27;</span>)) &#123;</span><br><span class="line">            socket.emit(<span class="string">&#x27;content_change&#x27;</span>, &#123;</span><br><span class="line">                <span class="attr">documentId</span>: documentId,</span><br><span class="line">                <span class="attr">changes</span>: changes</span><br><span class="line">            &#125;);</span><br><span class="line">            editor.resetDirty();</span><br><span class="line">            syncValue = input;</span><br><span class="line">        &#125;</span><br><span class="line">        keypressed = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">socket.on(<span class="string">&#x27;content_change&#x27;</span>, <span class="function">(<span class="params">incomingChanges</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> input = <span class="built_in">Array</span>.from(syncValue);</span><br><span class="line">    applyChanges(input, incomingChanges);</span><br><span class="line">    syncValue = input;</span><br><span class="line">    applyLocalChanges();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> ranges = editor.getSelection().getRanges();</span><br><span class="line">    editor.setData(syncValue.join(<span class="string">&#x27;&#x27;</span>));</span><br><span class="line">    editor.getSelection().selectRanges(ranges);</span><br><span class="line">    editor.resetDirty();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> timeout = <span class="built_in">setTimeout</span>(<span class="literal">null</span>, <span class="number">0</span>);</span><br><span class="line">editor.on(<span class="string">&#x27;key&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">clearTimeout</span>(timeout);</span><br><span class="line">    keypressed = <span class="literal">true</span>;</span><br><span class="line">    timeout = <span class="built_in">setTimeout</span>(applyLocalChanges, <span class="number">1000</span>);</span><br><span class="line">&#125;);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h2 id="Containerization"><a href="#Containerization" class="headerlink" title="Containerization"></a>Containerization</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">FROM node:16-alpine</span><br><span class="line">ENV NODE_ENV=production</span><br><span class="line"></span><br><span class="line">WORKDIR /app</span><br><span class="line"></span><br><span class="line">COPY [&quot;package.json&quot;, &quot;package-lock.json*&quot;, &quot;./&quot;]</span><br><span class="line"></span><br><span class="line">RUN npm install --production</span><br><span class="line"></span><br><span class="line">COPY . .</span><br><span class="line"></span><br><span class="line">EXPOSE 3000</span><br><span class="line"></span><br><span class="line">CMD [ &quot;node&quot;, &quot;server.js&quot; ]</span><br></pre></td></tr></table></figure>
+
+<p>In the next part, I’ll share the ideas and implementation to scale this application.</p>
+<p>Full source code is hosted in <a target="_blank" rel="noopener" href="https://github.com/mahfuzsust/collab">Github</a> and a quick <a target="_blank" rel="noopener" href="https://collab-edit-1.herokuapp.com/">demo</a></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://digitalfreepen.com/2018/01/04/operational-transform-hard.html">https://digitalfreepen.com/2018/01/04/operational-transform-hard.html</a></li>
+</ol>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Mahfuzur Rahman, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/socket/" class="tag">#socket</a><a href="/tags/node-js/" class="tag">#node.js</a><a href="/tags/ckeditor/" class="tag">#ckeditor</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2021/07/06/scaling-collaborative-editor/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Scale a real-time collaborative editor</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2021/05/24/min-stack/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Min Stack</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Home</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/mahfuzsust" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/" class="item">LinkedIn</a>
+                
+                <a href="mailto:mahfuzsust@yahoo.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2023 Mahfuzur Rahman<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

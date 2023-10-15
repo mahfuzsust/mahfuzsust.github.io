@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Kafka server setup - Read / Write</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Kafka server setup - Read / Write" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://www.mahfuz.info/2021/03/08/kafka-server-setup/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2021-03-08T12:24:34.000Z" />
+  
+  <meta property="og:article:author" content="Mahfuzur Rahman" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Home</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/mahfuzsust" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item" target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/">LinkedIn</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+
+        
+        <div class="date" id="date">
+            <span>March</span>
+            <span>8,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">Kafka server setup</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>Script to start a kafka server</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">setProperty</span></span>()&#123;</span><br><span class="line">    awk -v pat=<span class="string">&quot;^<span class="variable">$1</span>=&quot;</span> -v value=<span class="string">&quot;<span class="variable">$1</span>=<span class="variable">$2</span>&quot;</span> <span class="string">&#x27;&#123; if ($0 ~ pat) print value; else print $0; &#125;&#x27;</span> <span class="variable">$3</span> &gt; <span class="variable">$3</span>.tmp</span><br><span class="line">    mv <span class="variable">$3</span>.tmp <span class="variable">$3</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">downloadAndPrepare</span></span>() &#123;</span><br><span class="line">    DIR=<span class="string">&quot;kafka/&quot;</span></span><br><span class="line">    <span class="keyword">if</span> [[ -d <span class="string">&quot;<span class="variable">$DIR</span>&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">cd</span> kafka</span><br><span class="line">        rm -rf nohup.out</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        wget https://www-us.apache.org/dist/kafka/2.3.0/kafka_2.12-2.3.0.tgz</span><br><span class="line">        tar -xzf kafka_2.12-2.3.0.tgz</span><br><span class="line">        mv kafka_2.12-2.3.0 kafka</span><br><span class="line">        <span class="built_in">cd</span> kafka</span><br><span class="line">        rm -rf kafka_2.12-2.3.0.tgz</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">stopServer</span></span>() &#123;</span><br><span class="line">    PIDS=$(ps ax | grep -i <span class="string">&#x27;kafka\.Kafka&#x27;</span> | grep java | grep -v grep | awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [[ -z <span class="string">&quot;<span class="variable">$PIDS</span>&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;No kafka server to stop&quot;</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">for</span> pid <span class="keyword">in</span> <span class="variable">$PIDS</span>; <span class="keyword">do</span> <span class="built_in">kill</span> -9 <span class="variable">$pid</span>; <span class="keyword">done</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    PIDS=$(ps ax | grep java | grep -i QuorumPeerMain | grep -v grep | awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [[ -z <span class="string">&quot;<span class="variable">$PIDS</span>&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;No zookeeper server to stop&quot;</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">for</span> pid <span class="keyword">in</span> <span class="variable">$PIDS</span>; <span class="keyword">do</span> <span class="built_in">kill</span> -9 <span class="variable">$pid</span>; <span class="keyword">done</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">startServer</span></span>() &#123;</span><br><span class="line">    nohup bin/zookeeper-server-start.sh config/zookeeper.properties &amp;</span><br><span class="line">    nohup bin/kafka-server-start.sh config/server.properties &amp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">helpFunction</span></span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Usage: <span class="variable">$0</span> -n number&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">&quot;\t-n Number of kafka server to launch&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">getopts</span> <span class="string">&quot;n:&quot;</span> opt</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;<span class="variable">$opt</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">        n ) number=<span class="string">&quot;<span class="variable">$OPTARG</span>&quot;</span> ;;</span><br><span class="line">        ? ) helpFunction ;;</span><br><span class="line">    <span class="keyword">esac</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ -z <span class="string">&quot;<span class="variable">$number</span>&quot;</span> ]] || ! [[ <span class="string">&quot;<span class="variable">$number</span>&quot;</span> =~ ^[0-9]+$ ]]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    helpFunction</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">downloadAndPrepare</span><br><span class="line">stopServer</span><br><span class="line">startServer</span><br><span class="line"></span><br><span class="line">counter=1</span><br><span class="line"><span class="keyword">while</span> [[ <span class="variable">$&#123;counter&#125;</span> -lt <span class="variable">$&#123;number&#125;</span> ]]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    cp config/server.properties config/<span class="string">&quot;server-<span class="variable">$counter</span>.properties&quot;</span></span><br><span class="line"></span><br><span class="line">    setProperty <span class="string">&quot;broker.id&quot;</span> <span class="string">&quot;<span class="variable">$counter</span>&quot;</span> config/<span class="string">&quot;server-<span class="variable">$counter</span>.properties&quot;</span></span><br><span class="line">    setProperty <span class="string">&quot;log.dirs&quot;</span> <span class="string">&quot;/tmp/kafka-logs-<span class="variable">$counter</span>&quot;</span> config/<span class="string">&quot;server-<span class="variable">$counter</span>.properties&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;listeners=PLAINTEXT://:<span class="subst">$((counter+9092)</span>)&quot;</span> &gt;&gt; config/<span class="string">&quot;server-<span class="variable">$counter</span>.properties&quot;</span></span><br><span class="line"></span><br><span class="line">    nohup bin/kafka-server-start.sh config/<span class="string">&quot;server-<span class="variable">$counter</span>.properties&quot;</span> &amp;</span><br><span class="line"></span><br><span class="line">    counter=$(( counter+<span class="number">1</span> ))</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Mahfuzur Rahman, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/kafka/" class="tag">#kafka</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2021/03/24/log-everyday-in-google-spreadsheet/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Log everyday in google spreadsheet</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2020/08/25/how-to-implement-cache-in-java/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">How to implement cache in Java</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Home</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/mahfuzsust" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/" class="item">LinkedIn</a>
+                
+                <a href="mailto:mahfuzsust@yahoo.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2023 Mahfuzur Rahman<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

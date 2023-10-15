@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Fish FZF Configuration - Read / Write</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Fish FZF Configuration - Read / Write" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://www.mahfuz.info/2021/07/31/fish-fzf-configuration/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2021-07-31T18:48:13.000Z" />
+  
+  <meta property="og:article:author" content="Mahfuzur Rahman" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Home</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/mahfuzsust" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item" target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/">LinkedIn</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Tools/">Tools</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>July</span>
+            <span>31,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">Fish FZF Configuration</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>FZF is an interactive Unix filter for command-line that can be used with any list; files, command history, processes, hostnames, bookmarks, git commits, etc.</p>
+<h2 id="Tree"><a href="#Tree" class="headerlink" title="Tree"></a>Tree</h2><p>Display directories as trees (with optional color/HTML output)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install tree</span><br></pre></td></tr></table></figure>
+
+<h2 id="fd"><a href="#fd" class="headerlink" title="fd"></a>fd</h2><p>Simple, fast and user-friendly alternative to find.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install fd</span><br></pre></td></tr></table></figure>
+
+<h2 id="ripgrep"><a href="#ripgrep" class="headerlink" title="ripgrep"></a>ripgrep</h2><p>ripgrep is a line-oriented search tool that recursively searches the current directory for a regex pattern.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install ripgrep</span><br></pre></td></tr></table></figure>
+
+<h2 id="fish"><a href="#fish" class="headerlink" title="fish"></a>fish</h2><p>User-friendly command-line shell for UNIX-like operating systems.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install fish</span><br></pre></td></tr></table></figure>
+
+<h2 id="fzf"><a href="#fzf" class="headerlink" title="fzf"></a>fzf</h2><p>fzf is a general-purpose command-line fuzzy finder.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">brew install fzf</span><br><span class="line"></span><br><span class="line"># To install useful key bindings and fuzzy completion:</span><br><span class="line">$(brew --prefix)/opt/fzf/install</span><br></pre></td></tr></table></figure>
+
+<h2 id="FZF-preview"><a href="#FZF-preview" class="headerlink" title="FZF preview"></a>FZF preview</h2><p>Let’s create a function that will preview file or directory using mentioned tools</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># .config/fish/functions/__fzf_preview.fish</span><br><span class="line"></span><br><span class="line">function __fzf_preview</span><br><span class="line">    if file --mime &quot;$argv&quot; | grep -q directory</span><br><span class="line">        tree -L 3 &quot;$argv&quot;</span><br><span class="line">    else if file --mime &quot;$argv&quot; | grep -q binary</span><br><span class="line">        echo &quot;$argv is a binary file&quot;</span><br><span class="line">    else</span><br><span class="line">        if command --quiet --search bat</span><br><span class="line">            bat --color=always --line-range :250 &quot;$argv&quot;</span><br><span class="line">        else if command --quiet --search cat</span><br><span class="line">            cat &quot;$argv&quot; | head -250</span><br><span class="line">        else</span><br><span class="line">            head -250 &quot;$argv&quot;</span><br><span class="line">        end</span><br><span class="line">    end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>Now change the default option</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">set -U FZF_DEFAULT_OPTS &quot; \</span><br><span class="line">         --multi --cycle --keep-right -1 \</span><br><span class="line">         --height=80% --layout=reverse --info=default \</span><br><span class="line">         --preview-window right:50%:wrap \</span><br><span class="line">         --preview &#x27;__fzf_preview &#123;&#125;&#x27; \</span><br><span class="line">         --ansi&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Search"><a href="#Search" class="headerlink" title="Search"></a>Search</h2><p>Let’s make our search faster using fd and ripgrep</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set -U FZF_ALT_C_COMMAND &quot;fd -t d . \$dir&quot;</span><br><span class="line">set -U FZF_CTRL_T_COMMAND &quot;rg --files --no-require-git&quot;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Mahfuzur Rahman, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/fish/" class="tag">#fish</a><a href="/tags/fzf/" class="tag">#fzf</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2021/08/05/balanced-binary-tree/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">AVL (Balanced Binary Search Tree)</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2021/07/27/binary-search-tree/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Binary Search Tree</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Home</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/mahfuzsust" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/" class="item">LinkedIn</a>
+                
+                <a href="mailto:mahfuzsust@yahoo.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2023 Mahfuzur Rahman<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

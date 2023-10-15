@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>AVL (Balanced Binary Search Tree) - Read / Write</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="AVL (Balanced Binary Search Tree) - Read / Write" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://www.mahfuz.info/2021/08/05/balanced-binary-tree/index.html" />
+  
+  <meta property="og:image" content="https://miro.medium.com/max/2000/1*ic9Ou8ZXZeiADVCXpOaKIw.jpeg" />
+  
+  <meta property="og:article:published_time" content="2021-08-05T08:38:00.000Z" />
+  
+  <meta property="og:article:author" content="Mahfuzur Rahman" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Home</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/mahfuzsust" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item" target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/">LinkedIn</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Algorithm/">Algorithm</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>August</span>
+            <span>5,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">AVL (Balanced Binary Search Tree)</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p><img src="https://miro.medium.com/max/2000/1*ic9Ou8ZXZeiADVCXpOaKIw.jpeg" alt="Binary Search Tree"></p>
+<p>In our previous post(<a href="https://www.mahfuz.info/2021/07/27/binary-search-tree/">Binary Search Tree</a>), we have discussed binary search trees. We have checked out the insertion, deletion, and find operation for a BST.</p>
+<p>In the best-case scenario, BST can provide O(log n) complexity but in the worst-case scenario, this gives us O(n) complexity. The worst-case can happen if the input data is sorted in any order. To prevent the worst case, there are extensions that can help us maintain the binary tree balanced and get the best outcome. Some of them are,</p>
+<ul>
+<li>AVL tree</li>
+<li>Red black tree</li>
+<li>Treap</li>
+<li>B-tree</li>
+</ul>
+<p>Today, we will discuss the height-balanced AVL tree.</p>
+<h2 id="AVL-tree"><a href="#AVL-tree" class="headerlink" title="AVL tree"></a>AVL tree</h2><p>AVL tree is an extension of the binary search tree. It has an additional field called the balance factor. After insert, delete, or modification operation, it always checks the balance factor of each node.</p>
+<p>Based on the value of the balance factor, the tree self-balances itself.</p>
+<h2 id="Balance-factor"><a href="#Balance-factor" class="headerlink" title="Balance factor"></a>Balance factor</h2><p>The balance factor of a node in an AVL tree is the difference between the height of the left subtree and the height of the right subtree of that node.<br>Balance factor = Height of Left Subtree — Height of Right Subtree (or inverse)<br>The value of the balance factor should always be [-1, 0 or+1]</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">T</span>&gt;&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> T key;</span><br><span class="line">  <span class="keyword">private</span> TreeNode&lt;T&gt; parent;</span><br><span class="line">  <span class="keyword">private</span> TreeNode&lt;T&gt; left;</span><br><span class="line">  <span class="keyword">private</span> TreeNode&lt;T&gt; right;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> height;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> balanceFactor;</span><br><span class="line">  <span class="comment">// getter / setter</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateBalanceFactor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> left = <span class="number">0</span>, right = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">    left = <span class="keyword">this</span>.left.height;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">    right = <span class="keyword">this</span>.right.height;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">this</span>.height = Math.max(left, right) + <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">this</span>.balanceFactor = left - right;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isBalanced</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.getBalanceFactor() &lt;= <span class="number">1</span> &amp;&amp; <span class="keyword">this</span>.getBalanceFactor() &gt;= -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>We will use a callback pattern for our AVL tree insert and delete methods.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Callback</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">success</span><span class="params">(T value)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>We have already discussed BST implementation in our previous post. We will extend the insert and delete operation here to maintain AVL properties.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BST</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">T</span>&gt;&gt; </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(T key, Callback&lt;TreeNode&lt;T&gt;&gt; callback)</span> </span>&#123;</span><br><span class="line">    callback.success(node);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(T key, Callback&lt;TreeNode&lt;T&gt;&gt; callback)</span> </span>&#123;</span><br><span class="line">    callback.success(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="AVL-implementation"><a href="#AVL-implementation" class="headerlink" title="AVL implementation"></a>AVL implementation</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AVL</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">T</span>&gt;&gt; <span class="keyword">extends</span> <span class="title">BST</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(T key, Callback&lt;TreeNode&lt;T&gt;&gt; callback)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.insert(key, (node) -&gt; &#123;</span><br><span class="line">      fixAVLProperties(node, node.getKey());</span><br><span class="line">      <span class="keyword">if</span> (callback != <span class="keyword">null</span>) &#123;</span><br><span class="line">        callback.success(node);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(T key, Callback&lt;TreeNode&lt;T&gt;&gt; callback)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.delete(key, (node) -&gt; &#123;</span><br><span class="line">      TreeNode&lt;T&gt; parent = node.getParent();</span><br><span class="line">      <span class="keyword">if</span> (parent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        parent = root;</span><br><span class="line">      &#125;</span><br><span class="line">      updateChildBalanceFactor(parent);</span><br><span class="line">      TreeNode&lt;T&gt; unbalancedNode = getUnbalancedNode(parent);</span><br><span class="line">      <span class="keyword">if</span> (unbalancedNode != <span class="keyword">null</span>) &#123;</span><br><span class="line">        T unbalancedKey = getUnbalancedKey(unbalancedNode);</span><br><span class="line">        fixAVLProperties(unbalancedNode, unbalancedKey);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (callback != <span class="keyword">null</span>) &#123;</span><br><span class="line">        callback.success(node);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Insert"><a href="#Insert" class="headerlink" title="Insert"></a>Insert</h2><p>After the binary search tree insertion, we need to update the balance factor of each node. As we know we insert in any of the subtrees we are going to check all the way up to the parent to check if every node maintains the AVL properties.<br>If the node is unbalanced, we need to rotate the tree to maintain the balance factor ≤ 1 and ≥ -1</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">fixAVLProperties</span><span class="params">(TreeNode&lt;T&gt; node, T key)</span> </span>&#123;</span><br><span class="line">  TreeNode&lt;T&gt; item = node;</span><br><span class="line">  <span class="keyword">while</span> (item != <span class="keyword">null</span>) &#123;</span><br><span class="line">    item.updateBalanceFactor();</span><br><span class="line">    <span class="keyword">if</span> (item.isBalanced() == <span class="keyword">false</span>) &#123;</span><br><span class="line">      applyRotation(item, getUnbalancedDirection(item, key));</span><br><span class="line">    &#125;</span><br><span class="line">    item = item.getParent();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Unbalanced-Node"><a href="#Unbalanced-Node" class="headerlink" title="Unbalanced Node"></a>Unbalanced Node</h2><p>The subtree can be unbalanced in 4 different ways,</p>
+<ol>
+<li>Left unbalanced (LL)</li>
+<li>Right unbalanced (RR)</li>
+<li>Left Right unbalanced (LR)</li>
+<li>Right unbalanced (RL)</li>
+</ol>
+<p>For these use cases, we have to rotate our tree to maintain our balance properties.</p>
+<p>First, we have to find the unbalanced direction</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> String <span class="title">getUnbalancedDirection</span><span class="params">(TreeNode&lt;T&gt; node, T key)</span> </span>&#123;</span><br><span class="line">  String str = <span class="string">&quot;&quot;</span>;</span><br><span class="line">  TreeNode&lt;T&gt; item = node;</span><br><span class="line">  <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (item != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (count == <span class="number">2</span> || key == item.getKey()) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> compareTo = key.compareTo(item.getKey());</span><br><span class="line">    <span class="keyword">if</span> (compareTo &lt; <span class="number">0</span>) &#123;</span><br><span class="line">      str += <span class="string">&quot;L&quot;</span>;</span><br><span class="line">      item = item.getLeft();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      str += <span class="string">&quot;R&quot;</span>;</span><br><span class="line">      item = item.getRight();</span><br><span class="line">    &#125;</span><br><span class="line">    count++;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Next, we have to apply rotation based on the direction</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">applyRotation</span><span class="params">(TreeNode&lt;T&gt; node, String direction)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (direction) &#123;</span><br><span class="line">    <span class="keyword">case</span> LEFT:</span><br><span class="line">      rotateRight(node);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> RIGHT:</span><br><span class="line">      rotateLeft(node);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> LEFT_RIGHT:</span><br><span class="line">      rotateLeft(node.getLeft());</span><br><span class="line">      rotateRight(node);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> RIGHT_LEFT:</span><br><span class="line">      rotateRight(node.getRight());</span><br><span class="line">      rotateLeft(node);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Left-rotation"><a href="#Left-rotation" class="headerlink" title="Left rotation"></a>Left rotation</h2><p>To apply the rotation in left rotation,</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">rotateLeft</span><span class="params">(TreeNode&lt;T&gt; node)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (node.getParent() != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (node.getParent().getLeft() == node) &#123;</span><br><span class="line">      node.getParent().setLeft(node.getRight());</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      node.getParent().setRight(node.getRight());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (root == node) &#123;</span><br><span class="line">    root = node.getRight();</span><br><span class="line">  &#125;</span><br><span class="line">  TreeNode&lt;T&gt; left = <span class="keyword">null</span>;</span><br><span class="line">  <span class="keyword">if</span> (node.getRight()!= <span class="keyword">null</span> &amp;&amp; node.getRight().getLeft() != <span class="keyword">null</span>) &#123;</span><br><span class="line">    left = node.getRight().getLeft();</span><br><span class="line">    left.setParent(node);</span><br><span class="line">  &#125;</span><br><span class="line">  node.getRight().setLeft(node);</span><br><span class="line">  node.getRight().setParent(node.getParent());</span><br><span class="line">  node.setParent(node.getRight());</span><br><span class="line">  node.setRight(left);</span><br><span class="line">  updateChildBalanceFactor(node.getParent());</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Right-rotation"><a href="#Right-rotation" class="headerlink" title="Right rotation"></a>Right rotation</h2><p>To apply the rotation in the right rotation</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">rotateRight</span><span class="params">(TreeNode&lt;T&gt; node)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (node.getParent() != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (node.getParent().getLeft() == node) &#123;</span><br><span class="line">      node.getParent().setLeft(node.getLeft());</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      node.getParent().setRight(node.getLeft());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (root == node) &#123;</span><br><span class="line">    root = node.getLeft();</span><br><span class="line">  &#125;</span><br><span class="line">  TreeNode&lt;T&gt; right = <span class="keyword">null</span>;</span><br><span class="line">  <span class="keyword">if</span> (node.getLeft() != <span class="keyword">null</span> &amp;&amp; node.getLeft().getRight() != <span class="keyword">null</span>) &#123;</span><br><span class="line">    right = node.getLeft().getRight();</span><br><span class="line">    right.setParent(node);</span><br><span class="line">  &#125;</span><br><span class="line">  node.getLeft().setRight(node);</span><br><span class="line">  node.getLeft().setParent(node.getParent());</span><br><span class="line">  node.setParent(node.getLeft());</span><br><span class="line">  node.setLeft(right);</span><br><span class="line">  updateChildBalanceFactor(node.getParent());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Update-balance-factor"><a href="#Update-balance-factor" class="headerlink" title="Update balance factor"></a>Update balance factor</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">updateChildBalanceFactor</span><span class="params">(TreeNode&lt;T&gt; node)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  updateChildBalanceFactor(node.getLeft());</span><br><span class="line">  updateChildBalanceFactor(node.getRight());</span><br><span class="line">  node.updateBalanceFactor();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Deletion"><a href="#Deletion" class="headerlink" title="Deletion"></a>Deletion</h2><p>In terms of deletion, we need to check certain steps to determine if the balance factor is appropriate.</p>
+<ol>
+<li>The parent of the deleted node has any child node unbalanced.</li>
+<li>The unbalanced key that will determine the rotation direction</li>
+</ol>
+<p>First, we need to check if any unbalanced node exists or not</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> TreeNode&lt;T&gt; <span class="title">getUnbalancedNode</span><span class="params">(TreeNode&lt;T&gt; node)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (node.isBalanced() == <span class="keyword">false</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">  &#125;</span><br><span class="line">  TreeNode&lt;T&gt; unbalancedNode = getUnbalancedNode(node.getLeft());</span><br><span class="line">  <span class="keyword">if</span> (unbalancedNode == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> getUnbalancedNode(node.getRight());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> leftUNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Then we have to check the key, for which the node is unbalanced. We just need to check two nodes here and because to find the unbalanced direction two nodes are sufficient.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> T <span class="title">getUnbalancedKey</span><span class="params">(TreeNode&lt;T&gt; node)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (node == <span class="keyword">null</span> || node.isBalanced()) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">  TreeNode&lt;T&gt; item = node;</span><br><span class="line">  <span class="keyword">while</span> (item != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (count &gt;= <span class="number">2</span>) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (item.getBalanceFactor() &gt; <span class="number">1</span>) &#123;</span><br><span class="line">      item = item.getLeft();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      item = item.getRight();</span><br><span class="line">    &#125;</span><br><span class="line">    count++;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> item.getKey();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Driver"><a href="#Driver" class="headerlink" title="Driver"></a>Driver</h2><p>We can check our AVL tree using a driver method</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    AVL&lt;Integer&gt; tree = <span class="keyword">new</span> AVL&lt;Integer&gt;();</span><br><span class="line">    <span class="keyword">int</span>[] array = <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span> &#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i : array) &#123;</span><br><span class="line">      tree.insert(i, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    tree.preorder(tree.getRoot(), (x) -&gt; System.out.println(x));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This will make our tree as</p>
+<pre class="mermaid">  graph TD;
+      4-->2;
+      4-->6;
+      2-->1;
+      2-->3;
+      6-->5;
+      6-->9;
+      9-->8;
+      9-->10;</pre>
+
+<p>Full <a target="_blank" rel="noopener" href="https://gist.github.com/mahfuzsust/e67043588cbf42414ab3ecc0db1412fd">source code</a> is shared.</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Mahfuzur Rahman, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/binary-search-tree/" class="tag">#binary search tree</a><a href="/tags/algorithm/" class="tag">#algorithm</a><a href="/tags/java/" class="tag">#java</a><a href="/tags/avl/" class="tag">#avl</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2023/10/15/longest-palindromic-substring/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Longest Palindromic Substring</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2021/07/31/fish-fzf-configuration/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Fish FZF Configuration</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Home</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/mahfuzsust" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/" class="item">LinkedIn</a>
+                
+                <a href="mailto:mahfuzsust@yahoo.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2023 Mahfuzur Rahman<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Design a job scheduler - Read / Write</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Design a job scheduler - Read / Write" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://www.mahfuz.info/2021/07/12/design-job-scheduler/index.html" />
+  
+  <meta property="og:image" content="https://miro.medium.com/max/2000/1*KzGIlkYpm0v9E32SIR5pPw.jpeg" />
+  
+  <meta property="og:article:published_time" content="2021-07-12T08:41:52.000Z" />
+  
+  <meta property="og:article:author" content="Mahfuzur Rahman" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Home</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/mahfuzsust" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item" target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/">LinkedIn</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/System-design/">System design</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>July</span>
+            <span>12,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">Design a job scheduler</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <h2 id="Design-of-a-job-scheduler"><a href="#Design-of-a-job-scheduler" class="headerlink" title="Design of a job scheduler"></a>Design of a job scheduler</h2><p><img src="https://miro.medium.com/max/2000/1*KzGIlkYpm0v9E32SIR5pPw.jpeg" alt="Untitled Diagram (1)"></p>
+<p>From <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Job_scheduler">Wikipedia</a>,</p>
+<blockquote>
+<p>A <strong>job scheduler</strong> is a computer application for controlling unattended background program execution of jobs.</p>
+</blockquote>
+<p>In the real world, we find lots of use cases of a job scheduler. For example,</p>
+<ul>
+<li>Run a script daily to generate reports</li>
+<li>Charge subscription of a user daily/monthly.</li>
+<li>Running of a payroll program</li>
+</ul>
+<p>In this post, we’ll design and develop a job scheduler that can help us to scale in need.</p>
+<h2 id="Requirements"><a href="#Requirements" class="headerlink" title="Requirements"></a>Requirements</h2><ul>
+<li>A job can be scheduled for one time or multiple executions</li>
+<li>Results of job executions are stored and can be queried</li>
+</ul>
+<p>There are also some non-functional requirements to think of</p>
+<ul>
+<li>Scalability: Thousands or even millions of jobs can be scheduled and run per day</li>
+<li>Durability: Jobs must not get lost</li>
+<li>Reliability: Jobs must not be executed much later than expected or dropped</li>
+<li>Availability: It should always be possible to schedule and execute jobs </li>
+<li>Jobs must not be executed multiple times (or such occurrences should be kept to a minimum)</li>
+</ul>
+<h2 id="Job-service"><a href="#Job-service" class="headerlink" title="Job service"></a>Job service</h2><p>First, we need to create a service to store the job metadata. For simplicity, we can make a rest service endpoint that will store the job information in storage.</p>
+<p><img src="https://miro.medium.com/max/1122/1*zytff-jKeHeL_1mo9SP4Ag.png" alt="Untitled Diagram (1)"></p>
+<p>If we deploy our job service behind a load balancer then it can handle traffic load easily and store job metadata to the database.</p>
+<h2 id="Job-execution"><a href="#Job-execution" class="headerlink" title="Job execution"></a>Job execution</h2><p>So far, we have job information stored in our database. Now, we need to run a background process to check when to start a job. Either we need to run <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Cron">cron-like</a> process or use an event-driven strategy to have the same functionality.</p>
+<blockquote>
+<p>The software utility <strong>cron</strong> also known as <strong>cron job</strong> is a time-based job scheduler in Unix-like computer operating systems. Users who set up and maintain software environments use cron to schedule jobs.</p>
+</blockquote>
+<p>Cron internally uses crontab (Cron table) to run periodically schedule jobs. There are two ways to solve our problem with cron.</p>
+<ol>
+<li>Run a script periodically. This script will search all the jobs which match the criteria and executes them.</li>
+<li>For every job, add an entry to crontab to run jobs as scheduled. This solution is not scalable and not fault-tolerant as it has a dependency on the operating system.</li>
+</ol>
+<p>We can run a script periodically to check if any jobs are eligible to execute. Some decisions need to be made to implement this.</p>
+<ul>
+<li>The job trigger time will not be exact. If a job has a trigger time just after the script run, then the job will wait until the next iteration.</li>
+<li>To reduce the job execution delay, the length of the period needs to be smaller and thus the resource will be busy with frequent execution. </li>
+</ul>
+<h2 id="Event-based-trigger"><a href="#Event-based-trigger" class="headerlink" title="Event-based trigger"></a>Event-based trigger</h2><p>Jobs can run based on a certain event. If we can create an event for each of the jobs, then at some event of execution time we can start our job.</p>
+<p>Redis has an event called expiration event. Redis deletes a key after the time expires and throws an event to the subscriber channel. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; createClient &#125; = <span class="built_in">require</span>(<span class="string">&#x27;redis&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> client = createClient(&#123;</span><br><span class="line">    <span class="attr">host</span>: process.env.REDIS_ENDPOINT || <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">    <span class="attr">port</span>: process.env.REDIS_PORT || <span class="number">6379</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">if</span> (process.env.REDIS_PASSWORD) &#123;</span><br><span class="line">    client.auth(process.env.REDIS_PASSWORD);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">client.config(<span class="string">&#x27;set&#x27;</span>, <span class="string">&#x27;notify-keyspace-events&#x27;</span>, <span class="string">&#x27;Ex&#x27;</span>);</span><br><span class="line">client.subscribe(<span class="string">&#x27;__keyevent@0__:expired&#x27;</span>);</span><br><span class="line"></span><br><span class="line">client.on(<span class="string">&#x27;message&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">channel, key</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(key);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>For each job, we can create a key in Redis with appropriate expiration. After the time expired, we will get an event and run the appropriate trigger based on the task metadata.</p>
+<h2 id="Timing-of-Redis-expired-events"><a href="#Timing-of-Redis-expired-events" class="headerlink" title="Timing of Redis expired events"></a>Timing of Redis expired events</h2><p>Keys with a time to live associated are expired by Redis in two ways:</p>
+<ul>
+<li>When the key is accessed by a command and is found to be expired.</li>
+<li>Via a background system that looks for expired keys in the background, incrementally, to be able to also collect keys that are never accessed.</li>
+</ul>
+<p>There are some issues with this approach,</p>
+<ul>
+<li>There are no guarantees that the Redis server will be able to generate the expired event at the time the key time to live reaches the value of zero</li>
+<li>expired events <strong>are generated when the Redis server deletes the key</strong> and not when the time to live theoretically reaches the value of zero.</li>
+<li>Pub/Sub communication in a cluster, events notifications <strong>are not</strong> broadcasted to all nodes. </li>
+</ul>
+<p>For Redis expiration, it runs these steps 10 times per second</p>
+<ol>
+<li>Test 20 random keys from the set of keys with an associated expire.</li>
+<li>Delete all the keys found expired.</li>
+<li>If more than 25% of keys were expired then starts again.</li>
+</ol>
+<p>The accuracy of expiration of Redis</p>
+<ul>
+<li>For Redis 2.4, zero to one second</li>
+<li>Redis 2.6, the error is from 0 to 1 millisecond.</li>
+</ul>
+<p>So, provided values look good to implement events in Redis.</p>
+<p>Note: For the Redis cluster, to receive all keyspace events, we need to subscribe to each of the nodes.</p>
+<h2 id="Durability"><a href="#Durability" class="headerlink" title="Durability"></a>Durability</h2><p>If the event server crashes or execution fails, there is no way to track what happened or retry the same operation. There may be a running job going on, and the service can’t handle a new one. </p>
+<p>To solve these issues, we can add an extra layer of a queue. The generated event will publish to a topic in the Queue. We are using Kafka for this use case.</p>
+<p>To test this, we can set up a Kafka using docker-compose.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">zookeeper:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">&#x27;bitnami/zookeeper:latest&#x27;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;2181:2181&#x27;</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ALLOW_ANONYMOUS_LOGIN=yes</span></span><br><span class="line">  <span class="attr">kafka:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">&#x27;bitnami/kafka:latest&#x27;</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">&#x27;kafka&#x27;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;9092:9092&#x27;</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">KAFKA_BROKER_ID=1</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">KAFKA_LISTENERS=PLAINTEXT://:9092</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ALLOW_PLAINTEXT_LISTENER=yes</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">zookeeper</span></span><br></pre></td></tr></table></figure>
+
+<p>A producer example to push events to our Kafka cluster.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// producer.js</span></span><br><span class="line"><span class="keyword">const</span> &#123; Kafka &#125; = <span class="built_in">require</span>(<span class="string">&quot;kafkajs&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> clientId = <span class="string">&quot;my-app&quot;</span></span><br><span class="line"><span class="keyword">const</span> brokers = [<span class="string">&quot;localhost:9092&quot;</span>]</span><br><span class="line"><span class="keyword">const</span> topic = <span class="string">&quot;test&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> kafka = <span class="keyword">new</span> Kafka(&#123; clientId, brokers &#125;);</span><br><span class="line"><span class="keyword">const</span> producer = kafka.producer();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> send = <span class="keyword">async</span> (msg) =&gt; &#123;</span><br><span class="line">    <span class="keyword">await</span> producer.connect()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">await</span> producer.send(&#123;</span><br><span class="line">            topic,</span><br><span class="line">            <span class="attr">acks</span>: -<span class="number">1</span>,</span><br><span class="line">            <span class="attr">messages</span>: [msg],</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&quot;Message sent successfully&quot;</span>);</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">        <span class="built_in">console</span>.error(<span class="string">&quot;could not write message &quot;</span> + err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = send;</span><br></pre></td></tr></table></figure>
+
+<p>A consumer can listent to a certain topic and handle execution based on type.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// consumer.js</span></span><br><span class="line"><span class="keyword">const</span> &#123; Kafka &#125; = <span class="built_in">require</span>(<span class="string">&quot;kafkajs&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> clientId = <span class="string">&quot;my-app&quot;</span></span><br><span class="line"><span class="keyword">const</span> brokers = [<span class="string">&quot;localhost:9092&quot;</span>]</span><br><span class="line"><span class="keyword">const</span> topic = <span class="string">&quot;test&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> kafka = <span class="keyword">new</span> Kafka(&#123; clientId, brokers &#125;);</span><br><span class="line"><span class="keyword">const</span> consumer = kafka.consumer(&#123; <span class="attr">groupId</span>: clientId &#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> consume = <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">    <span class="keyword">await</span> consumer.connect()</span><br><span class="line">    <span class="keyword">await</span> consumer.subscribe(&#123; topic, <span class="attr">fromBeginning</span>: <span class="literal">true</span> &#125;)</span><br><span class="line">    <span class="keyword">await</span> consumer.run(&#123;</span><br><span class="line">        <span class="attr">eachMessage</span>: <span class="function">(<span class="params">&#123; message &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;message.key&#125;</span>: <span class="subst">$&#123;message.value&#125;</span>`</span>)</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">consume().catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.error(<span class="string">&quot;error in consumer: &quot;</span>, err)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>The executor service will subscribe to a different topic and then act based on different properties.</p>
+<h2 id="Message-duplication"><a href="#Message-duplication" class="headerlink" title="Message duplication"></a>Message duplication</h2><p>These consumers can perform different tasks based on events. In our case, we need to ensure the executor service need to runs exactly once.</p>
+<p>There are two different ways to solve this problem.</p>
+<ol>
+<li>Message broker support for duplication.</li>
+<li>Using a database with ACID properties</li>
+</ol>
+<h3 id="How-do-I-get-exactly-once-messaging-from-Kafka"><a href="#How-do-I-get-exactly-once-messaging-from-Kafka" class="headerlink" title="How do I get exactly once messaging from Kafka?"></a>How do I get exactly once messaging from Kafka?</h3><p>Exactly once semantics has two parts: avoiding duplication during data production and avoiding duplicates during data consumption.</p>
+<p>There are two approaches to getting exactly once semantics during data production:</p>
+<ol>
+<li>Use a single-writer per partition and every time you get a network error check the last message in that partition to see if your last write succeeded</li>
+<li>Include a primary key (UUID or something) in the message and deduplicate on the consumer.</li>
+</ol>
+<h3 id="Database-layer-duplication-handling"><a href="#Database-layer-duplication-handling" class="headerlink" title="Database layer duplication handling"></a>Database layer duplication handling</h3><p>When a consumer gets the event to execute the task, it can use the locking benefit of a database system. The approach can be,</p>
+<ol>
+<li>Add an entry to a table with UNIQUE_KEY restriction, so that multiple entries can not be created with the same ID.</li>
+<li>Process execution tasks in transactions.</li>
+</ol>
+<p>If the databases are in different locations or zone, then we need to ensure strong consistency in this approach. Otherwise, a different consumer from a different location will same entity and that will lead to another problem of conflict resolution.</p>
+<h2 id="Executor-service"><a href="#Executor-service" class="headerlink" title="Executor service"></a>Executor service</h2><p>The last piece of our system is an executor service. The consumer can act as the executor service to run appropriate operations based on scheduler metadata.</p>
+<p>From this service, the metadata of execution can be stored in a database for future queries.</p>
+<p><img src="https://miro.medium.com/max/1400/1*2oe9jxD7buwel91tgue4Gw.png" alt="full"></p>
+<h2 id="Improvement"><a href="#Improvement" class="headerlink" title="Improvement"></a>Improvement</h2><p>There are some improvements we can do to make our service better. </p>
+<ol>
+<li>If we can connect the event generation directly with the topic queue, then the producer service layer can be removed.</li>
+<li>Queue topics can be distributed with some criteria. This way consumers can be distributed with focused action groups.</li>
+<li>Database partition can be used based on need.</li>
+</ol>
+<p>Please share improvement ideas or feedback on this.</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Mahfuzur Rahman, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/scheduler/" class="tag">#scheduler</a><a href="/tags/redis/" class="tag">#redis</a><a href="/tags/programming/" class="tag">#programming</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2021/07/27/binary-search-tree/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Binary Search Tree</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2021/07/06/scaling-collaborative-editor/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Scale a real-time collaborative editor</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Home</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/mahfuzsust" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/" class="item">LinkedIn</a>
+                
+                <a href="mailto:mahfuzsust@yahoo.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2023 Mahfuzur Rahman<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

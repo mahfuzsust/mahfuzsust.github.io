@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Longest Palindromic Substring - Read / Write</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Longest Palindromic Substring - Read / Write" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://www.mahfuz.info/2023/10/15/longest-palindromic-substring/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2023-10-15T16:20:59.359Z" />
+  
+  <meta property="og:article:author" content="Mahfuzur Rahman" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Home</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/mahfuzsust" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item" target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/">LinkedIn</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/leetcode/">leetcode</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>October</span>
+            <span>15,</span>
+            <span>2023</span>
+        </div>
+        
+
+        <h2 class="title">Longest Palindromic Substring</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>Given a string s, return the longest palindromic substring in s.</p>
+<p>A string is called a palindrome string if the reverse of that string is the same as the original string.</p>
+<p>Example 1:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: s = &quot;babad&quot;</span><br><span class="line">Output: &quot;bab&quot;</span><br><span class="line">Explanation: &quot;aba&quot; is also a valid answer.</span><br></pre></td></tr></table></figure>
+
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p>There are multiple ways to solve the problem. First we should try to start with the basic brute-force solution.</p>
+<h3 id="Brute-force-solution"><a href="#Brute-force-solution" class="headerlink" title="Brute-force solution"></a>Brute-force solution</h3><p>In this way we will be checking all the possible substring and check if that’s a palindrome. Taking the example, <code>babad</code> the substrings will be (<code>b</code>, <code>ba</code>, <code>bad</code>, <code>baba</code>, <code>babad</code>, <code>a</code>, <code>ab</code>, <code>aba</code>, <code>abad</code>, <code>b</code>, <code>ba</code>, <code>bad</code>, <code>a</code>, <code>ad</code>). For all the substrings we have to check if that’s a palindrome or not.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">If palindrome, </span><br><span class="line">    compare the length if it&#x27;s the largest</span><br><span class="line"></span><br><span class="line">    if largest</span><br><span class="line">      store the value in a variable</span><br></pre></td></tr></table></figure>
+
+<p>To check if palindrome</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isPalindrome</span><span class="params">(<span class="keyword">char</span>[] arr, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(start == end) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> len = (end - start) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(arr[start++] != arr[end--]) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Now we generate all the substrings and then check if palindrome or not.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">longestPalindrome</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span>[] arr = s.toCharArray();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> max = -<span class="number">1</span>;</span><br><span class="line">    String ans = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = arr.length - <span class="number">1</span>; j &gt;= i; j--) &#123;</span><br><span class="line">            <span class="keyword">if</span>(isPalindrome(arr, i, j)) &#123;</span><br><span class="line">                <span class="keyword">int</span> len = j - i;</span><br><span class="line">                <span class="keyword">if</span>(len &gt; max) &#123;</span><br><span class="line">                    max = len;</span><br><span class="line">                    ans = <span class="keyword">new</span> String(arr, i, j-i+<span class="number">1</span>);</span><br><span class="line">                &#125;  </span><br><span class="line">            &#125; </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>To generate the substring the complexity is \(O(n^2)\) and for each substring checking palindrome take \(O(n)\). In total the complexity of the solution is \(O(n^3)\)</p>
+<h3 id="Dynamic-programming"><a href="#Dynamic-programming" class="headerlink" title="Dynamic programming"></a>Dynamic programming</h3><p>The brute-force solution works for solving the problem. Now we have to make the solution a bit better. We can see in our <code>isPalindrome</code> funtion we check for same substring if palindrome or not. We are going to store the value and reuse it so that we do not have to check again. We are solving the problem by using the result from our subproblem. Let’s say, for string <code>ababa</code>, it’s a palindrome if first and last character is same and the <code>bab</code> substring is palindrome.</p>
+<p>We will take a \((n*n)\) boolean array to store values for each substring. <code>start</code> will be representing row and <code>end</code> will represent the column.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if start == end, means the same character will set true</span><br><span class="line">if arr[start] == arr[end] </span><br><span class="line">    if end - start == 1; set true</span><br><span class="line">    else set value from arr[start + 1][end - 1]  // (for `ababa` set value of `bab`)</span><br></pre></td></tr></table></figure>
+
+<p>Let’s write the solution.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">longestPalindrome</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = s.length();</span><br><span class="line">    <span class="keyword">if</span>(n &lt; <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> s;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">char</span>[] arr = s.toCharArray();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> max = -<span class="number">1</span>;</span><br><span class="line">    String ans = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">boolean</span>[][] dp = <span class="keyword">new</span> <span class="keyword">boolean</span>[n][n];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = i; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j) dp[i][j] = <span class="keyword">true</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(arr[i] == arr[j]) &#123;</span><br><span class="line">                <span class="keyword">if</span>(j - i == <span class="number">1</span>) dp[i][j] = <span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    dp[i][j] = dp[i+<span class="number">1</span>][j-<span class="number">1</span>];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> len = j - i + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(dp[i][j] &amp;&amp; len &gt; max) &#123;</span><br><span class="line">                max = len;</span><br><span class="line">                ans = <span class="keyword">new</span> String(arr,i, len);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>In this solution we are building our boolean \((n*n)\) in bottom up approach. For our example <code>cbaba</code> from last the order of substring will be </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(4,4) -&gt; a -&gt; i == j -&gt; true</span><br><span class="line">(3,3) -&gt; b -&gt; i == j -&gt; true</span><br><span class="line">(3,4) -&gt; ba -&gt; arr[i] != arr[j] -&gt; false</span><br><span class="line">(2,2) -&gt; a -&gt; i == j -&gt; true</span><br><span class="line">(2,3) -&gt; ab -&gt; arr[i] != arr[j] -&gt; false</span><br><span class="line">(2,4) -&gt; aba -&gt; arr[i] == arr[j] -&gt; (3, 3) -&gt; true</span><br><span class="line">(1,1) -&gt; b -&gt; i == j -&gt; true</span><br><span class="line">(1,2) -&gt; ba -&gt; arr[i] != arr[j] -&gt; false</span><br><span class="line">(1,3) -&gt; bab -&gt; arr[i] == arr[j] -&gt; (2, 2) -&gt; true</span><br><span class="line">(1,4) -&gt; baba -&gt; arr[i] != arr[j] -&gt; false</span><br><span class="line">(0,0) -&gt; c -&gt; i == j -&gt; true</span><br><span class="line">(0,1) -&gt; cb -&gt; arr[i] != arr[j] -&gt; false</span><br><span class="line">(0,2) -&gt; cba -&gt; arr[i] != arr[j] -&gt; false</span><br><span class="line">(0,3) -&gt; cbab -&gt; arr[i] != arr[j] -&gt; false</span><br><span class="line">(0,4) -&gt; cbaba -&gt; arr[i] != arr[j] -&gt; false</span><br></pre></td></tr></table></figure>
+
+<p>if the result value is true, we will then check if the length is longest or not. We will store the longest string in a variable and after the loop is finished we will get the result.</p>
+<p>We just removed the use of <code>isPalindrome</code> function here but the loop will remain the same. So, for this solution the complexity will be \(O(n^2)\). But in this case we are using an extra memory to store the values and that’s why we will have an extra \(O(n^2)\) memory.</p>
+<h3 id="Expand-around-the-center"><a href="#Expand-around-the-center" class="headerlink" title="Expand around the center"></a>Expand around the center</h3><p>In the brute-force approach, we checked if the string is palindrome by starting from both the edges and traverse to center. In this approach we will start from the center expand one by one level to check if the string is palindrome. For example, in <code>atoyota</code> we will start with <code>y</code> then <code>oyo</code>, <code>toyot</code> and lastly <code>atoyota</code>. Here for every position we will expand and check if palindrome or not.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">expand</span><span class="params">(<span class="keyword">char</span>[] arr, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(start &gt;= <span class="number">0</span> &amp;&amp; end &lt; arr.length &amp;&amp; arr[start] == arr[end]) &#123;</span><br><span class="line">        start--;</span><br><span class="line">        end++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> String(arr, start+<span class="number">1</span>, (end - <span class="number">1</span>) - (start + <span class="number">1</span>) + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>If we call this <code>expand</code> function, we’ll get the longest palindrome of that position.<br>(<code>atoyota</code>, 3, 3) -&gt; <code>atoyota</code><br>(<code>aba</code>, 1, 1) -&gt; <code>aba</code><br>We can see it’s working for odd length string with giving the same position. For even length, we have to pass two positions(including the next) to keep it working.<br>(<code>abba</code>, 1, 2) -&gt; <code>abba</code><br>(<code>cc</code>, 0, 1) -&gt; <code>cc</code></p>
+<p>The next step will be loop through all the positions in the string to get the longest palindrome.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">longestPalindrome</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(s.length() &lt; <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> s;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">char</span>[] arr = s.toCharArray();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> max = -<span class="number">1</span>;</span><br><span class="line">    String ans = <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        String x = expand(arr, i, i);     <span class="comment">// Odd </span></span><br><span class="line">        String y = expand(arr, i, i+<span class="number">1</span>);   <span class="comment">// Even (add the next position i+1)</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> len = Math.max(x.length(), y.length());</span><br><span class="line">        <span class="keyword">if</span>(len &gt; max) &#123;</span><br><span class="line">            max = len;</span><br><span class="line">            ans = len == x.length() ? x : y;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>In this approach, we are only looping through the length of the string and expanding to the edge. For looping through all the positions the complexity will be \( O(n) \) and to expand the complexity is \( O(n) \). The total complexity of the solution is \( O(n^2) \) and having the memory complexity of \( O(n) \). The time complexity is similar to our dynamic programming solution but the advantage is the memory complexity.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>There is also another algorithm named <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Longest_palindromic_substring#Manacher's_algorithm">Manacher’s Algorithm</a> where the complexity is \( O(n) \).  </p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Mahfuzur Rahman, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/algorithm/" class="tag">#algorithm</a><a href="/tags/java/" class="tag">#java</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        <a class="next"></a>
+        
+        <a href="/2021/08/05/balanced-binary-tree/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">AVL (Balanced Binary Search Tree)</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Home</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/mahfuzsust" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/" class="item">LinkedIn</a>
+                
+                <a href="mailto:mahfuzsust@yahoo.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2023 Mahfuzur Rahman<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Binary Search Tree - Read / Write</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Binary Search Tree - Read / Write" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://www.mahfuz.info/2021/07/27/binary-search-tree/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2021-07-27T17:02:51.000Z" />
+  
+  <meta property="og:article:author" content="Mahfuzur Rahman" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Home</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/mahfuzsust" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item" target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/">LinkedIn</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Algorithm/">Algorithm</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>July</span>
+            <span>27,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">Binary Search Tree</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p><img src="https://miro.medium.com/max/1400/1*_LqrcGNWChmeXlrsbB5enQ.png" alt="Binary Search Tree (1)"></p>
+<p>A binary search tree is a tree data structure that stores values in two sub-tree of left and right.</p>
+<h2 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h2><ul>
+<li>If the node is the left child of its parent, then it must be smaller than (or equal to) the parent</li>
+<li>If the node is the right child of its parent, then it must be larger than the parent.</li>
+<li>All the nodes in the left subtree must be smaller (or equal) than the parent</li>
+<li>All the nodes in the right subtree must be larger than the parent</li>
+</ul>
+<h2 id="Tree-node"><a href="#Tree-node" class="headerlink" title="Tree node"></a>Tree node</h2><p>This is the tree node that will store our tree structure data.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Tree</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> key;</span><br><span class="line">    <span class="keyword">private</span> Tree parent;</span><br><span class="line">    <span class="keyword">private</span> Tree left;</span><br><span class="line">    <span class="keyword">private</span> Tree right;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// getters + setters</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Generate"><a href="#Generate" class="headerlink" title="Generate"></a>Generate</h2><p>We can add a method to generate a tree from an array or a collection of items</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">generate</span><span class="params">(<span class="keyword">int</span>[] array)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++) &#123;</span><br><span class="line">        insert(array[i]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Insert"><a href="#Insert" class="headerlink" title="Insert"></a>Insert</h2><p>While inserting an entry to our tree, we need to find the position to fit. Entry will always be the leaf node considering the properties of a binary search tree. We have to search through the tree from the root to find an appropriate position of the newly inserted node.</p>
+<ul>
+<li>Check every node and compare the key</li>
+<li>If the key is less than the node, move left to the tree.</li>
+<li>If the key is greater than the node, move right to the tree</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">    Tree node = <span class="keyword">new</span> Tree(key);</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">        root = node;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Tree item = root;</span><br><span class="line">    <span class="keyword">while</span> (item != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (key &lt; item.getKey()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (item.getLeft() == <span class="keyword">null</span>) &#123;</span><br><span class="line">                item.setLeft(node);</span><br><span class="line">                node.setParent(item);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            item = item.getLeft();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (item.getRight() == <span class="keyword">null</span>) &#123;</span><br><span class="line">                item.setRight(node);</span><br><span class="line">                node.setParent(item);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            item = item.getRight();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Find-Search"><a href="#Find-Search" class="headerlink" title="Find / Search"></a>Find / Search</h2><p>To find an entry in the tree, we have to search the tree recursively. If the key is less than the node then we have to move left otherwise, right.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Tree <span class="title">findNode</span><span class="params">(Tree node, <span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (node.getKey() == key) &#123;</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key &lt; node.getKey()) &#123;</span><br><span class="line">        <span class="keyword">return</span> findNode(node.getLeft(), key);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> findNode(node.getRight(), key);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> findNode(root, key) != <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Delete"><a href="#Delete" class="headerlink" title="Delete"></a>Delete</h2><p>While deleting a node from a tree, there can be three criteria to look</p>
+<ol>
+<li>Node is a leaf, having no child nodes</li>
+<li>Node has left / right child,</li>
+<li>Node has both left and right children.</li>
+</ol>
+<h3 id="Leaf-node"><a href="#Leaf-node" class="headerlink" title="Leaf node"></a>Leaf node</h3><p>If the node is a leaf node, then we can set the parent node to null.</p>
+<h3 id="Having-left-right-child"><a href="#Having-left-right-child" class="headerlink" title="Having left / right child"></a>Having left / right child</h3><p>If the node has a left / right child, then the parent will point to the child of the node.</p>
+<h2 id="Having-both-left-and-right-child"><a href="#Having-both-left-and-right-child" class="headerlink" title="Having both left and right child"></a>Having both left and right child</h2><p>If the node has both left and right children, then we have to follow these steps</p>
+<ol>
+<li>Find successor of the node</li>
+<li>Replace the node with the successor.</li>
+<li>Successor will have the left and right child of the node.</li>
+<li>Parent node will point to the successor.</li>
+</ol>
+<h3 id="Successor"><a href="#Successor" class="headerlink" title="Successor"></a>Successor</h3><p>To find the successor of the node, we need to follow these steps.</p>
+<ol>
+<li>Move to the right child of the node.</li>
+<li>Move to the way to the left most child. This child node will be the successor.</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Tree <span class="title">getSuccessor</span><span class="params">(Tree node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> right = node.getRight();</span><br><span class="line">    Tree successor = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span> (right != <span class="keyword">null</span>) &#123;</span><br><span class="line">        successor = right;</span><br><span class="line">        right = right.getLeft();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> successor;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The successor may contain the right child tree. In this case, the parent node of the successor will point to the right child and then replace the node with the successor.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">    Tree node = findNode(root, key);</span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Key does not exist&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (node.getLeft() == <span class="keyword">null</span> &amp;&amp; node.getRight() == <span class="keyword">null</span>) &#123;</span><br><span class="line">        replaceNode(node, <span class="keyword">null</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (node.getLeft() == <span class="keyword">null</span>) &#123;</span><br><span class="line">        replaceNode(node, node.getRight());</span><br><span class="line">        node.setRight(<span class="keyword">null</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (node.getRight() == <span class="keyword">null</span>) &#123;</span><br><span class="line">        replaceNode(node, node.getLeft());</span><br><span class="line">        node.setLeft(<span class="keyword">null</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Tree successor = getSuccessor(node);</span><br><span class="line">        replaceNode(successor, successor.getRight());</span><br><span class="line"></span><br><span class="line">        successor.setLeft(node.getLeft());</span><br><span class="line">        successor.setRight(node.getRight());</span><br><span class="line">        replaceNode(node, successor);</span><br><span class="line"></span><br><span class="line">        updateParent(successor.getLeft(), successor);</span><br><span class="line">        updateParent(successor.getRight(), successor);</span><br><span class="line"></span><br><span class="line">        node.setLeft(<span class="keyword">null</span>);</span><br><span class="line">        node.setRight(<span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    node.setParent(<span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">updateParent</span><span class="params">(Tree node, Tree parent)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node != <span class="keyword">null</span>) &#123;</span><br><span class="line">        node.setParent(parent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">replaceNode</span><span class="params">(Tree node, Tree replace)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node.getParent() == <span class="keyword">null</span>) &#123;</span><br><span class="line">        root = replace;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (node.getParent().getLeft() == node) &#123;</span><br><span class="line">        node.getParent().setLeft(replace);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        node.getParent().setRight(replace);</span><br><span class="line">    &#125;</span><br><span class="line">    updateParent(replace, node.getParent());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Height"><a href="#Height" class="headerlink" title="Height"></a>Height</h2><p>Height of a binary search tree is the depth count from root to the leaf node.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">height</span><span class="params">(Tree node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> Math.max(height(node.getLeft()) + <span class="number">1</span>, height(node.getRight()) + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Min"><a href="#Min" class="headerlink" title="Min"></a>Min</h2><p>From the definition, the leftmost element will have the minimum item of the tree.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">min</span><span class="params">(Tree node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">return</span> Math.min(min(node.getLeft()), node.getKey());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Max"><a href="#Max" class="headerlink" title="Max"></a>Max</h2><p>From the definition, the rightmost element will have the minimum item of the tree.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">max</span><span class="params">(Tree node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> Integer.MIN_VALUE;</span><br><span class="line">    <span class="keyword">return</span> Math.max(max(node.getRight()), node.getKey());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Complexity"><a href="#Complexity" class="headerlink" title="Complexity"></a>Complexity</h2><p>In a balanced tree (best case), the complexity is O(log n).<br>In the worst case, if the data is sorted, then the tree will behave like a linked list with the complexity is O(n).</p>
+<table>
+<thead>
+<tr>
+<th align="center">Operation</th>
+<th align="center">Best case</th>
+<th align="center">Worst case</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Insert</td>
+<td align="center">O(log n)</td>
+<td align="center">O(n)</td>
+</tr>
+<tr>
+<td align="center">Search</td>
+<td align="center">O(log n)</td>
+<td align="center">O(n)</td>
+</tr>
+<tr>
+<td align="center">Delete</td>
+<td align="center">O(log n)</td>
+<td align="center">O(n)</td>
+</tr>
+<tr>
+<td align="center">Min</td>
+<td align="center">O(log n)</td>
+<td align="center">O(n)</td>
+</tr>
+<tr>
+<td align="center">Max</td>
+<td align="center">O(log n)</td>
+<td align="center">O(n)</td>
+</tr>
+<tr>
+<td align="center">Height</td>
+<td align="center">O(n)</td>
+<td align="center">O(n)</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Mahfuzur Rahman, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/binary-search-tree/" class="tag">#binary search tree</a><a href="/tags/algorithm/" class="tag">#algorithm</a><a href="/tags/java/" class="tag">#java</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2021/07/31/fish-fzf-configuration/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Fish FZF Configuration</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2021/07/12/design-job-scheduler/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Design a job scheduler</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Home</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/mahfuzsust" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/" class="item">LinkedIn</a>
+                
+                <a href="mailto:mahfuzsust@yahoo.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2023 Mahfuzur Rahman<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

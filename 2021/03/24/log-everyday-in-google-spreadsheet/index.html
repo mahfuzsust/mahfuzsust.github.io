@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Log everyday in google spreadsheet - Read / Write</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Log everyday in google spreadsheet - Read / Write" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://www.mahfuz.info/2021/03/24/log-everyday-in-google-spreadsheet/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2021-03-24T03:16:13.000Z" />
+  
+  <meta property="og:article:author" content="Mahfuzur Rahman" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Home</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/mahfuzsust" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item" target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/">LinkedIn</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+
+        
+        <div class="date" id="date">
+            <span>March</span>
+            <span>24,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">Log everyday in google spreadsheet</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>I just wanted to create a daily task list with notes and reminders in google spreadsheet. So, I created a template which will look like this.<br><img src="/content/images/2021/03/Screen-Shot-2021-03-24-at-9.44.06-AM.png"><br>Now, I need to create a new sheet everyday where the sheet name will denote the day and after each month I needed it to back up in my google drive.</p>
+<p>To solve this problem, I have created a app script which will create a new sheet everyday I open the spreadsheet and backup in a separate file.</p>
+<p>My tasks will be</p>
+<ul>
+<li>Create a new clone of the template everyday</li>
+<li>Backup current sheet monthly</li>
+<li>Create google drive folders to organize</li>
+</ul>
+<p>First, we need to create a clone of the template sheet.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">function <span class="title">cloneTemplateDaily</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> name = Utilities.formatDate(<span class="keyword">new</span> Date(), <span class="string">&quot;GMT&quot;</span>, <span class="string">&quot;dd-MM-yyyy&quot;</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">var</span> ss = SpreadsheetApp.getActiveSpreadsheet();</span><br><span class="line">  <span class="keyword">var</span> duplicate_sheet = ss.getSheetByName(name); </span><br><span class="line">  <span class="keyword">if</span>(duplicate_sheet == <span class="keyword">null</span>) &#123; </span><br><span class="line">    <span class="keyword">var</span> templateSheet = ss.getSheetByName(<span class="string">&quot;template&quot;</span>);</span><br><span class="line">    ss.setActiveSheet(templateSheet);</span><br><span class="line">    duplicate_sheet = ss.duplicateActiveSheet();</span><br><span class="line">    duplicate_sheet.setName(name);</span><br><span class="line">  &#125;</span><br><span class="line">  ss.setActiveSheet(duplicate_sheet);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>Then I need to backup the sheet to my google drive</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">function <span class="title">backupSheetMonthly</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> lastMonthDate = getLastMonthDate();</span><br><span class="line">  <span class="keyword">var</span> fileName = Utilities.formatDate(lastMonthDate, <span class="string">&quot;GMT&quot;</span>, <span class="string">&quot;MMMM, yyyy&quot;</span>);</span><br><span class="line">  <span class="keyword">var</span> year = Utilities.formatDate(lastMonthDate, <span class="string">&quot;GMT&quot;</span>, <span class="string">&quot;yyyy&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> rootFolder = getFolder(<span class="string">&quot;My Logs&quot;</span>);</span><br><span class="line">  <span class="keyword">var</span> yearFolder = getFolder(year, rootFolder);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(!fileExist(fileName, yearFolder)) &#123;</span><br><span class="line">    <span class="keyword">var</span> file = DriveApp.getFileById(SpreadsheetApp.getActiveSpreadsheet().getId())</span><br><span class="line">    file.makeCopy(fileName, yearFolder);</span><br><span class="line">    deleteSheets();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>Now, all the methods that I require</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">function <span class="title">fileExist</span><span class="params">(name, folder)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> files = folder.getFilesByName(name);</span><br><span class="line">  <span class="keyword">while</span>(files.hasNext())&#123;</span><br><span class="line">    <span class="keyword">var</span> file = files.next();</span><br><span class="line">    <span class="keyword">if</span>(file.getName() == month) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">function <span class="title">getFolder</span><span class="params">(name, parent)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> folders = <span class="keyword">null</span>;</span><br><span class="line">  <span class="keyword">if</span>(!parent) &#123;</span><br><span class="line">    folders = DriveApp.getFoldersByName(name);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    folders = parent.getFoldersByName(name);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">while</span>(folders.hasNext())&#123;</span><br><span class="line">    <span class="keyword">var</span> folder = folders.next();</span><br><span class="line">    <span class="keyword">if</span>(folder.getName() == name) &#123;</span><br><span class="line">      <span class="keyword">return</span> folder;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(!parent) &#123;</span><br><span class="line">    <span class="keyword">return</span> DriveApp.createFolder(name);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> parent.createFolder(name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">function <span class="title">getLastMonthDate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> dt = <span class="keyword">new</span> Date();</span><br><span class="line">  dt.setDate(<span class="number">0</span>);</span><br><span class="line">  dt.setDate(<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> dt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">function <span class="title">deleteSheets</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> ss = SpreadsheetApp.getActiveSpreadsheet();</span><br><span class="line">  <span class="keyword">var</span> sheets = ss.getSheets();</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; sheets.length; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span>(sheets[i].getName() !== <span class="string">&quot;template&quot;</span>) &#123;</span><br><span class="line">      ss.setActiveSheet(sheets[i]);</span><br><span class="line">      ss.deleteActiveSheet();</span><br><span class="line">      Utilities.sleep(<span class="number">100</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>Lastly, I created two separate trigger that will call my two functions</p>
+<ol>
+<li>cloneTemplateDaily</li>
+<li>backupSheetMonthly</li>
+</ol>
+<p>I set up a trigger poninted to From spreadsheet - On open cloneTemplateDaily so there will be a new sheet name current date with the same template</p>
+<p>And a time based trigger that will run 1st of every month to run backupSheetMonthly function.</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Mahfuzur Rahman, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/app-script/" class="tag">#app script</a><a href="/tags/spreadsheet/" class="tag">#spreadsheet</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2021/05/23/climbing-stairs/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Climbing Stairs</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2021/03/08/kafka-server-setup/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Kafka server setup</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Home</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/mahfuzsust" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/mahfuzsust/" class="item">LinkedIn</a>
+                
+                <a href="mailto:mahfuzsust@yahoo.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2023 Mahfuzur Rahman<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>
